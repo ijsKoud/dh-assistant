@@ -57,7 +57,7 @@ export default class helpCommand extends Command {
 					`• ${category.id}`,
 					"`" +
 						category
-							.filter((c) => c.categoryID === category.id && c.aliases.length > 0)
+							.filter((c) => c.categoryID === category.id && c.aliases.length > 0 && !c.ownerOnly)
 							.map((c) => c.id)
 							.join("`, `") +
 						"`" || "No commands for this category",
