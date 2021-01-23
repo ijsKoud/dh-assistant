@@ -1,6 +1,7 @@
 import { Command } from "discord-akairo";
 import { MessageEmbed } from "discord.js";
 import { Message } from "discord.js";
+import ms from "ms";
 
 export default class helpCommand extends Command {
 	public constructor() {
@@ -44,7 +45,8 @@ export default class helpCommand extends Command {
 				`📋 | **Usage**: ${command.description.usage || "No usage available"}`,
 				`📘 | **Description**: ${command.description.content || "No usage available"}\n`,
 				`👮‍♂️ | **User Permissions**: ${userPermissions}`,
-				`👮‍♂️ | **Client Permissions**: ${clientPermissions}`,
+				`🤖 | **Client Permissions**: ${clientPermissions}`,
+				`⌚ | **Cooldown**: \`${ms(command.cooldown || 0, { long: false })}\``,
 			]);
 		} else {
 			for (const category of this.handler.categories.values()) {
