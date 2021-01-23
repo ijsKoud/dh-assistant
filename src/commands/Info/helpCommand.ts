@@ -18,6 +18,7 @@ export default class helpCommand extends Command {
 					default: "",
 				},
 			],
+			userPermissions: ["BAN_MEMBERS", "KICK_MEMBERS"],
 		});
 	}
 
@@ -29,12 +30,21 @@ export default class helpCommand extends Command {
 			.setTitle(`Help Command - ${message.author.tag}`);
 
 		if (command) {
+			const userPermissions = this.client.utils.formatPerms(
+				(command.userPermissions as string[]) || []
+			);
+			const clientPermissions = this.client.utils.formatPerms(
+				(command.clientPermissions as string[]) || []
+			);
+
 			embed.setDescription([
 				`>>> 🏷 | **Name**: ${command.id}`,
 				`📁 | **Category**: ${command.category}`,
 				`🔖 | **Aliases**: \`${command.aliases.join("`, `")}\`\n`,
 				`📋 | **Usage**: ${command.description.usage || "No usage available"}`,
-				`📘 | **Description**: ${command.description.content || "No usage available"}`,
+				`📘 | **Description**: ${command.description.content || "No usage available"}\n`,
+				`👮‍♂️ | **User Permissions**: ${userPermissions}`,
+				`👮‍♂️ | **Client Permissions**: ${clientPermissions}`,
 			]);
 		} else {
 			for (const category of this.handler.categories.values()) {

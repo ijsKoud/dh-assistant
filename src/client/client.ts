@@ -12,6 +12,7 @@ declare module "discord-akairo" {
 		commandHandler: CommandHandler;
 		listenerHandler: ListenerHandler;
 		log(msg: string): void;
+		utils: util;
 	}
 }
 
