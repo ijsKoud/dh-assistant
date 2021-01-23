@@ -17,7 +17,7 @@ declare module "discord-akairo" {
 
 // client
 export default class osloClient extends AkairoClient {
-	private wb: WebhookClient = new WebhookClient(process.env.wbId, process.env.wbToken);
+	private wb: WebhookClient = new WebhookClient(process.env.WB_ID, process.env.WB_TOKEN);
 	public utils: util = new util(this);
 
 	public listenHandler: ListenerHandler = new ListenerHandler(this, {
