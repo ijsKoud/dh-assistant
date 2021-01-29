@@ -8,9 +8,9 @@ export const muteRole: string = "754004272664018956";
 export const seniorTeam: string = "739540543570444368";
 
 // tickets
-export const ticketClaim: string = "781841366795288576";
-export const ticketCategory: string = "802267718840877127";
-export const transcriptsId: string = "792005203867729921";
+export const ticketClaim: string = "795094374383353856";
+export const ticketCategory: string = "804394975726272513";
+export const transcriptsId: string = "715948763449131140";
 
 // events
 export const pingChannel: string = "741659701804269608";
