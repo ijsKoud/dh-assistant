@@ -5,13 +5,11 @@ export default class pingCommand extends Command {
 	public constructor() {
 		super("ping", {
 			aliases: ["ping", "pong"],
-			category: "Info",
+			category: "General",
 			description: {
 				content: "Check the edit and discord connection latency",
 				usage: "ping",
-				examples: ["> 🏓 pong. API Latency is `148`ms."],
 			},
-			ratelimit: 2,
 		});
 	}
 

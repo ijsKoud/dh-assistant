@@ -1,10 +1,11 @@
 import { ListenerHandler } from "discord-akairo";
 import { AkairoClient, CommandHandler } from "discord-akairo";
 import { WebhookClient } from "discord.js";
-import { Collection, Message } from "discord.js";
+import { Message } from "discord.js";
 import { connect, connection } from "mongoose";
 import { join } from "path";
 import util from "./util";
+import moment from "moment";
 
 // declare
 declare module "discord-akairo" {
@@ -13,11 +14,13 @@ declare module "discord-akairo" {
 		listenerHandler: ListenerHandler;
 		log(msg: string): void;
 		utils: util;
+		tickets: boolean;
 	}
 }
 
 // client
-export default class osloClient extends AkairoClient {
+export default class dhClient extends AkairoClient {
+	public tickets: boolean = true;
 	private wb: WebhookClient = new WebhookClient(process.env.WB_ID, process.env.WB_TOKEN);
 	public utils: util = new util(this);
 
@@ -58,6 +61,7 @@ export default class osloClient extends AkairoClient {
 			},
 			{
 				disableMentions: "everyone",
+				partials: ["REACTION", "MESSAGE", "GUILD_MEMBER", "CHANNEL", "USER"],
 			}
 		);
 	}
@@ -99,6 +103,11 @@ export default class osloClient extends AkairoClient {
 	}
 
 	public async start(): Promise<string> {
+		this.log(
+			`ℹ | [\`${moment(Date.now()).format(
+				"MMMM Do YYYY hh:mm:ss"
+			)}\`] - **DH-Assistant Client** restarted!`
+		);
 		await this._init();
 		this.connect();
 		return this.login(process.env.TOKEN);
