@@ -54,4 +54,9 @@ export const ignoreBlacklistWord: string[] = [
 	"722119312856449144",
 ];
 
-export const secretChannels: string[] = [];
+export const secretChannels: string[] = [
+	"780907551554011136",
+	"780907238561677322",
+	"789521547751981106",
+	"804801766369132554",
+];

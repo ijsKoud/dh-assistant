@@ -29,20 +29,13 @@ export default class kick extends Command {
 					match: "rest",
 					default: () => "No reason given.",
 				},
-				{
-					id: "anonymous",
-					type: ["true", "false"],
-					match: "option",
-					flag: "-a=",
-					default: () => "false",
-				},
 			],
 		});
 	}
 
 	async exec(
 		message: Message,
-		{ userId, reason, anonymous }: { userId: string; reason: string; anonymous: string }
+		{ userId, reason }: { userId: string; reason: string; anonymous: string }
 	) {
 		const redtick = this.client.utils.emojiFinder("greentick");
 		const user = await this.client.utils.fetchUser(userId || "");

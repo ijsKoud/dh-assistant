@@ -3,6 +3,7 @@ import { Command } from "discord-akairo";
 import Mute from "../../models/mute";
 import { muteRole } from "../../client/config";
 import ms from "ms";
+import { GuildMember } from "discord.js";
 
 export default class mute extends Command {
 	constructor() {
@@ -57,7 +58,9 @@ export default class mute extends Command {
 
 		let DMed: boolean = false;
 
-		const member = await this.client.util.fetchMember(message.guild, user.id, true);
+		const member: GuildMember = await this.client.util
+			.fetchMember(message.guild, user.id, true)
+			.catch((e) => null);
 		if (member) {
 			if (
 				member.roles.highest.position >= message.member.roles.highest.position &&

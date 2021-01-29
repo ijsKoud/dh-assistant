@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { Message, GuildMember } from "discord.js";
 import { Command } from "discord-akairo";
 import { modlog, systemLogPublic } from "../../client/config";
 import { MessageEmbed } from "discord.js";
@@ -54,7 +54,9 @@ export default class ban extends Command {
 		if (user.id === message.guild.ownerID)
 			return message.util.send(">>> 👑 | Why do you want to ban the owner? You can't do that!");
 
-		const member = await this.client.util.fetchMember(message.guild, user.id, true);
+		const member: GuildMember = await this.client.util
+			.fetchMember(message.guild, user.id, true)
+			.catch((e) => null);
 		let DMed: boolean = false;
 
 		if (member) {
@@ -105,7 +107,7 @@ export default class ban extends Command {
 		);
 
 		return message.util.send(
-			`>>>🔨 | Successfully banned **${user.tag}** for **${reason}**. ${
+			`>>> 🔨 | Successfully banned **${user.tag}** for **${reason}**. ${
 				DMed ? "" : "\nℹ | **I couldn't DM this user**"
 			}`,
 			{ split: true }

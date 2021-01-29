@@ -1,8 +1,6 @@
-import { Message } from "discord.js";
+import { Message, GuildMember } from "discord.js";
 import { Command } from "discord-akairo";
 import Warn from "../../models/warn";
-import { modlog } from "../../client/config";
-import { MessageEmbed } from "discord.js";
 
 export default class warn extends Command {
 	constructor() {
@@ -37,7 +35,9 @@ export default class warn extends Command {
 		const redtick = this.client.utils.emojiFinder("redtick");
 		if (!user) return this.client.emit("missingArg", message, ["<user>", "[reason]"]);
 
-		const member = await this.client.util.fetchMember(message.guild, user.id, true);
+		const member: GuildMember = await this.client.util
+			.fetchMember(message.guild, user.id, true)
+			.catch((e) => null);
 
 		if (!member) return message.util.send(`> 🔎 | I didn't find a user called "${userId}".`);
 		if (member.id === message.author.id)
