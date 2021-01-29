@@ -36,7 +36,7 @@ export default class dhClient extends AkairoClient {
 		commandUtil: true,
 		handleEdits: true,
 		commandUtilLifetime: 3e5,
-		defaultCooldown: 6e4,
+		defaultCooldown: 1e3,
 		argumentDefaults: {
 			prompt: {
 				modifyStart: (_: Message, str: string): string =>
