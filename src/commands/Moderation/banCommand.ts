@@ -106,7 +106,7 @@ export default class ban extends Command {
 
 		return message.util.send(
 			`>>>🔨 | Successfully banned **${user.tag}** for **${reason}**. ${
-				DMed ? "" : "\n > ℹ | **I couldn't DM this user**"
+				DMed ? "" : "\nℹ | **I couldn't DM this user**"
 			}`,
 			{ split: true }
 		);

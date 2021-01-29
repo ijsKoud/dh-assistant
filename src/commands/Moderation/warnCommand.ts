@@ -86,10 +86,10 @@ export default class warn extends Command {
 		this.client.emit("warnEvent", user, message.author, caseId, reason);
 
 		return message.util.send(
-			`> 🧾 | Successfully warned **${
+			`>>> 🧾 | Successfully warned **${
 				member.user.tag
 			}** for **${reason}**. Case id: \`${caseId}\`. ${
-				DMed ? "" : "\n > ℹ | **I couldn't DM this user**"
+				DMed ? "" : "\nℹ | **I couldn't DM this user**"
 			}`,
 			{ split: true }
 		);

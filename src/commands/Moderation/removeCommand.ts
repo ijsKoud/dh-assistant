@@ -57,8 +57,8 @@ export default class remove extends Command {
 		});
 
 		return message.util.send(
-			`> 🧾 | Successfully removed the message of **${msg.author.tag}** for **${reason}**. ${
-				DMed ? "" : "\n > ℹ | **I couldn't DM this user**"
+			`>>> 🧾 | Successfully removed the message of **${msg.author.tag}** for **${reason}**. ${
+				DMed ? "" : "\nℹ | **I couldn't DM this user**"
 			}`,
 			{ split: true }
 		);

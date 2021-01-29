@@ -97,7 +97,7 @@ export default class kick extends Command {
 
 		return message.util.send(
 			`>>> 👞 | Successfully kicked **${member.user.tag}** for **${reason}**. ${
-				DMed ? "" : "\n > ℹ | **I couldn't DM this user**"
+				DMed ? "" : "\nℹ | **I couldn't DM this user**"
 			}`,
 			{ split: true }
 		);

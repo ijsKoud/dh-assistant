@@ -57,7 +57,7 @@ export default class stats extends Command {
 				)
 				.addField(
 					"• Github Info",
-					"[V1] - Repo: [`github`](https://github.com/DaanGamesDG/draavos-hangout)\n[V2] - Repo: **private**"
+					"[V1] - Repo: [`github`](https://github.com/DaanGamesDG/draavos-hangout)\n[V2] - Repo: [`private`](https://github.com/DaanGamesDG/dh-assistant-v2)"
 				)
 		);
 	}

@@ -136,7 +136,7 @@ export default class tempban extends Command {
 
 		return message.util.send(
 			`>>>🔨 | Successfully tempbanned **${user.tag}** for **${reason}**, duration: ${ms(dur)}. ${
-				DMed ? "" : "\n > ℹ | **I couldn't DM this user**"
+				DMed ? "" : "\nℹ | **I couldn't DM this user**"
 			}`,
 			{ split: true }
 		);
