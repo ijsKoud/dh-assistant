@@ -344,6 +344,7 @@ export default class message extends Listener {
 	// chat system
 	async ticketchat(message: Message) {
 		try {
+			const files = this.client.utils.getAttachments(message.attachments);
 			switch (message.channel.type) {
 				case "dm":
 					{
@@ -359,7 +360,7 @@ export default class message extends Listener {
 								/{CONTENT}/g,
 								message.content
 							),
-							{ split: true }
+							{ split: true, files }
 						);
 
 						message.react(this.client.utils.emojiFinder("greentick"));
@@ -382,7 +383,7 @@ export default class message extends Listener {
 								/{CONTENT}/g,
 								message.content
 							),
-							{ split: true }
+							{ split: true, files }
 						);
 
 						message.react(this.client.utils.emojiFinder("greentick"));

@@ -1,5 +1,6 @@
 import { User } from "discord.js";
-import { TextChannel } from "discord.js";
+import { Collection } from "discord.js";
+import { TextChannel, MessageAttachment } from "discord.js";
 import osloClient from "./client";
 
 export default class util {
@@ -60,5 +61,14 @@ export default class util {
 		const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 		const i = Math.floor(Math.log(bytes) / Math.log(1024));
 		return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(2))} ${sizes[i]}`;
+	}
+
+	public getAttachments(attachments: Collection<string, MessageAttachment>) {
+		const valid = /^.*(gif|png|jpg|jpeg|mp4|mp3|pdf|psd)$/g;
+
+		return attachments
+			.array()
+			.filter((attachment) => valid.test(attachment.url))
+			.map((attachment) => attachment.url);
 	}
 }
