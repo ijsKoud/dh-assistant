@@ -334,6 +334,8 @@ export default class message extends Listener {
 			)
 		).pin();
 
+		tickets.delete(message.author.id);
+
 		await writeFile(
 			`transcriptions/${message.author.id}-ticket.txt`,
 			`Transcription - ${moment(Date.now()).format("MMMM Do YYYY hh:mm:ss")}`,

@@ -11,10 +11,10 @@ export default class CommandBlockedListener extends Listener {
 
 	exec(message: Message, command: Command, reason: string) {
 		switch (reason) {
-			case "owner":
+			case "guild":
 				message.util.send(`>>> ❗ | You are unable to use the **${command.id}** command in DMs!`);
 				break;
-			case "guild":
+			case "owner":
 				message.util.send(
 					`>>> ❗ | Only Developers of ${this.client.user.toString()} have access to the **${
 						command.id
