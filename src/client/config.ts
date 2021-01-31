@@ -12,6 +12,9 @@ export const ticketClaim: string = "795094374383353856";
 export const ticketCategory: string = "804394975726272513";
 export const transcriptsId: string = "715948763449131140";
 
+// channels
+export const videoSuggestions: string = "714119239686029334";
+
 // events
 export const pingChannel: string = "741659701804269608";
 export const eventsChannel: string = "748653610098884760";

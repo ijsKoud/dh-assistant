@@ -4,6 +4,7 @@ import {
 	seniorTeam,
 	ticketCategory,
 	ticketClaim,
+	videoSuggestions,
 } from "./../../client/config";
 import { Listener } from "discord-akairo";
 import { Message, GuildMember, Collection, MessageReaction, User } from "discord.js";
@@ -64,6 +65,7 @@ export default class message extends Listener {
 			return this.createticket(message);
 		if (message.channel.type === "dm" || message.channel.name === "ticket")
 			return this.ticketchat(message);
+		if (message.channel.id === videoSuggestions) return this.videoSuggestions(message);
 
 		// auto mod
 		if (
@@ -216,6 +218,24 @@ export default class message extends Listener {
 
 		if ((char.length / 100) * 75 <= uppercase) return true;
 		return false;
+	}
+
+	// video suggestions
+	async videoSuggestions(message: Message) {
+		if (
+			!message.member.hasPermission("MANAGE_GUILD", { checkAdmin: true, checkOwner: true }) &&
+			!message.content.startsWith("video suggestion:")
+		) {
+			message.delete();
+			return message.channel
+				.send(
+					">>> ❗ | Video suggestions only! Add `video suggestions:` to the beginning of your message to suggest something"
+				)
+				.then((m) => m.delete({ timeout: 5e3 }));
+		}
+
+		if (!message.content.startsWith("video suggestion:")) return;
+		["🔼", "🔽"].forEach((e) => message.react(e));
 	}
 
 	// tickets
