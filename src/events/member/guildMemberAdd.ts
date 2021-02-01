@@ -145,6 +145,8 @@ export default class guildMemberAdd extends Listener {
 
 	async welcome(member: GuildMember) {
 		const channel = await this.client.utils.getChannel(systemLogPublic);
+		const general = await this.client.utils.getChannel("701791506226348124");
+
 		const embed = new MessageEmbed()
 			.setColor("#58DCAE")
 			.setTitle(`Welcome to Draavo's Hangout, ${member.user.tag}`)
@@ -157,5 +159,6 @@ export default class guildMemberAdd extends Listener {
 			);
 
 		channel.send(embed);
+		general.send(`**${member.user.tag}** just joined! Make sure to welcome them!`);
 	}
 }

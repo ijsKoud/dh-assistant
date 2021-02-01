@@ -143,7 +143,7 @@ export default class message extends Listener {
 			)
 			.catch((e) => null);
 
-		this.client.emit("warnEvent", user, this.client.user, caseId, reason);
+		this.client.emit("warnEvent", user.user, this.client.user, caseId, reason);
 	}
 
 	async spamFilter(message: Message) {
