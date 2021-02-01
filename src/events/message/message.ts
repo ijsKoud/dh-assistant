@@ -224,17 +224,17 @@ export default class message extends Listener {
 	async videoSuggestions(message: Message) {
 		if (
 			!message.member.hasPermission("MANAGE_GUILD", { checkAdmin: true, checkOwner: true }) &&
-			!message.content.startsWith("video suggestion:")
+			!message.content.toLowerCase().startsWith("video suggestion:")
 		) {
 			message.delete();
 			return message.channel
 				.send(
-					">>> ❗ | Video suggestions only! Add `video suggestions:` to the beginning of your message to suggest something"
+					">>> ❗ | Video suggestions only! Add `video suggestion:` to the beginning of your message to suggest something"
 				)
 				.then((m) => m.delete({ timeout: 5e3 }));
 		}
 
-		if (!message.content.startsWith("video suggestion:")) return;
+		if (!message.content.toLowerCase().startsWith("video suggestion:")) return;
 		["🔼", "🔽"].forEach((e) => message.react(e));
 	}
 

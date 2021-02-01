@@ -5,7 +5,7 @@ export const systemLogPublic: string = "701792628844527697";
 
 // roles
 export const muteRole: string = "754004272664018956";
-export const seniorTeam: string = "739540543570444368";
+export const seniorTeam: string = "791638446207926324";
 
 // tickets
 export const ticketClaim: string = "795094374383353856";
