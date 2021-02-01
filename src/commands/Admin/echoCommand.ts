@@ -27,7 +27,9 @@ export default class echo extends Command {
 	}
 
 	async exec(message: Message, { channelId, msg }: { channelId: string; msg: string }) {
-		const channel = await this.client.utils.getChannel(channelId || "");
+		const channel = await this.client.utils.getChannel(
+			channelId || message.mentions.channels.first()?.id || ""
+		);
 		if (!channel || !msg) return message.react(this.client.utils.emojiFinder("redtick"));
 
 		const m = channel.send ? await channel.send(msg).catch((e) => null) : null;
