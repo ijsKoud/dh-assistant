@@ -1,6 +1,5 @@
 import { Command } from "discord-akairo";
 import { Message } from "discord.js";
-import Feedback from "../../models/feedback";
 
 export default class echo extends Command {
 	constructor() {
