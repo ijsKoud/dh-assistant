@@ -16,7 +16,7 @@ export default class requestping extends Command {
 	}
 
 	async exec(message: Message) {
-		if (message.channel.id !== pingChannel) return;
+		if (message.channel.id !== "729327005341843486") return;
 		const channel = await this.client.utils.getChannel(pingChannel);
 		channel
 			.send(
@@ -31,5 +31,6 @@ export default class requestping extends Command {
 					this.client.utils.emojiFinder("redtick"),
 				].forEach((e) => m.react(e))
 			);
+		message.react(this.client.utils.emojiFinder("greentick"));
 	}
 }
