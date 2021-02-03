@@ -19,6 +19,7 @@ export default class mute extends Listener {
 		reason: string,
 		duration?: number
 	) {
+		if (member.guild.id !== process.env.GUILD) return;
 		const channel = await this.client.utils.getChannel(modlog);
 		const embed = new MessageEmbed();
 
@@ -38,10 +39,7 @@ export default class mute extends Listener {
 				embed
 					.setColor("#4AF3AB")
 					.setTitle(`🔊 Unmute | ${member.user.tag}`)
-					.setDescription([
-						`Responsable moderator: ${moderator.toString()}`,
-						`Duration: ${ms(duration, { long: true })}`,
-					])
+					.setDescription([`Responsable moderator: ${moderator.toString()}`])
 					.addField("• Reason", reason.substr(0, 1024));
 				break;
 		}

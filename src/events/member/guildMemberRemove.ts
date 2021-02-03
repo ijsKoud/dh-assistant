@@ -13,6 +13,7 @@ export default class guildMemberRemove extends Listener {
 	}
 
 	async exec(member: GuildMember) {
+		if (member.guild.id !== process.env.GUILD) return;
 		const channel = await this.client.utils.getChannel(systemLog);
 		const joinDate = moment(member.joinedTimestamp).fromNow();
 

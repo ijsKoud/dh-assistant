@@ -13,7 +13,8 @@ export default class guildBanAdd extends Listener {
 	}
 
 	async exec(guild: Guild, user: User) {
-		const bans = await guild.fetchAuditLogs({ user, type: "MEMBER_BAN_ADD", limit: 100 });
+		if (guild.id !== process.env.GUILD) return;
+		const bans = await guild.fetchAuditLogs({ type: "MEMBER_BAN_ADD", limit: 100 });
 		const ban = bans.entries.find(
 			(b) => b.targetType === "USER" && (b.target as User).id === user.id
 		);

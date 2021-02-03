@@ -20,6 +20,7 @@ export default class guildMemberAdd extends Listener {
 	}
 
 	async exec(member: GuildMember): Promise<void> {
+		if (member.guild.id !== process.env.GUILD) return;
 		const channel = await this.client.utils.getChannel(systemLog);
 
 		const msg = await channel.send(

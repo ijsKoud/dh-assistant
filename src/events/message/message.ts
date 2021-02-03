@@ -116,6 +116,7 @@ export default class message extends Listener {
 		let blWord: string = null;
 
 		str
+			.replace(/\|/g, "")
 			.split(/\s+/)
 			.forEach((word) => blacklisted.forEach((w) => (blWord = word.includes(w) ? w : blWord)));
 

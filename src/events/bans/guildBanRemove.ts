@@ -13,6 +13,7 @@ export default class guildBanRemove extends Listener {
 	}
 
 	async exec(guild: Guild, user: User) {
+		if (guild.id !== process.env.GUILD) return;
 		const unbans = await guild.fetchAuditLogs({ user, type: "MEMBER_BAN_REMOVE", limit: 100 });
 		const unban = unbans.entries.find(
 			(b) => b.targetType === "USER" && (b.target as User).id === user.id

@@ -15,6 +15,7 @@ export default class messageDelete extends Listener {
 
 	async exec(message: Message) {
 		if (message.channel.type === "dm") return;
+		if (message.guild.id !== process.env.GUILD) return;
 		await message.channel.fetch(true);
 
 		if (

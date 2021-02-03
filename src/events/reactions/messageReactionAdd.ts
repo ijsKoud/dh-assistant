@@ -2,6 +2,7 @@ import { Listener } from "discord-akairo";
 import { User } from "discord.js";
 import { MessageReaction } from "discord.js";
 import feedback from "../../models/feedback";
+import feedbackBlacklist from "../../models/feedbackBlacklist";
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import { eventsChannel, pingChannel } from "../../client/config";
 import { MessageEmbed } from "discord.js";
@@ -24,7 +25,8 @@ export default class messageReactionAdd extends Listener {
 		if (user.bot || user.system) return;
 
 		const schema = await feedback.findOne({ guildId: reaction.message.guild.id });
-		if (!schema) return;
+		const blacklist = await feedbackBlacklist.findOne({ userId: user.id });
+		if (!schema || blacklist) return;
 
 		const id = schema.get("message");
 		if (reaction.message.channel.id === pingChannel) return this.ping(reaction, user);
@@ -52,7 +54,7 @@ export default class messageReactionAdd extends Listener {
 
 			return msg.edit(feedback);
 		} catch (e) {
-			return this.client.log(`⚠ | Reaction Role Error: \`${e}\``);
+			return this.client.log(`⚠ | Reaction Role Error - (${user.toString()}): \`${e}\``);
 		}
 	}
 

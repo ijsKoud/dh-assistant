@@ -16,6 +16,7 @@ export default class channelDelete extends Listener {
 
 	async exec(channel: GuildChannel) {
 		if (channel.type !== "text" || channel.name !== "ticket") return;
+		if (channel.guild.id !== process.env.GUILD) return;
 
 		const schema = await ticket.findOne({ channelId: channel.id });
 		if (!schema) return;

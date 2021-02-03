@@ -20,6 +20,7 @@ export default class messageUpdate extends Listener {
 		const message = oldMessage;
 		if (message.channel.type === "dm") return;
 		await message.channel.fetch(true);
+		if (message.guild.id !== process.env.GUILD) return;
 
 		if (
 			message.partial ||
@@ -30,6 +31,8 @@ export default class messageUpdate extends Listener {
 			oldMessage.content === newMessage.content
 		)
 			return;
+
+		this.client.emit("message", newMessage);
 
 		const embed = new MessageEmbed()
 			.setTimestamp()
