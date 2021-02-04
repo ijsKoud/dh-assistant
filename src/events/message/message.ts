@@ -69,7 +69,7 @@ export default class message extends Listener {
 
 		// auto mod
 		if (
-			!message.guild ||
+			(this.client.automod && !message.guild) ||
 			message.member.hasPermission("MANAGE_GUILD", { checkAdmin: true, checkOwner: true })
 		)
 			return;

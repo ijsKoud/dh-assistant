@@ -34,6 +34,7 @@ export default class guildMemberAdd extends Listener {
 		let kicked: boolean = false;
 
 		if (
+			this.client.altDetection &&
 			acc1.status === "error" &&
 			acc1.errorCode === 404 &&
 			acc2.error &&
