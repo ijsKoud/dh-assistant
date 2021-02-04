@@ -1,6 +1,7 @@
 import moment from "moment";
 import {
 	ignoreBlacklistWord,
+	modlog,
 	seniorTeam,
 	ticketCategory,
 	ticketClaim,
@@ -80,6 +81,40 @@ export default class message extends Listener {
 
 		// if (capAbuse && message.content.length > 10)
 		// 	return message.channel.send(`> ❗ | Hey, ${message.author.toString()}, too many caps!`);
+		if (message.content.toLowerCase().includes("nigga")) {
+			const reason = "Rasicm is strictly not allowed!";
+			let DMed = true;
+			await message.member
+				.send(
+					`>>> 👞 | **Kicked - Draavo's Hangout**\n📃 | Reason: **${reason}**\n\n👋 | **Want to join back?**\nMake sure to follow the rules and listen to the staff members! http://www.draavo.cf/discord`,
+					{ split: true }
+				)
+				.catch((e) => (DMed = false));
+
+			await message.member.kick(`${reason}`).catch((e) => {
+				return message.channel.send(
+					`>>> ${this.client.utils.emojiFinder(
+						"warning"
+					)} | Oops, Discord threw an exception: \`${e}\`.`
+				);
+			});
+
+			const channel = await this.client.utils.getChannel(modlog);
+			channel.send(
+				new MessageEmbed()
+					.setColor("#4C8CFB")
+					.setAuthor(`👞 Kick | ${this.client.user.tag}`)
+					.setDescription(`Responsable moderator: ${message.author.toString()}`)
+					.addField("• Reason", reason.substr(0, 1024))
+			);
+
+			return message.util.send(
+				`>>> 👞 | Successfully kicked **${message.member.user.tag}** for **${reason}**. ${
+					DMed ? "" : "\nℹ | **I couldn't DM this user**"
+				}`,
+				{ split: true }
+			);
+		}
 		if (filtered && !ignoreBlacklistWord.includes(message.channel.id)) {
 			(
 				await message.channel.send(

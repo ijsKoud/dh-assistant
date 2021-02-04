@@ -84,7 +84,10 @@ export default class ready extends Listener {
 			if ((m.get("endDate") as number) - Date.now() < 0) {
 				const guild = this.client.guilds.cache.get(m.get("guildId"));
 
-				const user = await this.client.util.fetchMember(guild, m.get("id"), true);
+				const user = await this.client.util
+					.fetchMember(guild, m.get("id"), true)
+					.catch((e) => null);
+				if (!user) return m.delete();
 				const mod = await this.client.utils.fetchUser(m.get("moderator"));
 				if (user) user.roles.remove(muteRole);
 				this.client.emit(
