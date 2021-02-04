@@ -25,18 +25,18 @@ export default class configCommand extends Command {
 		switch (type) {
 			case "automod":
 				this.client.automod = !this.client.automod;
-				message.util.send(`Automod is now **${this.client.automod ? "disabled" : "enabled"}**.`);
+				message.util.send(`Automod is now **${this.client.automod ? "enabled" : "disabled"}**.`);
 				break;
 			case "alt-detection":
 				this.client.altDetection = !this.client.altDetection;
 				message.util.send(
-					`Alt-detection is now **${this.client.altDetection ? "disabled" : "enabled"}**.`
+					`Alt-detection is now **${this.client.altDetection ? "enabled" : "disabled"}**.`
 				);
 				break;
 			case "view":
 				message.util.send(
 					`Automod: **${this.client.automod ? "enabled" : "disabled"}**.\nAlt-detection: **${
-						this.client.altDetection ? "disabled" : "enabled"
+						this.client.altDetection ? "enabled" : "disabled"
 					}**.`
 				);
 				break;
