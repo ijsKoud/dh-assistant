@@ -42,11 +42,11 @@ export default class kick extends Command {
 		if (!user) return message.util.send(">>> 🔎 | I was unable to find this user on discord.");
 
 		if (user.id === message.author.id)
-			return message.util.send(">>> ❓ | Why do you want to ban yourself?!");
+			return message.util.send(">>> ❓ | Why do you want to kick yourself?!");
 		if (user.id === this.client.user.id)
-			return message.util.send(">>> 😢 | After all the hard work, you still want to ban me?");
+			return message.util.send(">>> 😢 | After all the hard work, you still want to kick me?");
 		if (user.id === message.guild.ownerID)
-			return message.util.send(">>> 👑 | Why do you want to ban the owner? You can't do that!");
+			return message.util.send(">>> 👑 | Why do you want to kick the owner? You can't do that!");
 
 		const member: GuildMember = await this.client.util
 			.fetchMember(message.guild, user.id, true)
@@ -59,9 +59,9 @@ export default class kick extends Command {
 			member.roles.highest.position >= message.member.roles.highest.position &&
 			message.guild.ownerID !== message.author.id
 		)
-			return message.util.send(`>>> ${redtick} | You cannot ban this user due to role hierarchy.`);
-		if (!member.bannable)
-			return message.util.send(`>>> ${redtick} | I cannot ban this user due to role hierarchy.`);
+			return message.util.send(`>>> ${redtick} | You cannot kick this user due to role hierarchy.`);
+		if (!member.kickable)
+			return message.util.send(`>>> ${redtick} | I cannot kick this user due to role hierarchy.`);
 
 		DMed = true;
 		await member
