@@ -15,11 +15,15 @@ declare module "discord-akairo" {
 		log(msg: string): void;
 		utils: util;
 		tickets: boolean;
+		automod: boolean;
+		altDetection: boolean;
 	}
 }
 
 // client
 export default class dhClient extends AkairoClient {
+	public automod: boolean = true;
+	public altDetection: boolean = true;
 	public tickets: boolean = true;
 	private wb: WebhookClient = new WebhookClient(process.env.WB_ID, process.env.WB_TOKEN);
 	public utils: util = new util(this);
