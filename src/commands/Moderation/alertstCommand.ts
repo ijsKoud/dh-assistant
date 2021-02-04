@@ -13,18 +13,10 @@ export default class alertstCommand extends Command {
 				usage: "alertst [channel]",
 			},
 			cooldown: 1e3,
-			args: [
-				{
-					id: "channelId",
-					type: async (m: Message, str: string) => (this.client.utils.getChannel(str) ? str : null),
-					default: (m: Message) => m.channel.id,
-				},
-			],
 		});
 	}
 
-	async exec(message: Message, { channelId }: { channelId: string }) {
-		const channel = await this.client.utils.getChannel(channelId);
+	async exec(message: Message, { channelId }: { channelId: Promise<string> }) {
 		const available = message.guild.members.cache.filter((m) =>
 			m.roles.cache.has("791638446207926324")
 		);
@@ -32,7 +24,7 @@ export default class alertstCommand extends Command {
 		available.forEach((u) =>
 			u
 				.send(
-					`Staff member ${message.author.toString()} has alerted all Senior Staff of a serious issue in channel ${channel.toString()}, please respond immediately!`
+					`Staff member ${message.author.toString()} has alerted all Senior Staff of a serious issue in channel ${message.channel.toString()}, please respond immediately!`
 				)
 				.catch((e) => null)
 		);

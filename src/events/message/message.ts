@@ -108,8 +108,9 @@ export default class message extends Listener {
 					.addField("• Reason", reason.substr(0, 1024))
 			);
 
+			message.delete();
 			return message.util.send(
-				`>>> 👞 | Successfully kicked **${message.member.user.tag}** for **${reason}**. ${
+				`>>> 👞 | Successfully kicked **${message.author.tag}** for **${reason}**. ${
 					DMed ? "" : "\nℹ | **I couldn't DM this user**"
 				}`,
 				{ split: true }
