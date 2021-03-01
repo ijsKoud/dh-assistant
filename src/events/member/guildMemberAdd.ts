@@ -143,6 +143,7 @@ export default class guildMemberAdd extends Listener {
 		msg.edit("", embed);
 
 		if (!member.user.bot) this.welcome(member);
+		member.roles.add("701782375834583338");
 	}
 
 	async welcome(member: GuildMember) {
