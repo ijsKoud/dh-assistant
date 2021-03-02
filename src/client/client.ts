@@ -1,6 +1,6 @@
 import { ListenerHandler } from "discord-akairo";
 import { AkairoClient, CommandHandler } from "discord-akairo";
-import { WebhookClient } from "discord.js";
+import { WebhookClient, Guild, Structures } from "discord.js";
 import { Message } from "discord.js";
 import { connect, connection } from "mongoose";
 import { join } from "path";
@@ -19,6 +19,11 @@ declare module "discord-akairo" {
 		altDetection: boolean;
 	}
 }
+declare module "discord.js" {
+	interface GuildMember {
+		pending: boolean;
+	}
+}
 
 // client
 export default class dhClient extends AkairoClient {
@@ -28,7 +33,7 @@ export default class dhClient extends AkairoClient {
 	private wb: WebhookClient = new WebhookClient(process.env.WB_ID, process.env.WB_TOKEN);
 	public utils: util = new util(this);
 
-	public listenHandler: ListenerHandler = new ListenerHandler(this, {
+	public listenerHandler: ListenerHandler = new ListenerHandler(this, {
 		directory: join(__dirname, "..", "events"),
 	});
 	public commandHandler: CommandHandler = new CommandHandler(this, {
@@ -71,15 +76,15 @@ export default class dhClient extends AkairoClient {
 	}
 
 	private async _init(): Promise<void> {
-		this.commandHandler.useListenerHandler(this.listenHandler);
-		this.listenHandler.setEmitters({
+		this.commandHandler.useListenerHandler(this.listenerHandler);
+		this.listenerHandler.setEmitters({
 			commandHandler: this.commandHandler,
-			listenerHandler: this.listenHandler,
+			listenerHandler: this.listenerHandler,
 			process,
 		});
 
 		this.commandHandler.loadAll();
-		this.listenHandler.loadAll();
+		this.listenerHandler.loadAll();
 	}
 
 	private connect(): void {
@@ -122,3 +127,23 @@ export default class dhClient extends AkairoClient {
 		console.log(msg.replace(/\*/g, "").replace(/`/g, ""));
 	}
 }
+
+// extends
+Structures.extend(
+	"GuildMember",
+	(GuildMember) =>
+		class dhGuildMember extends GuildMember {
+			pending = false;
+
+			constructor(client: dhClient, data: any, guild: Guild) {
+				super(client, data, guild);
+				this.pending = data.pending ?? false;
+			}
+
+			_patch(data: any) {
+				// @ts-expect-error
+				super._patch(data);
+				this.pending = data.pending ?? false;
+			}
+		}
+);
