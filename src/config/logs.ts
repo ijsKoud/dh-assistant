@@ -6,3 +6,4 @@ export const systemlogs = {
 
 export const whitelistedChannels = [];
 export const lvlBlacklisted = [];
+export const channelIds = [];

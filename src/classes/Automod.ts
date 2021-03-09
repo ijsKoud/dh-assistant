@@ -1,8 +1,10 @@
+import ms from "ms";
 import { GuildMember } from "discord.js";
 import { Message } from "discord.js";
 import dhClient from "../client/client";
 import { iWarn } from "../model/interfaces";
 import Warn from "../model/moderation/Warn";
+import Mute from "../model/moderation/Mute";
 
 const spamfilter: Map<string, sFilterObj> = new Map();
 interface sFilterObj {
@@ -65,6 +67,33 @@ export default class Automod {
 		});
 
 		this.client.emit("warnEvent", offender, moderator, reason, caseId);
+		const warnCount = warns.filter((w) => w.userId === offender.id)?.length || 0;
+		if (warnCount % 2 === 0) {
+			await offender
+				.send(
+					this.client.tagscript(
+						this.client.messages.DM + "\n\n⌚ | **Duration of mute**: `{DURATION}`",
+						{
+							TYPE: "Mute",
+							GUILD: offender.guild.name,
+							reason: reason.substr(0, 1900),
+							DURATION: ms(6e5),
+						}
+					)
+				)
+				.catch((e) => null);
+
+			await Mute.create({
+				guildId: offender.guild.id,
+				userId: offender.id,
+				moderator: moderator.id,
+				date: Date.now() + 6e5,
+				duration: 6e5,
+			});
+
+			await offender.roles.add(this.client.config.muteRole, `${reason}`);
+			this.client.emit("muteEvent", offender, offender.guild.me, reason, 6e5);
+		}
 		return caseId;
 	}
 

@@ -15,6 +15,7 @@ import LevelManager from "../classes/LevelManager";
 
 // extensions
 import "../extensions/dhMember";
+import Api from "../classes/Api";
 
 // declare
 declare module "discord-akairo" {
@@ -22,7 +23,10 @@ declare module "discord-akairo" {
 		inhibitorHandler: InhibitorHandler;
 		commandHandler: CommandHandler;
 		listenerHandler: ListenerHandler;
+
 		utils: util;
+
+		Api: Api;
 		automod: Automod;
 		levelManager: LevelManager;
 
@@ -66,6 +70,8 @@ interface timeoutObj {
 export default class dhClient extends AkairoClient {
 	private wb: WebhookClient = new WebhookClient(process.env.WB_ID, process.env.WB_TOKEN);
 	public utils: util = new util(this);
+
+	public Api: Api = new Api(this);
 	public automod: Automod = new Automod(this);
 	public levelManager = new LevelManager(this);
 
@@ -149,6 +155,7 @@ export default class dhClient extends AkairoClient {
 		});
 
 		[this.commandHandler, this.listenerHandler, this.inhibitorHandler].forEach((x) => x.loadAll());
+		this.Api.start();
 	}
 
 	public tagscript(msg: string, vars: Record<string, any> = {}) {
