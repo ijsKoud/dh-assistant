@@ -11,3 +11,4 @@
 - [x] fun commands
 - [x] admin commands
 - [x] leveling
+- [ ] cet commands (requestping, qotd/fotd command)
