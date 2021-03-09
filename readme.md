@@ -9,5 +9,5 @@
 - [ ] feedback
 - [ ] tickets + transcripts
 - [x] fun commands
-- [ ] admin commands
+- [x] admin commands
 - [x] leveling
