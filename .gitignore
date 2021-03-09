@@ -1,0 +1,10 @@
+# folders
+node_modules/
+dist/
+
+# yarn
+yarn.lock
+yarn-error.log
+
+# files
+.env
