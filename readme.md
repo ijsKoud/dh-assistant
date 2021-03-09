@@ -8,6 +8,6 @@
 - [x] alt defender + logging
 - [ ] feedback
 - [ ] tickets + transcripts
-- [ ] fun commands
+- [x] fun commands
 - [ ] admin commands
 - [x] leveling
