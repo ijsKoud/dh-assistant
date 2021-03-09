@@ -67,6 +67,7 @@ export default class userinfoCommand extends Command {
 		if (message.guild) {
 			const member = await this.client.utils.fetchMember(user.id, message.guild);
 			if (member) {
+				const roblox = await member.robloxUser();
 				const r = member.roles.cache
 					.sort((a, b) => b.position - a.position)
 					.map((role) => role.toString())
@@ -85,6 +86,10 @@ export default class userinfoCommand extends Command {
 						"MMMM Do YYYY hh:mm:ss"
 					)} | ${moment(member.joinedTimestamp).fromNow()}\``,
 					`> 📂 | **Roles**: ${roles}`,
+				]);
+				embed.addField("• Roblox Information", [
+					`>>> 🎮 | **Rover**: ${roblox.rover || "-"}`,
+					`🕹 | **Bloxlink**: ${roblox.bloxlink || "-"}`,
 				]);
 			}
 		}

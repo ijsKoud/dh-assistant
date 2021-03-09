@@ -5,7 +5,7 @@
 - [x] logging (ban, kick, mute, warn, message)
 - [x] info commands (userinfo, serverinfo)
 - [x] automod (spamfilter, blacklisted words)
-- [ ] alt defender + logging
+- [x] alt defender + logging
 - [ ] feedback
 - [ ] tickets + transcripts
 - [ ] fun commands

@@ -7,9 +7,14 @@ import util from "./util";
 import moment from "moment";
 
 import { Logger, LogLevel } from "@melike2d/logger";
+const logger = new Logger("DH Assistant v3");
+
+// classes
 import Automod from "../classes/Automod";
 import LevelManager from "../classes/LevelManager";
-const logger = new Logger("DH Assistant v3");
+
+// extensions
+import "../extensions/dhMember";
 
 // declare
 declare module "discord-akairo" {
@@ -35,6 +40,13 @@ declare module "discord-akairo" {
 
 		log(type: "DEBUG" | "ERROR" | "INFO" | "SILLY" | "TRACE" | "WARN", msg: string): void;
 		tagscript(msg: string, vars?: Record<string, any>): string;
+	}
+}
+
+declare module "discord.js" {
+	interface GuildMember {
+		robloxUser(): Promise<{ rover: string; bloxlink: string }>;
+		pending: boolean;
 	}
 }
 
