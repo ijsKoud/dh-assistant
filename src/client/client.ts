@@ -38,6 +38,11 @@ declare module "discord-akairo" {
 			[x: string]: string;
 		};
 
+		mod: {
+			altDefender: boolean;
+			automod: boolean;
+		};
+
 		log(type: "DEBUG" | "ERROR" | "INFO" | "SILLY" | "TRACE" | "WARN", msg: string): void;
 		tagscript(msg: string, vars?: Record<string, any>): string;
 	}
@@ -65,6 +70,11 @@ export default class dhClient extends AkairoClient {
 	public levelManager = new LevelManager(this);
 
 	public hex = "#1F1F1F";
+
+	public mod = {
+		altDefender: true,
+		automod: true,
+	};
 
 	public config = config;
 	public messages = {

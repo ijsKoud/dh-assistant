@@ -30,6 +30,7 @@ export default class Automod {
 	constructor(public client: dhClient) {}
 
 	public check(message: Message): warnObj[] {
+		if (!this.client.mod.automod) return [];
 		return [
 			this.spamFilter(message),
 			this.mentionFilter(message),

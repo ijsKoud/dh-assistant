@@ -27,15 +27,15 @@ export default class guildMemberAdd extends Listener {
 		let kicked: boolean = false;
 
 		if (
-			!roblox.bloxlink ||
-			!roblox.rover ||
-			(Date.now() - member.user.createdTimestamp < 1296e6 &&
-				!member.user.bot &&
-				(!member.user.displayAvatarURL().includes(".gif") ||
-					!member.user.tag.includes("0001") ||
-					!member.user.tag.includes("9999") ||
-					!member.user.tag.includes("6666") ||
-					!member.user.tag.includes("0003")))
+			(!roblox.bloxlink || !roblox.rover) &&
+			this.client.mod.altDefender &&
+			Date.now() - member.user.createdTimestamp < 1296e6 &&
+			!member.user.bot &&
+			(!member.user.displayAvatarURL().includes(".gif") ||
+				!member.user.tag.includes("0001") ||
+				!member.user.tag.includes("9999") ||
+				!member.user.tag.includes("6666") ||
+				!member.user.tag.includes("0003"))
 		) {
 			const joins = invalidJoins.get(member.id) || invalidJoins.set(member.id, 1).get(member.id);
 			if (joins > 2) {
