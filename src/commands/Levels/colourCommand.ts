@@ -21,9 +21,11 @@ export default class colourCommand extends Command {
 	}
 
 	async exec(message: Message, { colour }: { colour: string }) {
-		if (!(await this.client.levelManager.getUser(message.author.id, message.guild.id)))
-			return message.util.send("You don't have any xp yet, send some messages first.");
+		const data = await this.client.levelManager.getUser(message.author.id, message.guild.id);
+		if (!data) return message.util.send("You don't have any xp yet, send some messages first.");
 
+		if (data.level < 10)
+			return message.util.send("Sorry, you can only change your colour when you are level 10+");
 		if (!colour) return message.util.send("the colour must be an hex object (ex: #ffffff)");
 		await this.client.levelManager.updateUser(message.author.id, message.guild.id, {
 			colour: colour || this.client.hex,
