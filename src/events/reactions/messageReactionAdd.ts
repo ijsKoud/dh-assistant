@@ -4,6 +4,7 @@ import { MessageReaction } from "discord.js";
 import Feedback from "../../model/bot/Feedback";
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import { MessageEmbed } from "discord.js";
+import Ticket from "../../model/tickets/Ticket";
 
 export default class messageReactionAdd extends Listener {
 	constructor() {
@@ -27,6 +28,68 @@ export default class messageReactionAdd extends Listener {
 		if (user.bot || user.system) return;
 
 		if (reaction.emoji.name === "📋") this.feedback(reaction.message, user);
+
+		try {
+			let message = reaction.message;
+
+			if (
+				reaction.emoji.name !== "✔" ||
+				user.system ||
+				user.bot ||
+				message.channel.id !== this.client.config.tickets.claim
+			)
+				return;
+
+			const ticket = await Ticket.findOne({ messageId: message.id });
+			if (!ticket) return;
+
+			const channel = await message.guild.channels.create("ticket", {
+				type: "text",
+				parent: this.client.config.tickets.category,
+				permissionOverwrites: [
+					{
+						id: message.guild.id,
+						deny: ["VIEW_CHANNEL"],
+					},
+					{
+						id: this.client.user.id,
+						allow: [
+							"VIEW_CHANNEL",
+							"ADD_REACTIONS",
+							"EMBED_LINKS",
+							"SEND_MESSAGES",
+							"ATTACH_FILES",
+							"MANAGE_MESSAGES",
+						],
+					},
+					{
+						id: user.id,
+						allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ATTACH_FILES"],
+					},
+				],
+			});
+
+			ticket.channelId = channel.id;
+			ticket.claimerId = user.id;
+			ticket.status = "open";
+			await ticket.save();
+
+			const embed = message.embeds[0];
+			const ticketOwner = await this.client.utils.fetchUser(ticket.userId);
+			channel
+				.send(
+					new MessageEmbed()
+						.setTitle(`ticket - ${ticketOwner.tag}`)
+						.setDescription(embed.description)
+						.setFooter(`Claimed by ${user.tag}`)
+						.setColor(this.client.hex)
+				)
+				.then((m) => m.pin().catch((e) => null));
+
+			message.delete();
+		} catch (e) {
+			this.client.log("ERROR", `Reaction add event error: \`\`\`${e}\`\`\``);
+		}
 	}
 
 	async feedback(message: Message, user: User) {

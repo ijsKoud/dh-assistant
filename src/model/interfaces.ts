@@ -24,3 +24,11 @@ export interface iLevel {
 	xp: number;
 	colour?: string;
 }
+
+export interface iTicket {
+	messageId?: string;
+	channelId?: string;
+	claimerId?: string;
+	userId: string;
+	status: "open" | "closed" | "unclaimed";
+}

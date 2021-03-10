@@ -7,7 +7,7 @@
 - [x] automod (spamfilter, blacklisted words)
 - [x] alt defender + logging
 - [x] feedback
-- [ ] tickets + transcripts
+- [x] tickets + transcripts
 - [x] fun commands
 - [x] admin commands
 - [x] leveling
