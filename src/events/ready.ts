@@ -2,6 +2,7 @@ import { Listener } from "discord-akairo";
 import ms from "ms";
 import Ban from "../model/moderation/Ban";
 import Mute from "../model/moderation/Mute";
+import fetch from "node-fetch";
 
 const max = 2147483647;
 
@@ -15,16 +16,31 @@ export default class ready extends Listener {
 
 	async exec() {
 		this.client.log("INFO", `**${this.client.user.tag}** has logged in!`);
-		this.client.user.setActivity("with the ban hammer", {
+		await this.client.user.setStatus("dnd");
+
+		const url: string =
+			"https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCkMrp3dJhWz2FcGTzywQGWg&key=" +
+			process.env.YOUTUBE_API_KEY;
+
+		const data = await (await fetch(url)).json().catch((e) => {
+			this.client.log("ERROR", `Youtube Fetch Error: \`\`\`${e}\`\`\``);
+			return { items: [{ statistics: { subscriberCount: "unkown" } }] };
+		});
+		const subCount = data.items[0].statistics.subscriberCount;
+		this.client.user.setActivity(`with ${subCount} subscribers!`, {
 			type: "PLAYING",
 		});
-		setInterval(
-			() =>
-				this.client.user.setActivity("with the ban hammer", {
-					type: "PLAYING",
-				}),
-			864e5
-		);
+
+		setInterval(async () => {
+			const data = await (await fetch(url)).json().catch((e) => {
+				this.client.log("ERROR", `Youtube Fetch Error: \`\`\`${e}\`\`\``);
+				return { items: [{ statistics: { subscriberCount: "unkown" } }] };
+			});
+			const subCount = data.items[0].statistics.subscriberCount;
+			this.client.user.setActivity(`with ${subCount} subscribers!`, {
+				type: "PLAYING",
+			});
+		}, 6e5);
 
 		setInterval(async () => {
 			const bans = await Ban.find();
