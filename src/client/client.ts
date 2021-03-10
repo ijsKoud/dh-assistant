@@ -45,6 +45,7 @@ declare module "discord-akairo" {
 		mod: {
 			altDefender: boolean;
 			automod: boolean;
+			tickets: boolean;
 		};
 
 		log(type: "DEBUG" | "ERROR" | "INFO" | "SILLY" | "TRACE" | "WARN", msg: string): void;
@@ -80,6 +81,7 @@ export default class dhClient extends AkairoClient {
 	public mod = {
 		altDefender: true,
 		automod: true,
+		tickets: true,
 	};
 
 	public config = config;
