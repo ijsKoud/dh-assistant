@@ -1,7 +1,12 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Document } from "mongoose";
 import { strings } from "../interfaces";
 
-const feedback = model(
+interface iFeedback extends Document {
+	message: string;
+	guildId: string;
+}
+
+const feedback = model<iFeedback>(
 	"feedback",
 	new Schema({
 		message: strings.required,

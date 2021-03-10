@@ -6,7 +6,7 @@
 - [x] info commands (userinfo, serverinfo)
 - [x] automod (spamfilter, blacklisted words)
 - [x] alt defender + logging
-- [ ] feedback
+- [x] feedback
 - [ ] tickets + transcripts
 - [x] fun commands
 - [x] admin commands
