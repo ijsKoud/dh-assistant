@@ -23,7 +23,7 @@ export default class muteCommand extends Command {
 				},
 				{
 					id: "duration",
-					type: (_: Message, str: string) => ms(str),
+					type: (_: Message, str: string) => (str ? ms(str) : null),
 					default: 864e5,
 				},
 				{
@@ -46,7 +46,7 @@ export default class muteCommand extends Command {
 		const check = this.client.utils.checkPerms(member, message.member);
 		if (check) return message.util.send(check.replace("{TYPE}", "mute"));
 
-		if (duration < 6e4 * 2)
+		if (isNaN(duration) || duration < 6e4 * 2)
 			return message.util.send(
 				"Sorry, to avoid ratelimits you can only mute someone for a minimum of 2 minutes."
 			);
