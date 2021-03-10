@@ -145,9 +145,9 @@ export default class messageEvent extends Listener {
 		}
 
 		if (
-			((message.member &&
+			(message.member &&
 				message.member.hasPermission("MANAGE_GUILD", { checkAdmin: true, checkOwner: true })) ||
-				this.client.isOwner(message.author.id)) &&
+			this.client.isOwner(message.author.id) ||
 			[
 				"723665469894164580",
 				"710223624442871970",
