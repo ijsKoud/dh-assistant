@@ -26,7 +26,7 @@ export default class Api {
 
 		this.notifier = new YouTubeNotifier({
 			hubCallback: `http://85.214.166.129:${this.port}/yt`,
-			secret: "very_cool_secret",
+			secret: "ZeroTwoIsTheBest:D",
 		});
 
 		this.notifier.on("notified", (data: iData) => {
