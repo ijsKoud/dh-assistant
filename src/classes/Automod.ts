@@ -67,7 +67,7 @@ export default class Automod {
 		});
 
 		this.client.emit("warnEvent", offender, moderator, reason, caseId);
-		const warnCount = warns.filter((w) => w.userId === offender.id)?.length || 0;
+		const warnCount = (warns.filter((w) => w.userId === offender.id)?.length || 0) + 1;
 		if (warnCount % 2 === 0) {
 			await offender
 				.send(
