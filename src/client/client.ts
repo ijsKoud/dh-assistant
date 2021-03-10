@@ -76,7 +76,7 @@ export default class dhClient extends AkairoClient {
 	public automod: Automod = new Automod(this);
 	public levelManager = new LevelManager(this);
 
-	public hex = "#1F1F1F";
+	public hex = "#A31422";
 
 	public mod = {
 		altDefender: true,

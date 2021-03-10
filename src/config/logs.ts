@@ -1,17 +1,17 @@
 export const modlog = "806887450257391677";
 export const cet = {
-	ping: "",
-	public: "",
+	ping: "741659701804269608",
+	public: "748653610098884760",
 };
 export const systemlogs = {
-	public: "",
-	staff: "",
+	public: "701792628844527697",
+	staff: "764191400451244053",
 };
 
 export const tickets = {
-	claim: "805243599104901130",
-	transcript: "805243752787738714",
-	category: "805244016916168704",
+	claim: "795094374383353856",
+	transcript: "715948763449131140",
+	category: "804394975726272513",
 };
 
 export const whitelistedChannels = [];
