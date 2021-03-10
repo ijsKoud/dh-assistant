@@ -145,9 +145,17 @@ export default class messageEvent extends Listener {
 		}
 
 		if (
-			(message.member &&
+			((message.member &&
 				message.member.hasPermission("MANAGE_GUILD", { checkAdmin: true, checkOwner: true })) ||
-			this.client.isOwner(message.author.id)
+				this.client.isOwner(message.author.id)) &&
+			[
+				"723665469894164580",
+				"710223624442871970",
+				"731221008085811253",
+				"729327005341843486",
+				"787361508567941130",
+				"789521547751981106",
+			].includes(message.channel.id)
 		)
 			return;
 
@@ -233,7 +241,7 @@ export default class messageEvent extends Listener {
 			.send(
 				new MessageEmbed()
 					.setTitle(`New ticket - ${message.author.tag}`)
-					.setDescription(m.content.substr(0, 2048))
+					.setDescription((m.content || "no message content").substr(0, 2048))
 					.setFooter("React with ✔ to claim this ticket.")
 					.setColor(this.client.hex)
 			)
