@@ -237,7 +237,9 @@ export default class Automod {
 		return {
 			guildId: message.guild.id,
 			moderator: this.client.user.id,
-			reason: `Automatic warning carried out for using blacklisted word (${blWord})`,
+			reason: `Automatic warning carried out for using blacklisted word (${
+				blWord.length > 50 ? blWord.substr(0, 50 - 3) + "..." : blWord
+			})`,
 			userId: message.author.id,
 			type: "blacklisted",
 		};
