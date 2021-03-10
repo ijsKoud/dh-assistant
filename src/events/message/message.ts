@@ -47,7 +47,8 @@ export default class messageEvent extends Listener {
 			}
 		}
 
-		if (message.mentions.users.has(this.client.user.id)) this.createTicket(message);
+		if (message.mentions.users.has(this.client.user.id) && message.content.startsWith("<@"))
+			this.createTicket(message);
 		if (
 			message.channel.type === "dm" ||
 			(message.channel.type === "text" && message.channel.name === "ticket")

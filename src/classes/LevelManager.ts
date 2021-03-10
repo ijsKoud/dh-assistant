@@ -87,11 +87,7 @@ export default class LevelManager {
 	}
 
 	public async getCard(user: User, data: iLevel): Promise<MessageAttachment> {
-		const ranks = (await Level.find({ guildId: data.guildId }))
-			.sort((a, b) => b.level * 75 + b.xp - (a.level * 75 + a.xp))
-			.map((l, i) => {
-				return { level: l, i };
-			});
+		const ranks = await this.getLevels(data.guildId);
 		const buffer =
 			this.img.get(user.id + data.guildId) ||
 			(await new Rank()
@@ -113,5 +109,23 @@ export default class LevelManager {
 		}
 
 		return new MessageAttachment(buffer, "rankcard.png");
+	}
+
+	public async getLevels(id: string): Promise<{ level: iLevel; i: number }[]> {
+		return (await Level.find({ guildId: id }))
+			.map((v) => {
+				return { level: v, total: this.getTotal(v.level, v.xp) };
+			})
+			.sort((a, b) => b.total - a.total)
+			.map((l, i) => {
+				return { level: l.level, i };
+			});
+	}
+
+	public getTotal(level: number, xp: number): number {
+		const arr: number[] = [];
+		for (let i = 1; i < level + 1; i++) arr.push(75 * i);
+
+		return arr.reduce((a, b) => a + b) + xp;
 	}
 }
