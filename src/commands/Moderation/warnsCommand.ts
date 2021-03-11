@@ -37,7 +37,7 @@ export default class warns extends Command {
 		const member = await this.client.utils.fetchMember(id, message.guild);
 		const embed = new MessageEmbed().setColor(this.client.hex);
 
-		if (member) {
+		if (member && id) {
 			const data = await Warn.find({ guildId: message.guild.id, userId: member.id });
 			if (!data?.length) return message.util.send(`No warnings found for **${member.user.tag}**.`);
 
