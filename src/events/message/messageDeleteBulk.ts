@@ -18,7 +18,7 @@ export default class messageDeleteBulk extends Listener {
 
 		cachedMessages = cachedMessages.filter((m) => !m.author.bot);
 		const message = cachedMessages.first();
-		if (message.guild?.id !== process.env.GUILD) return;
+		if (message?.guild?.id !== process.env.GUILD) return;
 
 		if (message.channel.type === "dm") return;
 		await message.channel.fetch(true);

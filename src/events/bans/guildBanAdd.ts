@@ -28,7 +28,7 @@ export default class guildBanAddEvent extends Listener {
 			.setFooter("User banned")
 			.setTimestamp();
 		const description = [`**Offender**: ${user.tag} (${user.toString()})`];
-		switch (ban.executor?.id) {
+		switch (ban?.executor?.id) {
 			case this.client.user.id:
 				{
 					const [userId, reason] = ban.reason?.split(/\|/g) || [
