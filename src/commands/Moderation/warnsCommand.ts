@@ -28,7 +28,6 @@ export default class warns extends Command {
 				{
 					id: "id",
 					type: "string",
-					default: "user",
 				},
 			],
 		});
