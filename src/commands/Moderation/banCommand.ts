@@ -17,7 +17,6 @@ export default class banCommand extends Command {
 				{
 					id: "id",
 					type: "string",
-					default: "user",
 				},
 				{
 					id: "reason",
@@ -31,7 +30,7 @@ export default class banCommand extends Command {
 
 	async exec(message: Message, { id, reason }: { id: string; reason: string }) {
 		const user = await this.client.utils.fetchUser(id);
-		if (!user) return message.util.send(this.client.messages.noUser.replace("{USER}", id));
+		if (!user || !id) return message.util.send(this.client.messages.noUser.replace("{USER}", id));
 
 		const member = await this.client.utils.fetchMember(user.id, message.guild);
 		if (member) {

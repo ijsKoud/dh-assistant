@@ -17,7 +17,6 @@ export default class kickCommand extends Command {
 				{
 					id: "id",
 					type: "string",
-					default: "user",
 				},
 				{
 					id: "reason",
@@ -31,7 +30,7 @@ export default class kickCommand extends Command {
 
 	async exec(message: Message, { id, reason }: { id: string; reason: string }) {
 		const member = await this.client.utils.fetchMember(id, message.guild);
-		if (!member) return message.util.send(this.client.messages.noUser.replace("{USER}", id));
+		if (!member || !id) return message.util.send(this.client.messages.noUser.replace("{USER}", id));
 		const check = this.client.utils.checkPerms(member, message.member);
 		if (check) return message.util.send(check.replace("{TYPE}", "kick"));
 

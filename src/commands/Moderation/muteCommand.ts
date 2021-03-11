@@ -19,7 +19,6 @@ export default class muteCommand extends Command {
 				{
 					id: "id",
 					type: "string",
-					default: "user",
 				},
 				{
 					id: "duration",
@@ -41,7 +40,7 @@ export default class muteCommand extends Command {
 		{ id, reason, duration }: { id: string; reason: string; duration: number }
 	) {
 		const member = await this.client.utils.fetchMember(id, message.guild);
-		if (!member) return message.util.send(this.client.messages.noUser.replace("{USER}", id));
+		if (!member || !id) return message.util.send(this.client.messages.noUser.replace("{USER}", id));
 
 		const check = this.client.utils.checkPerms(member, message.member);
 		if (check) return message.util.send(check.replace("{TYPE}", "mute"));

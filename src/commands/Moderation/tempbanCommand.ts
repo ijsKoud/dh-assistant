@@ -19,7 +19,6 @@ export default class tempbanCommand extends Command {
 				{
 					id: "id",
 					type: "string",
-					default: "user",
 				},
 				{
 					id: "duration",
@@ -41,7 +40,7 @@ export default class tempbanCommand extends Command {
 		{ id, reason, duration }: { id: string; reason: string; duration: number }
 	) {
 		const user = await this.client.utils.fetchUser(id);
-		if (!user) return message.util.send(this.client.messages.noUser.replace("{USER}", id));
+		if (!user || !id) return message.util.send(this.client.messages.noUser.replace("{USER}", id));
 
 		const member = await this.client.utils.fetchMember(user.id, message.guild);
 		if (member) {
