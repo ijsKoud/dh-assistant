@@ -23,7 +23,7 @@ export default class guildMemberAdd extends Listener {
 			}**, do **not** kick this user.`
 		);
 
-		const roblox = await member.robloxUser();
+		const roblox = await member.user.robloxUser();
 		let kicked: boolean = false;
 
 		if (

@@ -1,4 +1,3 @@
-import fetch from "node-fetch";
 import { Guild, Structures } from "discord.js";
 import dhClient from "../client/client";
 
