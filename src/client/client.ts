@@ -12,10 +12,11 @@ const logger = new Logger("DH Assistant v3");
 // classes
 import Automod from "../classes/Automod";
 import LevelManager from "../classes/LevelManager";
+import Api from "../classes/Api";
 
 // extensions
 import "../extensions/dhMember";
-import Api from "../classes/Api";
+import "../extensions/dhUser";
 
 // declare
 declare module "discord-akairo" {
@@ -55,8 +56,11 @@ declare module "discord-akairo" {
 
 declare module "discord.js" {
 	interface GuildMember {
-		robloxUser(): Promise<{ rover: string; bloxlink: string }>;
 		pending: boolean;
+	}
+
+	interface User {
+		robloxUser(): Promise<{ rover: string; bloxlink: string }>;
 	}
 }
 
