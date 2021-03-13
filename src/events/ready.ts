@@ -126,6 +126,7 @@ export default class ready extends Listener {
 								const member = await this.client.utils.fetchMember(b.userId, guild);
 								if (member)
 									await member.roles.remove(this.client.config.muteRole).catch((e) => null);
+								this.client.emit("muteEvent", member, guild.me, b.reason);
 							}
 
 							await Mute.findOneAndRemove({ userId: b.userId, guildId: b.guildId });

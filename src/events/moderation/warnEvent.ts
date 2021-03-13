@@ -19,7 +19,7 @@ export default class warnEvent extends Listener {
 			.setDescription([
 				`**Offender**: ${offender.user.tag} (${offender.toString()})`,
 				`**Moderator**: ${moderator.user.tag} (${moderator.toString()})`,
-				`**Duration**: \`${caseId}\``,
+				`**Case Id**: \`${caseId}\``,
 			])
 			.addField("- Reason:", reason.substr(0, 1024) || "no reason given")
 			.setTimestamp();
