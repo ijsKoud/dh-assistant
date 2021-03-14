@@ -91,8 +91,9 @@ export default class Automod {
 				duration: 6e5,
 			});
 
-			await offender.roles.add(this.client.config.muteRole, `${reason}`);
-			this.client.emit("muteEvent", offender, offender.guild.me, reason, 6e5);
+			let r = `Automatic mute for every 2 warnings`;
+			await offender.roles.add(this.client.config.muteRole, `${r}`);
+			this.client.emit("muteEvent", offender, offender.guild.me, r, 6e5);
 		}
 		return caseId;
 	}

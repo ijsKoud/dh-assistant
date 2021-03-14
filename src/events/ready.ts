@@ -1,3 +1,4 @@
+import { GuildMember } from "discord.js";
 import { Listener } from "discord-akairo";
 import ms from "ms";
 import Ban from "../model/moderation/Ban";
@@ -97,7 +98,7 @@ export default class ready extends Listener {
 								delete: true,
 								guildId: b.guildId,
 								userId: b.userId,
-								reason: `${b.moderator}|Automatic unmute from ban made ${ms(b.duration, {
+								reason: `Automatic unmute from ban made ${ms(b.duration, {
 									long: true,
 								})} ago by <@${b.moderator}>`,
 						  }
@@ -105,7 +106,7 @@ export default class ready extends Listener {
 								delete: true,
 								guildId: b.guildId,
 								userId: b.userId,
-								reason: `${b.moderator}|Automatic unmute from ban made ${ms(b.duration, {
+								reason: `Automatic unmute from ban made ${ms(b.duration, {
 									long: true,
 								})} ago by <@${b.moderator}>`,
 								duration: b.date - Date.now(),
@@ -123,23 +124,32 @@ export default class ready extends Listener {
 						timer: setTimeout(async () => {
 							const guild = this.client.guilds.cache.get(b.guildId);
 							if (guild) {
-								const member = await this.client.utils.fetchMember(b.userId, guild);
-								if (member)
+								const member: GuildMember = await this.client.utils
+									.fetchMember(b.userId, guild)
+									.catch((e) => null);
+								if (member) {
 									await member.roles.remove(this.client.config.muteRole).catch((e) => null);
-								this.client.emit("muteEvent", member, guild.me, b.reason);
+									this.client.emit("muteEvent", member, guild.me, b.reason);
+								}
 							}
 
 							await Mute.findOneAndRemove({ userId: b.userId, guildId: b.guildId });
 						}, b.duration),
 					});
-				}
-				const guild = this.client.guilds.cache.get(b.guildId);
-				if (guild) {
-					const member = await this.client.utils.fetchMember(b.userId, guild);
-					if (member) await member.roles.remove(this.client.config.muteRole).catch((e) => null);
-				}
+				} else {
+					const guild = this.client.guilds.cache.get(b.guildId);
+					if (guild) {
+						const member: GuildMember = await this.client.utils
+							.fetchMember(b.userId, guild)
+							.catch((e) => null);
+						if (member) {
+							await member.roles.remove(this.client.config.muteRole).catch((e) => null);
+							this.client.emit("muteEvent", member, guild.me, b.reason);
+						}
+					}
 
-				await Mute.findOneAndRemove({ userId: b.userId, guildId: b.guildId });
+					await Mute.findOneAndRemove({ userId: b.userId, guildId: b.guildId });
+				}
 			});
 		}, 6e4);
 	}
