@@ -98,6 +98,8 @@ export default class guildMemberAdd extends Listener {
 					`> 🎮 | **Connected account**: ${bool}`,
 					`> 📊 | **Status**: \`valid\``,
 				]);
+
+			if (!member.pending) member.roles.add("701782375834583338");
 		} else {
 			embed
 				.setColor("#DC5E55")
@@ -112,10 +114,10 @@ export default class guildMemberAdd extends Listener {
 
 		msg.edit("", embed);
 
-		if (!member.user.bot) this.welcome(member);
+		if (!member.user.bot) this.welcome(member, kicked);
 	}
 
-	async welcome(member: GuildMember) {
+	async welcome(member: GuildMember, kicked: boolean) {
 		const channel = await this.client.utils.getChannel(this.client.config.systemlogs.public);
 		const general = await this.client.utils.getChannel("701791506226348124");
 
@@ -131,6 +133,6 @@ export default class guildMemberAdd extends Listener {
 			);
 
 		channel.send(embed);
-		general.send(`**${member.user.tag}** just joined! Make sure to welcome them!`);
+		if (!kicked) general.send(`**${member.user.tag}** just joined! Make sure to welcome them!`);
 	}
 }
