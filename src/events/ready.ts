@@ -98,7 +98,7 @@ export default class ready extends Listener {
 								delete: true,
 								guildId: b.guildId,
 								userId: b.userId,
-								reason: `Automatic unmute from ban made ${ms(b.duration, {
+								reason: `Automatic unmute from mute made ${ms(b.duration, {
 									long: true,
 								})} ago by <@${b.moderator}>`,
 						  }
@@ -106,7 +106,7 @@ export default class ready extends Listener {
 								delete: true,
 								guildId: b.guildId,
 								userId: b.userId,
-								reason: `Automatic unmute from ban made ${ms(b.duration, {
+								reason: `Automatic unmute from mute made ${ms(b.duration, {
 									long: true,
 								})} ago by <@${b.moderator}>`,
 								duration: b.date - Date.now(),
