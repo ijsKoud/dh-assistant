@@ -49,13 +49,13 @@ export default class Api {
 
 	public notifySenior(data: iData) {
 		this.webhooks.senior.send(
-			`<@&709908903135019010>\n**${data.channel.name}** just posted an **EPIC** video! Make sure to check it out below!\n${data.video.link}`
+			`<@&751928738672934952>\n**${data.channel.name}** just posted an **EPIC** video! Make sure to check it out below!\n${data.video.link}`
 		);
 	}
 
 	public notifyDraavo(data: iData) {
 		this.webhooks.senior.send(
-			`<@&751928738672934952>\n**${data.channel.name}** just posted an **EPIC** video! Make sure to check it out below!\n${data.video.link}`
+			`<@&709908903135019010>\n**${data.channel.name}** just posted an **EPIC** video! Make sure to check it out below!\n${data.video.link}`
 		);
 	}
 }
