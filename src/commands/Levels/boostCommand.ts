@@ -15,7 +15,8 @@ export default class boostCommand extends Command {
 			args: [
 				{
 					id: "boost",
-					type: "number",
+					type: (_: Message, str: string) =>
+						str ? (parseInt(str) > 10 ? null : parseInt(str)) : null,
 					default: 1,
 				},
 			],
@@ -23,7 +24,7 @@ export default class boostCommand extends Command {
 	}
 
 	async exec(message: Message, { boost }: { boost: number }) {
-		this.client.levelManager.boost = boost === 0 ? 1 : boost;
+		this.client.levelManager.boost = boost < 1 ? 1 : boost;
 		message.react("✅");
 	}
 }

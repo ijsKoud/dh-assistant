@@ -150,6 +150,7 @@ export default class messageEvent extends Listener {
 				message.member.hasPermission("MANAGE_GUILD", { checkAdmin: true, checkOwner: true })) ||
 			this.client.isOwner(message.author.id) ||
 			[
+				"710090914776743966",
 				"723665469894164580",
 				"710223624442871970",
 				"731221008085811253",
@@ -237,6 +238,7 @@ export default class messageEvent extends Listener {
 		const m = collector.first();
 		const channel = await this.client.utils.getChannel(this.client.config.tickets.claim);
 		if (!channel) return dm.send("No channel found, please contact the developer of this bot.");
+		if (!m || m?.content.toLowerCase().startsWith("cancel")) return;
 
 		const claimMsg = await channel
 			.send(
