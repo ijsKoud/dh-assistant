@@ -63,7 +63,7 @@ export default class Api {
 	}
 
 	public notifyDraavo(data: iData) {
-		this.webhooks.senior.send(
+		this.webhooks.draavo.send(
 			`<@&709908903135019010>\n**${data.channel.name}** just posted an **EPIC** video! Make sure to check it out below!\n${data.video.link}`
 		);
 	}
