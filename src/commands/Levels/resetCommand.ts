@@ -54,5 +54,7 @@ export default class resetCommand extends Command {
 		await Level.findOneAndDelete({ userId: user.id, guildId: message.guild.id });
 		msg.edit("Successfully deleted their xp + level.");
 		msg.reactions.removeAll();
+
+		this.client.log("INFO", `User XP (${member.user.tag} / ${member.user.id}) reset by by ${message.author.tag} / ${message.author.id}`);
 	}
 }

@@ -25,7 +25,7 @@ export default class helpCommand extends Command {
 		const embed = new MessageEmbed()
 			.setColor(this.client.hex)
 			.setFooter(
-				`LAUNCH Admin - Created by DaanGamesDG`,
+				`DH Assistant - Created by DaanGamesDG`,
 				this.client.user.displayAvatarURL({ dynamic: true, size: 4096 })
 			)
 			.setTitle(`Help Command - ${message.author.tag}`);

@@ -25,5 +25,9 @@ export default class bwhitelist extends Command {
 
 		await blacklist.deleteOne();
 		message.util.send("Ahhhh, someone is removed from the blacklist :(");
+		this.client.log(
+			"INFO",
+			`${user.tag} / ${user.id} whitelisted by ${message.author.tag} / ${message.author.id}`
+		);
 	}
 }

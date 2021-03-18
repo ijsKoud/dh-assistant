@@ -30,11 +30,20 @@ export default class Api {
 		});
 
 		this.notifier.on("notified", (data: iData) => {
-			if (this.links.includes(data.video.link)) return;
+			if (this.links.includes(data.video.link))
+				return this.client.log(
+					"INFO",
+					`Ignoring incoming POST request on port: \`${this.port}\` - channel: ${data.channel.name}`
+				);
 			this.links.push(data.video.link);
 
 			if (["draavo", "ovaard"].includes(data.channel.name?.toLowerCase())) this.notifyDraavo(data);
 			else this.notifySenior(data);
+
+			this.client.log(
+				"INFO",
+				`Incoming POST request on port: \`${this.port}\` - channel: ${data.channel.name}`
+			);
 		});
 
 		this.server.use("/yt", this.notifier.listener());

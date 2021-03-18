@@ -19,8 +19,8 @@ export default class LevelManager {
 		return Level.create({ userId: user, guildId: guild, colour: this.client.hex, level: 1, xp: 0 });
 	}
 
-	public generateXP(xp: number = 0): number {
-		return xp + (Math.floor(Math.random() * 16) + 4) * this.boost;
+	public generateXP(xp: number = 0, multiplier: number = 1): number {
+		return xp + (Math.floor(Math.random() * 16) + 4) * this.boost * multiplier;
 	}
 
 	public async updateUser(

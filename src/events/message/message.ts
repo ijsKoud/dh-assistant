@@ -31,7 +31,7 @@ export default class messageEvent extends Listener {
 				(await this.client.levelManager.getUser(message.author.id, message.guild.id)) ||
 				(await this.client.levelManager.createUser(message.author.id, message.guild.id));
 			const lvl = await this.client.levelManager.updateUser(message.author.id, message.guild.id, {
-				xp: this.client.levelManager.generateXP(data.xp),
+				xp: this.client.levelManager.generateXP(data.xp, message.member.multiplier),
 			});
 
 			if (lvl?.lvlUp) {
@@ -146,11 +146,10 @@ export default class messageEvent extends Listener {
 		}
 
 		if (
-			(message.member &&
-				message.member.hasPermission("MANAGE_GUILD", { checkAdmin: true, checkOwner: true })) ||
+			!message.member ||
+			message.member.hasPermission("MANAGE_GUILD", { checkAdmin: true, checkOwner: true }) ||
 			this.client.isOwner(message.author.id) ||
 			[
-				"710090914776743966",
 				"723665469894164580",
 				"710223624442871970",
 				"731221008085811253",
@@ -167,6 +166,8 @@ export default class messageEvent extends Listener {
 				return message.channel
 					.send(`Hey ${message.author.toString()}, **${w.reason}**`)
 					.then((m) => m.delete({ timeout: 5e3 }));
+
+			if (w.type === "spam" && message.channel.id === "710090914776743966") return;
 
 			try {
 				const caseId = await this.client.automod.warn(message.member, message.guild.me, w.reason);

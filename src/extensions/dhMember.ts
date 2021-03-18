@@ -6,6 +6,7 @@ Structures.extend(
 	(GuildMember) =>
 		class dhGuildMember extends GuildMember {
 			public pending = false;
+			public multiplier: number = 1;
 
 			constructor(client: dhClient, data: any, guild: Guild) {
 				super(client, data, guild);

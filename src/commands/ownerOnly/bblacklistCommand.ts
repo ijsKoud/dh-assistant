@@ -25,5 +25,10 @@ export default class bblacklist extends Command {
 
 		await botBlacklist.create({ userId: user.id });
 		message.util.send("Yay, another user blacklisted!");
+
+		this.client.log(
+			"INFO",
+			`${user.tag} / ${user.id} blacklisted by ${message.author.tag} / ${message.author.id}`
+		);
 	}
 }

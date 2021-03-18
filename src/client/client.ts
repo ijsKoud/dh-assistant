@@ -57,6 +57,7 @@ declare module "discord-akairo" {
 declare module "discord.js" {
 	interface GuildMember {
 		pending: boolean;
+		multiplier: number;
 	}
 
 	interface User {

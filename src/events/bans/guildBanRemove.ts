@@ -13,7 +13,7 @@ export default class guildBanRemoveEvent extends Listener {
 	async exec(guild: Guild, user: User) {
 		if (guild.id !== process.env.GUILD) return;
 		const bans = await guild.fetchAuditLogs({ type: "MEMBER_BAN_REMOVE", limit: 100 });
-		if (!bans?.entries?.size) return console.log("no ban found");
+		if (!bans?.entries?.size) return this.client.log("WARN", `No ban found`);
 
 		const ban = bans.entries.find(
 			(b) => b.targetType === "USER" && (b.target as GuildMember).id === user.id

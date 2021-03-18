@@ -25,6 +25,11 @@ export default class boostCommand extends Command {
 
 	async exec(message: Message, { boost }: { boost: number }) {
 		this.client.levelManager.boost = boost < 1 ? 1 : boost;
+		this.client.log(
+			"INFO",
+			`XP Multiplier changed to ${this.client.levelManager.boost} by ${message.author.id} / ${message.author.tag}`
+		);
+
 		message.react("✅");
 	}
 }
