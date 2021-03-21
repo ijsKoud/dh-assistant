@@ -17,6 +17,8 @@ const files: string[] = [
 	"https://cdn.discordapp.com/attachments/563724345478742018/729394221294944346/unknown.png",
 	"https://media.discordapp.net/attachments/780907238561677322/804100716695126077/unknown.png",
 	"https://cdn.discordapp.com/attachments/780907238561677322/822591236316987414/unknown.png",
+	"https://media.discordapp.net/attachments/710223624442871970/823296420324704276/unknown.png",
+	"https://media.discordapp.net/attachments/710223624442871970/823296417036238888/unknown.png",
 ];
 
 export default class uwu extends Command {
