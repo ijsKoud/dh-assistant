@@ -10,7 +10,7 @@ export default class boostCommand extends Command {
 			cooldown: 1e3,
 			description: {
 				content: "Update the xp boost to give people more xp per minute",
-				usage: "rank [user]",
+				usage: "boost <number>",
 			},
 			args: [
 				{
