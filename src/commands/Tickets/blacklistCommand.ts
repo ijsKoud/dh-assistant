@@ -6,6 +6,7 @@ export default class blacklistCommand extends Command {
 	public constructor() {
 		super("blacklist", {
 			aliases: ["blacklist"],
+			userPermissions: ["BAN_MEMBERS"],
 			channel: "guild",
 			description: {
 				content: "blacklist a user or remove them from the blacklist",

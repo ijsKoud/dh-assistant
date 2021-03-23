@@ -6,6 +6,7 @@ export default class contactCommand extends Command {
 	public constructor() {
 		super("contact", {
 			aliases: ["contact"],
+			userPermissions: ["MANAGE_MESSAGES"],
 			channel: "guild",
 			description: {
 				content: "Contact a user (contacting them instead of them contacting you)",
