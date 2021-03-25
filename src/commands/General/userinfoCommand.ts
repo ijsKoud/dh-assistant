@@ -42,8 +42,21 @@ export default class userinfoCommand extends Command {
 			.setAuthor(`${user.tag} - user info`, user.displayAvatarURL({ dynamic: true, size: 4096 }));
 
 		message.channel.startTyping();
-		const rep: Reputation = await drep.rep(user.id);
-		const banned = await ksoft.bans.check(user.id);
+		const rep: Reputation = await drep.rep(user.id).catch((e: Error) => {
+			this.client.log("ERROR", `Userinfo command error: \`\`\`${e}\`\`\``);
+			return {
+				upvotes: 0,
+				downvotes: 0,
+				reputation: 0,
+				rank: 0,
+				xp: 0,
+				staff: false,
+			};
+		});
+		const banned: Boolean = await ksoft.bans.check(user.id).catch((e) => {
+			this.client.log("ERROR", `Userinfo command error: \`\`\`${e}\`\`\``);
+			return null;
+		});
 		const roblox = await user.robloxUser();
 
 		embed
