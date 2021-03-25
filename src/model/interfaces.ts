@@ -32,3 +32,11 @@ export interface iTicket {
 	userId: string;
 	status: "open" | "closed" | "unclaimed";
 }
+
+export interface iGiveaway {
+	channelId: string;
+	guildId: string;
+	messageId: string;
+	date: number;
+	winners: number;
+}

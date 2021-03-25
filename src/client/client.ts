@@ -12,6 +12,7 @@ const logger = new Logger("DH Assistant v3");
 // classes
 import Automod from "../classes/Automod";
 import LevelManager from "../classes/LevelManager";
+import Giveaway from "../classes/Giveaway";
 import Api from "../classes/Api";
 
 // extensions
@@ -30,6 +31,7 @@ declare module "discord-akairo" {
 		Api: Api;
 		automod: Automod;
 		levelManager: LevelManager;
+		giveaway: Giveaway;
 
 		map: Map<string, timeoutObj>;
 
@@ -80,6 +82,7 @@ export default class dhClient extends AkairoClient {
 	public Api: Api = new Api(this);
 	public automod: Automod = new Automod(this);
 	public levelManager = new LevelManager(this);
+	public giveaway = new Giveaway(this);
 
 	public hex = "#A31422";
 
@@ -161,8 +164,13 @@ export default class dhClient extends AkairoClient {
 			process,
 		});
 
-		[this.commandHandler, this.listenerHandler, this.inhibitorHandler].forEach((x) => x.loadAll());
-		this.Api.start();
+		[
+			this.commandHandler,
+			this.listenerHandler,
+			this.inhibitorHandler,
+			this.Api,
+			this.giveaway,
+		].forEach((x) => x.loadAll());
 	}
 
 	public tagscript(msg: string, vars: Record<string, any> = {}) {

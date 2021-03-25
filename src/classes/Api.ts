@@ -19,7 +19,7 @@ export default class Api {
 		this.server.get("/", (req, res) => res.status(200).send("API is online."));
 	}
 
-	public start(): Express {
+	public loadAll(): Express {
 		this.server?.listen(this.port, () =>
 			this.client.log("INFO", `Server is running on port **${this.port}**.`)
 		);
