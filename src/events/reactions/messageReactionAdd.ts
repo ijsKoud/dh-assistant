@@ -5,6 +5,7 @@ import Feedback from "../../model/bot/Feedback";
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import { MessageEmbed } from "discord.js";
 import Ticket from "../../model/tickets/Ticket";
+import botBlacklist from "../../model/bot/botBlacklist";
 
 export default class messageReactionAdd extends Listener {
 	constructor() {
@@ -95,6 +96,13 @@ export default class messageReactionAdd extends Listener {
 	async feedback(message: Message, user: User) {
 		const config = await Feedback.findOne({ guildId: message.guild.id });
 		if (!config || message.id !== config.message) return;
+
+		if (user.feedbackBlacklisted || (await botBlacklist.findOne({ userId: user.id })))
+			return user
+				.send(
+					"Sorry, you aren't allowed to see your feedback. Please don't try to break our system, because this is the consequence."
+				)
+				.catch((e) => null);
 
 		const msg: Message = await user
 			.send(

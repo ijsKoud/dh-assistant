@@ -25,6 +25,9 @@ export default class Giveaway {
 			const message = await channel.messages.fetch(data.messageId);
 			if (!message || !message.editable) return null;
 
+			const guild = this.client.guilds.cache.get(data.guildId);
+			if (!guild) return null;
+
 			return setTimeout(async () => {
 				try {
 					let reaction = message.reactions.cache.find((r) => r.emoji.name === "🎉");
@@ -33,9 +36,16 @@ export default class Giveaway {
 					let valid = await reaction.users.fetch();
 					let users: User[] = [];
 					for (let i = 0; i < data.winners; i++) {
-						const user = valid.filter((u) => !u.bot || !u.system)?.random();
-						valid = valid.filter(({ id }) => id === user.id);
-						users.push(user);
+						let user = valid.filter((u) => !u.bot || !u.system)?.random();
+						while (
+							data.requiredRole &&
+							(await this.client.utils.fetchMember(user.id, guild)).roles.cache.has(
+								data.requiredRole
+							)
+						) {
+							valid = valid.filter(({ id }) => id === user.id);
+							users.push(user);
+						}
 					}
 
 					users = users.filter((u) => u !== undefined);

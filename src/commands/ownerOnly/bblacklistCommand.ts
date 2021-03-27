@@ -24,6 +24,7 @@ export default class bblacklist extends Command {
 		if (blacklist) return message.util.send("User is already blacklisted kek");
 
 		await botBlacklist.create({ userId: user.id });
+		user.feedbackBlacklisted = true;
 		message.util.send("Yay, another user blacklisted!");
 
 		this.client.log(

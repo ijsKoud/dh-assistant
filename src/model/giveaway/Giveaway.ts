@@ -2,6 +2,7 @@ import { strings, numbers } from "../interfaces";
 import { Schema, Document, model } from "mongoose";
 
 interface iGiveaway extends Document {
+	requiredRole?: string;
 	channelId: string;
 	guildId: string;
 	messageId: string;
@@ -12,6 +13,7 @@ interface iGiveaway extends Document {
 export default model<iGiveaway>(
 	"giveaway",
 	new Schema({
+		requiredRole: strings.optional,
 		channelId: strings.required,
 		guildId: strings.required,
 		messageId: strings.required,

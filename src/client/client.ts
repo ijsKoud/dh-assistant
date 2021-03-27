@@ -64,6 +64,7 @@ declare module "discord.js" {
 
 	interface User {
 		robloxUser(): Promise<{ rover: string; bloxlink: string }>;
+		feedbackBlacklisted: boolean;
 	}
 }
 

@@ -6,6 +6,8 @@ Structures.extend(
 	"User",
 	(User) =>
 		class dhUser extends User {
+			public feedbackBlacklisted = false;
+
 			constructor(client: dhClient, data: any) {
 				super(client, data);
 			}

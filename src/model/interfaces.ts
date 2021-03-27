@@ -34,6 +34,7 @@ export interface iTicket {
 }
 
 export interface iGiveaway {
+	requiredRole?: string;
 	channelId: string;
 	guildId: string;
 	messageId: string;
