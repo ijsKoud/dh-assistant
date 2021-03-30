@@ -67,6 +67,10 @@ export default class messageReactionAdd extends Listener {
 						id: user.id,
 						allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ATTACH_FILES"],
 					},
+					{
+						id: "791638446207926324",
+						allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ATTACH_FILES"],
+					},
 				],
 			});
 

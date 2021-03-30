@@ -156,6 +156,7 @@ export default class messageEvent extends Listener {
 				"729327005341843486",
 				"787361508567941130",
 				"789521547751981106",
+				"731221008085811253",
 			].includes(message.channel.id)
 		)
 			return;

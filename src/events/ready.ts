@@ -152,5 +152,6 @@ export default class ready extends Listener {
 				}
 			});
 		}, 6e4);
+		this.client.giveaway.loadAll();
 	}
 }

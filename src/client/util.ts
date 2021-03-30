@@ -80,8 +80,10 @@ export default class util {
 	}
 
 	public async getChannel(id: string): Promise<TextChannel> {
-		return (this.client.util.resolveChannel(id, this.client.channels.cache, false, false) ||
-			(await this.client.channels.fetch(id).catch((e) => null))) as TextChannel;
+		return id
+			? ((this.client.util.resolveChannel(id, this.client.channels.cache, false, false) ||
+					(await this.client.channels.fetch(id).catch((e) => null))) as TextChannel)
+			: null;
 	}
 
 	public async fetchUser(id: string): Promise<User> {

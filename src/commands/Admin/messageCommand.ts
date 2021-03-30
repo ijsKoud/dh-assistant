@@ -5,7 +5,7 @@ export default class message extends Command {
 	constructor() {
 		super("message", {
 			aliases: ["message", "send"],
-			userPermissions: ["MANAGE_GUILD"],
+			userPermissions: ["MANAGE_ROLES"],
 			category: "Admin",
 			description: {
 				content: 'Send a message to the specified user, use the "-a=true" to make it anonymous.',

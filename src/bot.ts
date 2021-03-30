@@ -1,5 +1,5 @@
 import { config } from "dotenv";
-import launchClient from "./client/client";
+import dhClient from "./client/client";
 config();
 
-new launchClient({ ownerID: ["304986851310043136"] }).start();
+new dhClient({ ownerID: ["304986851310043136"] }).start();

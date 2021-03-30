@@ -5,7 +5,7 @@ export default class echo extends Command {
 	constructor() {
 		super("echo", {
 			aliases: ["echo"],
-			userPermissions: ["MANAGE_GUILD"],
+			userPermissions: ["MANAGE_CHANNELS"],
 			category: "Admin",
 			description: {
 				content: "Secret Command Only Available for Admins",

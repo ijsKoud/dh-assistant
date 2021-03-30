@@ -165,13 +165,9 @@ export default class dhClient extends AkairoClient {
 			process,
 		});
 
-		[
-			this.commandHandler,
-			this.listenerHandler,
-			this.inhibitorHandler,
-			this.Api,
-			this.giveaway,
-		].forEach((x) => x.loadAll());
+		[this.commandHandler, this.listenerHandler, this.inhibitorHandler, this.Api].forEach((x) =>
+			x.loadAll()
+		);
 	}
 
 	public tagscript(msg: string, vars: Record<string, any> = {}) {
