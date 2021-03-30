@@ -11,6 +11,7 @@ import {
 	AwaitReactionsOptions,
 	MessageReaction,
 } from "discord.js";
+import { AwaitMessagesOptions } from "discord.js";
 
 export default class util {
 	public constructor(private client: dhClient) {}
@@ -67,8 +68,19 @@ export default class util {
 			.catch((e) => new Collection<string, MessageReaction>());
 	}
 
+	public async awaitMessages(
+		message: Message,
+		filter: CollectorFilter,
+		options: AwaitMessagesOptions = { max: 1, time: 6e4, errors: ["time"] }
+	): Promise<Collection<string, Message>> {
+		const coll = await message.channel
+			.awaitMessages(filter, options)
+			.catch((e) => new Collection<string, Message>());
+		return coll;
+	}
+
 	public async getChannel(id: string): Promise<TextChannel> {
-		return (this.client.channels.cache.get(id) ||
+		return (this.client.util.resolveChannel(id, this.client.channels.cache, false, false) ||
 			(await this.client.channels.fetch(id).catch((e) => null))) as TextChannel;
 	}
 

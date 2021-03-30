@@ -12,3 +12,5 @@
 - [x] admin commands
 - [x] leveling
 - [x] cet command
+- [ ] advert command (request check -> approved = send, denied = send reason why)
+- [ ] giveaways
