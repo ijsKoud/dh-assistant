@@ -12,7 +12,7 @@
 - [x] admin commands
 - [x] leveling
 - [x] cet command
-- [ ] advert command (request check -> approved = send, denied = send reason why)
+- [x] advert command (request check -> approved = send, denied = send reason why)
 - [x] giveaways
 - [ ] ticket prompt command (request close)
 - [ ] automod whitelist

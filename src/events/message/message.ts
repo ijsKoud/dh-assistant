@@ -150,7 +150,6 @@ export default class messageEvent extends Listener {
 			message.member.hasPermission("MANAGE_GUILD", { checkAdmin: true, checkOwner: true }) ||
 			this.client.isOwner(message.author.id) ||
 			[
-				"723665469894164580",
 				"710223624442871970",
 				"731221008085811253",
 				"729327005341843486",
@@ -169,6 +168,11 @@ export default class messageEvent extends Listener {
 					.then((m) => m.delete({ timeout: 5e3 }));
 
 			if (w.type === "spam" && message.channel.id === "710090914776743966") return;
+			if (
+				w.type === "blacklisted" &&
+				["826949661234692096", "723665469894164580"].includes(message.channel.id)
+			)
+				return;
 
 			try {
 				const caseId = await this.client.automod.warn(message.member, message.guild.me, w.reason);

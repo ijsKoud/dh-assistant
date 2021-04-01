@@ -11,12 +11,16 @@ export default class adrequestCommand extends Command {
 				content: "Ad request",
 				usage: "adrequest <ad>",
 			},
-			cooldown: 2e3,
+			cooldown: 36e5 * 2,
 			args: [
 				{
 					id: "msg",
 					type: "string",
 					match: "rest",
+					prompt: {
+						start: "Please provide a message",
+						retry: "Please provide a message",
+					},
 				},
 			],
 		});
