@@ -26,7 +26,7 @@ export default class messageReactionAdd extends Listener {
 
 		if (reaction.message.channel.id === this.client.config.cet.ping)
 			return this.ping(reaction, user);
-		if (user.bot || user.system) return;
+		if (reaction.message.channel.id === "710223624442871970") return this.adrequest(reaction, user);
 
 		if (reaction.emoji.name === "📋") this.feedback(reaction.message, user);
 
@@ -168,6 +168,55 @@ export default class messageReactionAdd extends Listener {
 						.setColor("#DB5D57")
 				);
 				message.reactions.removeAll();
+				break;
+			default:
+				break;
+		}
+	}
+
+	async adrequest(reaction: MessageReaction, user: User) {
+		const { message } = reaction;
+		if (!message.author.bot) return;
+		if (message.embeds.length === 0) return;
+
+		switch (`<:${reaction.emoji.identifier}>`) {
+			case this.client.utils.emojiFinder("greentick"):
+				message.edit(
+					new MessageEmbed(message.embeds[0])
+						.addField("Granted by:", user.toString())
+						.setColor("#51F2AF")
+				);
+				message.reactions.removeAll();
+				const channel = await this.client.utils.getChannel("720986432176652369");
+				channel.send(
+					`>>> 💰 | Ad - ${message.embeds[0].fields.find((f) => f.name === "User").value}\n${
+						message.embeds[0].description
+					}`,
+					{ allowedMentions: { users: [], roles: [] } }
+				);
+				break;
+			case this.client.utils.emojiFinder("redtick"):
+				message.edit(
+					new MessageEmbed(message.embeds[0])
+						.addField("Denied by:", user.toString())
+						.setColor("#DB5D57")
+				);
+				message.reactions.removeAll();
+				message.channel.send(`${user.toString()}, ad request denied: please provide a reason.`);
+				const collector = await this.client.utils.awaitMessages(
+					message,
+					(m: Message) => m.author.id === user.id
+				);
+				const u = await this.client.utils.fetchUser(
+					message.embeds[0].fields.find((f) => f.name === "User").value.split(/ +/g)[1]
+				);
+
+				await u.send(
+					`Your ad request status update: **denied**\n${
+						collector?.first()?.content || "No reason provided."
+					}`,
+					{ split: true }
+				);
 				break;
 			default:
 				break;
