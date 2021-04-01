@@ -33,14 +33,18 @@ export default class ready extends Listener {
 		});
 
 		setInterval(async () => {
-			const data = await (await fetch(url)).json().catch((e) => {
-				this.client.log("ERROR", `Youtube Fetch Error: \`\`\`${e}\`\`\``);
-				return { items: [{ statistics: { subscriberCount: "unkown" } }] };
-			});
-			const subCount = data.items[0].statistics.subscriberCount;
-			this.client.user.setActivity(`with ${subCount} subscribers!`, {
-				type: "PLAYING",
-			});
+			try {
+				const data = await (await fetch(url)).json().catch((e) => {
+					this.client.log("ERROR", `Youtube Fetch Error: \`\`\`${e}\`\`\``);
+					return { items: [{ statistics: { subscriberCount: "unkown" } }] };
+				});
+				const subCount = data.items[0].statistics.subscriberCount;
+				this.client.user.setActivity(`with ${subCount} subscribers!`, {
+					type: "PLAYING",
+				});
+			} catch (e) {
+				this.client.log("ERROR", `Status update error: \`\`\`${e.stack}\`\`\``);
+			}
 		}, 6e5);
 
 		setInterval(async () => {

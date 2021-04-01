@@ -7,8 +7,9 @@ export default class gstartCommand extends Command {
 	constructor() {
 		super("gstart", {
 			aliases: ["gstart", "gcreate"],
+			channel: "guild",
 			clientPermissions: ["EMBED_LINKS", "ADD_REACTIONS", "MENTION_EVERYONE"],
-			userPermissions: ["MANAGE_GUILD"],
+			userPermissions: ["MANAGE_ROLES"],
 			description: {
 				content: "Starts a giveaway",
 				usage: "gstart <...prompt>",

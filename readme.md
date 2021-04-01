@@ -13,4 +13,8 @@
 - [x] leveling
 - [x] cet command
 - [ ] advert command (request check -> approved = send, denied = send reason why)
-- [ ] giveaways
+- [x] giveaways
+- [ ] ticket prompt command (request close)
+- [ ] automod whitelist
+- [ ] rank command (HoD+)
+- [ ] notifications 2.0
