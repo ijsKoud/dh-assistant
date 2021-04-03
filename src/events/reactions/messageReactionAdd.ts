@@ -211,6 +211,8 @@ export default class messageReactionAdd extends Listener {
 					message.embeds[0].fields.find((f) => f.name === "User").value.split(/ +/g)[1]
 				);
 
+				this.client.commandHandler.cooldowns.get(message.author.id)["adrequest"] = null;
+
 				await u.send(
 					`Your ad request status update: **denied**\n${
 						collector?.first()?.content || "No reason provided."

@@ -27,7 +27,11 @@ export default class adrequestCommand extends Command {
 	}
 
 	async exec(message: Message, { msg }: { msg: string }) {
-		if (!msg) return message.util.send("Uhm, why didn't you provide a message?");
+		if (!msg) {
+			this.client.commandHandler.cooldowns.get(message.author.id)[this.id] = null;
+			return message.util.send("Uhm, why didn't you provide a message?");
+		}
+
 		const channel = await this.client.utils.getChannel("710223624442871970");
 		const m = await channel.send(
 			new MessageEmbed()
