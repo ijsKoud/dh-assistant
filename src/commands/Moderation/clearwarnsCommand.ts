@@ -30,7 +30,7 @@ export default class clearwarnsCommand extends Command {
 		if (check) return message.util.send(check.replace("{TYPE}", "clear warnings from"));
 
 		try {
-			const warns = await Warn.find({ guildId: message.guild.id });
+			const warns = await Warn.find({ guildId: message.guild.id, userId: member.id });
 			if (!warns?.length) return message.util.send(`No warning found for: **${member.user.tag}**.`);
 
 			warns.forEach(async (w) => await w.deleteOne());

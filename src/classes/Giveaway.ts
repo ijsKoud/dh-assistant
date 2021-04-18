@@ -66,7 +66,7 @@ export default class Giveaway {
 
 					await msg.channel.send(
 						users?.length
-							? `🎉'Congrats ${users.map((u) => u.toString()).join(", ")}, you won **${
+							? `🎉'Congrats ${users.map((u) => u?.toString?.()).join(", ")}, you won **${
 									msg.embeds[0]?.fields?.find((f) => f.name === "• Prize")?.value || "unkown"
 							  }**.`
 							: `😢 No one wanted to enter this giveaway.`
@@ -90,9 +90,9 @@ export default class Giveaway {
 		guild: Guild,
 		data: iGiveaway
 	): Promise<User[]> {
-		let valid = (await this.parseMember(await reaction.users.fetch(), guild))?.filter(
-			(u) => !u.user.bot
-		);
+		let valid = (await this.parseMember(await reaction.users.fetch(), guild))
+			?.filter((u) => !u?.user?.bot)
+			.filter((x) => x !== null);
 
 		if (data.requiredRole) valid = valid.filter((u) => u.roles.cache.has(data.requiredRole));
 		let users: User[] = [];
