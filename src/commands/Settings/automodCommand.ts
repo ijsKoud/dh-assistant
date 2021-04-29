@@ -21,7 +21,7 @@ export default class automodCommand extends Command {
 					id: "module",
 					type: (_: Message, str: string) =>
 						str
-							? ["view", "automod", "mute", "caps", "mention", "spam", "blacklisted"].includes(
+							? ["view", "enabled", "mute", "caps", "mention", "spam", "blacklisted"].includes(
 									str.toLowerCase()
 							  )
 								? str.toLowerCase()
