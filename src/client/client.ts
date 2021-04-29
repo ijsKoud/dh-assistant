@@ -24,6 +24,7 @@ import { Logger, LogLevel } from "@dimensional-fun/logger";
 const logger = new Logger("DH Assistant v3.1");
 
 // extensions import
+import "../extensions/dhMember";
 import "../extensions/dhMessage";
 import "../extensions/dhGuild";
 import "../extensions/dhUser";
