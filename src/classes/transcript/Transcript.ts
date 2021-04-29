@@ -143,7 +143,7 @@ export default class Transcript {
 		const timestamp = document.createElement("span");
 		timestamp.setAttribute("class", "chat__timestamp");
 		timestamp.appendChild(
-			document.createTextNode(moment(message.createdAt).tz("Europe/London").calendar())
+			document.createTextNode(moment(message.createdAt).tz("Europe/London").format("DD/MM/YYYY h:mm:ss a"))
 		);
 		messagesDiv.appendChild(timestamp);
 		messages.map((m) => messagesDiv.appendChild(this.getMessage(document, m)));
@@ -163,7 +163,7 @@ export default class Transcript {
 		if (message.editedTimestamp) {
 			const edited = document.createElement("span");
 			edited.setAttribute("class", "chat__edited-timestamp");
-			edited.setAttribute("title", moment(message.editedAt).tz("Europe/London").calendar());
+			edited.setAttribute("title", moment(message.editedAt).tz("Europe/London").format("DD/MM/YYYY h:mm:ss a"));
 			edited.append("(edited)");
 			div.appendChild(edited);
 		}
@@ -464,7 +464,7 @@ export default class Transcript {
 
 		div = document.createElement("div");
 		div.setAttribute("class", "footer-item");
-		div.append(`Date: ${moment(new Date()).tz("Europe/London").format("MMMM Do YYYY, h:mm:ss a")}`);
+		div.append(`Date: ${moment(new Date()).tz("Europe/London").format("DD/MM/YYYY h:mm:ss a")}`);
 		mainDiv.append(div);
 
 		return mainDiv;
