@@ -1,5 +1,4 @@
 # folders
-chatExporter/
 transcripts/
 node_modules/
 dist/
@@ -11,6 +10,3 @@ yarn-error.log
 
 # files
 .env
-
-# Dev DB
-db
