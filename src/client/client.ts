@@ -96,7 +96,7 @@ export default class dhClient extends AkairoClient {
 	public utils: util = new util(this);
 
 	public altdefender = true;
-	public hex = "#E2BC13";
+	public hex = "#B12024";
 	public emoji = Emojis;
 	public responses = Reponses;
 
