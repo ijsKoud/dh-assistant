@@ -139,7 +139,8 @@ export default class ticketsCommand extends Command {
 					await message.util.send(
 						`>>> 🎫 | **Tickets Updated**:\nAccess role successfully changed to **${
 							role.name
-						}** (${role.toString()})`
+						}** (${role.toString()})`,
+						{ allowedMentions: { roles: [] } }
 					);
 				}
 				break;
