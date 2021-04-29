@@ -1,0 +1,16 @@
+# folders
+chatExporter/
+transcripts/
+node_modules/
+dist/
+
+# yarn
+yarn.lock
+yarn-error.log
+.yarnrc.yml
+
+# files
+.env
+
+# Dev DB
+db

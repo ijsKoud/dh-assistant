@@ -1,0 +1,26 @@
+import { Command } from "discord-akairo";
+import { Message } from "discord.js";
+
+export default class reload extends Command {
+	constructor() {
+		super("reload", {
+			aliases: ["reload"],
+			args: [
+				{
+					id: "command",
+					type: "commandAlias",
+				},
+			],
+			ownerOnly: true,
+		});
+	}
+
+	async exec(message: Message, { command }: { command: Command }) {
+		if (!command) return message.util.send(`>>> ${this.client.emoji.redcross} | No command found.`);
+		command.reload();
+		this.client.log("INFO", `**${command.id}** command reloaded!`);
+		return message.util.send(
+			`>>> ${this.client.emoji.greentick} | **${command.id}** command reloaded!`
+		);
+	}
+}
