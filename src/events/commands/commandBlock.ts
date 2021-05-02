@@ -23,7 +23,7 @@ export default class CommandBlockedListener extends Listener {
 				break;
 			case "blacklisted":
 				message.util.send(
-					">>> 🔨 | It looks like you are blacklisted, if this is a mistake join our Discord server for help: https://modtech.app/discord"
+					">>> 🔨 | It looks like you are blacklisted, please DM **DaanGamesDG#7621** if you think this is a mistake."
 				);
 				break;
 			default:

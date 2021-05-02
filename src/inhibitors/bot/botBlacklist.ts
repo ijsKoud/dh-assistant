@@ -11,7 +11,7 @@ export default class botBlacklist extends Inhibitor {
 
 	async exec(message: Message, command: Command) {
 		return (await blacklist.findOne({ userId: message.author.id })) ||
-			(await blacklist.findOne({ guildId: message.guild?.id }))
+			(message.guild && (await blacklist.findOne({ guildId: message.guild?.id })))
 			? true
 			: false;
 	}
