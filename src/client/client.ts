@@ -96,7 +96,7 @@ export default class dhClient extends AkairoClient {
 	private wb: WebhookClient = new WebhookClient(process.env.WB_ID, process.env.WB_TOKEN);
 	public utils: util = new util(this);
 
-	public altdefender = true;
+	public altdefender = false;
 	public hex = "#B12024";
 	public emoji = Emojis;
 	public responses = Reponses;

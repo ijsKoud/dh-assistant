@@ -113,14 +113,22 @@ export default class LevelManager {
 	}
 
 	public async getLevels(id: string): Promise<{ level: iLevel; i: number }[]> {
-		return (await Level.find({ guildId: id }))
-			.map((v) => {
-				return { level: v, total: this.getTotal(v.level, v.xp) };
-			})
-			.sort((a, b) => b.total - a.total)
-			.map((l, i) => {
-				return { level: l.level, i };
-			});
+		return await Promise.all(
+			(await Level.find({ guildId: id }))
+				.map((v) => {
+					return { level: v.toObject(), total: this.getTotal(v.level, v.xp) };
+				})
+				.sort((a, b) => b.total - a.total)
+				.map(async (l, i) => {
+					return {
+						level: {
+							...l.level,
+							tag: (await this.client.utils.fetchUser(l.level.userId))?.tag,
+						},
+						i,
+					};
+				})
+		);
 	}
 
 	public getTotal(level: number, xp: number): number {

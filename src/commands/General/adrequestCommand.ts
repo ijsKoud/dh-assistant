@@ -39,7 +39,7 @@ export default class adrequestCommand extends Command {
 			!message.member.hasPermission("USE_EXTERNAL_EMOJIS", { checkAdmin: true, checkOwner: true })
 		)
 			return message.util.send(
-				"Uhm, sorry you only users with level 5+, boosters, members, content creators and staff members are able to do this."
+				"Uhm, sorry only users with level 5+ role, boosters, channel members, content creators and staff members are able to do this."
 			);
 
 		const channel = await this.client.utils.getChannel("710223624442871970");

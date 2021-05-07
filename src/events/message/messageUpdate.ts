@@ -13,7 +13,7 @@ export default class messageUpdateListener extends Listener {
 		try {
 			if (newMessage.partial) newMessage = await newMessage.fetch();
 			if (oldMessage.partial) {
-				oldMessage = await oldMessage.fetch();
+				oldMessage = newMessage;
 				oldMessage.content = "unkown";
 			}
 			if (newMessage.author.partial) {
