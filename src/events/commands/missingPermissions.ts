@@ -10,13 +10,19 @@ export default class missingPermissionsListener extends Listener {
 		});
 	}
 
-	exec(message: Message, command: Command, type: "client" | "user", missing: PermissionString[]) {
+	async exec(
+		message: Message,
+		command: Command,
+		type: "client" | "user",
+		missing: PermissionString[]
+	) {
+		if (command.id === "adrequest") await message.delete().catch((e) => null);
 		const users = {
 			client: this.client.user.tag,
 			user: message.author.tag,
 		};
 
-		message.util.send(
+		await message.util.send(
 			`>>> 👮‍♂️ | Oops, **${users[type]}** is missing the following permissions for \`${
 				command.id
 			}\`: ${this.client.utils.formatPerms(missing)}.`

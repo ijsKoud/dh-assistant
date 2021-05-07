@@ -10,6 +10,8 @@ export default class errorEvent extends Listener {
 	}
 
 	async exec(error: Error, message: Message, command?: Command) {
+		if (command?.id === "adrequest") await message.delete().catch((e) => null);
+
 		this.client.log(
 			"ERROR",
 			`${command?.id || "unkown"} command error (${message.guild.id}): \`\`\`${

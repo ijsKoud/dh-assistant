@@ -147,18 +147,20 @@ export default class messageReactionAdd extends Listener {
 					message.embeds[0].fields.find((f) => f.name === "User").value.split(/ +/g)[1]
 				);
 
+				await u
+					.send(
+						`Your ad request status update: **denied**\n${
+							collector?.first()?.content || "No reason provided."
+						}`,
+						{ split: true }
+					)
+					.catch((e) => null);
+
 				const data = this.client.commandHandler.cooldowns.get(message.author.id)?.["adrequest"];
 				if (data) {
-					data.end = 0;
 					clearTimeout(data.timer);
+					this.client.commandHandler.cooldowns.get(message.author.id)["adrequest"] = null;
 				}
-
-				await u.send(
-					`Your ad request status update: **denied**\n${
-						collector?.first()?.content || "No reason provided."
-					}`,
-					{ split: true }
-				);
 				break;
 			default:
 				break;

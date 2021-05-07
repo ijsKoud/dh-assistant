@@ -14,9 +14,10 @@ export default class pingCommand extends Command {
 
 	public async exec(message: Message) {
 		const time = Date.now();
-		const m = await message.util.send(`> 🏓 Pinging...`)
+		const m = await message.util.send(`> 🏓 Pinging...`);
 		m.edit(
-			`> 🏓 Pong, edit latency is \`${Date.now() - time}\` ms and the API Latency is \`${this.client.ws.ping
+			`> 🏓 Pong, edit latency is \`${Date.now() - time}\` ms and the API Latency is \`${
+				this.client.ws.ping
 			}\` ms!`
 		);
 	}

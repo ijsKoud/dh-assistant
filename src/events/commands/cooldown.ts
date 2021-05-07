@@ -10,7 +10,10 @@ export default class cooldownListener extends Listener {
 		});
 	}
 
-	exec(message: Message, command: Command, remaining: number) {
-		message.util.send(`>>> ⌚ | Cooldown is active, please try again after \`${ms(remaining)}\`.`);
+	async exec(message: Message, command: Command, remaining: number) {
+		if (command.id === "adrequest") await message.delete().catch((e) => null);
+		await message.util.send(
+			`>>> ⌚ | Cooldown is active, please try again after \`${ms(remaining)}\`.`
+		);
 	}
 }
