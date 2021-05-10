@@ -84,7 +84,7 @@ export default class messageReactionAdd extends Listener {
 		if (!message.author.bot) return;
 		if (message.embeds.length === 0) return;
 
-		switch (`<:${reaction.emoji.identifier}>`) {
+		switch (reaction.emoji.toString()) {
 			case this.client.emoji.greentick:
 				message.edit(
 					new MessageEmbed(message.embeds[0].spliceFields(0, message.embeds[0].fields.length))
@@ -113,7 +113,7 @@ export default class messageReactionAdd extends Listener {
 		if (!message.author.bot) return;
 		if (message.embeds.length === 0) return;
 
-		switch (`<:${reaction.emoji.identifier}>`) {
+		switch (reaction.emoji.toString()) {
 			case this.client.emoji.greentick:
 				await message.edit(
 					new MessageEmbed(message.embeds[0])
