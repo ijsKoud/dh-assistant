@@ -25,6 +25,8 @@ export default class messageReactionAdd extends Listener {
 				await this.client.ticketHandler.handleReaction(reaction, user);
 
 			if (reaction.emoji.name === "📋") return this.feedback(reaction.message, user);
+			if (channel.id === "741659701804269608") return this.ping(reaction, user);
+
 			if (reaction.message.channel.id === "710223624442871970" && !user.bot)
 				return this.adrequest(reaction, user);
 		} catch (e) {
