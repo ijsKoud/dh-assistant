@@ -22,12 +22,14 @@ export default class messageUpdateListener extends Listener {
 			}
 
 			if (
+				!newMessage.guild ||
 				newMessage.author.bot ||
 				newMessage.system ||
 				newMessage.webhookID ||
 				oldMessage.content === newMessage.content
 			)
 				return;
+
 			if (
 				newMessage.guild.automod &&
 				!newMessage.member.hasPermission("MANAGE_GUILD", { checkAdmin: true, checkOwner: true })
