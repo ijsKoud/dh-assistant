@@ -16,10 +16,6 @@ export default class adrequestCommand extends Command {
 					id: "msg",
 					type: "string",
 					match: "rest",
-					prompt: {
-						start: "Please provide a message",
-						retry: "Please provide a message",
-					},
 				},
 			],
 		});
