@@ -158,7 +158,7 @@ export default class messageReactionAdd extends Listener {
 					)
 					.catch((e) => null);
 
-				delete this.client.commandHandler.cooldowns.get(message.author.id)["adrequest"];
+				delete this.client.commandHandler.cooldowns.get(u.id)["adrequest"];
 				break;
 			default:
 				break;
