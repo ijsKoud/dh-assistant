@@ -23,11 +23,10 @@ export default class adrequestCommand extends Command {
 
 	async exec(message: Message, { msg }: { msg: string }) {
 		if (!msg) {
-			const data = this.client.commandHandler.cooldowns.get(message.author.id)?.["adrequest"];
-			if (data) {
-				data.end = 0;
-				clearTimeout(data.timer);
-			}
+			setTimeout(
+				() => delete this.client.commandHandler.cooldowns.get(message.author.id)?.["adrequest"],
+				2e3
+			);
 			return message.util.send("Uhm, why didn't you provide a message?");
 		}
 

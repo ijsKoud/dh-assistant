@@ -158,11 +158,7 @@ export default class messageReactionAdd extends Listener {
 					)
 					.catch((e) => null);
 
-				const data = this.client.commandHandler.cooldowns.get(message.author.id)?.["adrequest"];
-				if (data) {
-					clearTimeout(data.timer);
-					this.client.commandHandler.cooldowns.get(message.author.id)["adrequest"] = null;
-				}
+				delete this.client.commandHandler.cooldowns.get(message.author.id)?.["adrequest"];
 				break;
 			default:
 				break;
