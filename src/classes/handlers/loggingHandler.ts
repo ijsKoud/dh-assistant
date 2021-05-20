@@ -261,7 +261,7 @@ export default class LoggingHandler {
 				.setColor("#000000")
 				.setTitle(`User banned from the server`)
 				.setDescription([
-					`Kicked by **${data.moderator.tag}** (${data.moderator.toString()})${
+					`Banned by **${data.moderator.tag}** (${data.moderator.toString()})${
 						data.endDate
 							? `\nDuration: \`${ms(data.endDate - data.startDate || 0, { long: true })}\``
 							: ""

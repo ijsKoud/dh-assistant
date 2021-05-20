@@ -52,7 +52,9 @@ export default class NotificationsApi {
 		});
 
 		this.server.use("/yt", this.notifier.listener());
+
 		this.subscribe();
+		setInterval(() => this.subscribe(), 864e5 * 5);
 		return this.server;
 	}
 
