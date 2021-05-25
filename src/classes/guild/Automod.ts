@@ -419,8 +419,8 @@ export default class Automod {
 			.replace(/\|/g, "")
 			.split(/\s+/)
 			.map((word) =>
-				blacklisted.words.blacklisted.includes(word) &&
-				!blacklisted.words.whitelisted.includes(word)
+				blacklisted.words.blacklisted.some((str) => word.includes(str.toLowerCase())) &&
+				!blacklisted.words.whitelisted.some((str) => word.includes(str.toLowerCase()))
 					? word
 					: null
 			)
