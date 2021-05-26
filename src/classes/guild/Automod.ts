@@ -91,7 +91,7 @@ export default class Automod {
 				message,
 				await this.client.utils.fetchMember(data.userId, guild),
 				{
-					...warn,
+					...data,
 					type: "mute",
 					reason: "Automatic mute for every 2 warns",
 					endDate: Date.now() + automod.mutes.duration,
