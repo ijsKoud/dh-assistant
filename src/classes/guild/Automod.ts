@@ -52,7 +52,7 @@ export default class Automod {
 		});
 	}
 
-	public async warn(message: Message, user: User, data: iWarn) {
+	public async warn(message: Message, user: User, data: iWarn, automod: iAutomod) {
 		const reason = this.types[data.type] || data.reason.substr(0, 1800);
 		const dm = await user
 			.send(this.client.responses.warn(message.guild.name, reason))
@@ -68,13 +68,9 @@ export default class Automod {
 			)
 			.catch((e) => null);
 
+		const warns = await Warn.find({ guildId: message.guild.id });
 		const caseId = `#${
-			Number(
-				(
-					(await Warn.find({ guildId: message.guild.id })).sort((a, b) => b.date - a.date).shift()
-						?.caseId || "#0"
-				).slice(1)
-			) + 1
+			Number((warns.sort((a, b) => b.date - a.date).shift()?.caseId || "#0").slice(1)) + 1
 		}`;
 		const warn = await Warn.create({
 			guildId: message.guild.id,
@@ -86,7 +82,22 @@ export default class Automod {
 		});
 
 		const moderator = await this.client.utils.fetchUser(data.moderator);
+		const guild = this.client.guilds.cache.get(data.guildId);
 		await this.client.loggingHandler.warn(message, moderator, warn);
+
+		if (warns.filter((w) => w.userId === user.id).length % 2 === 0)
+			this.mute(
+				message,
+				await this.client.utils.fetchMember(user.id, guild),
+				{
+					...warn,
+					type: "mute",
+					reason: "Automatic mute for every 2 warns",
+					endDate: Date.now() + automod.mutes.duration,
+					startDate: Date.now(),
+				},
+				automod.mutes.role
+			);
 	}
 
 	public async mute(message: Message, user: GuildMember, data: iMute, id: string) {
@@ -178,7 +189,7 @@ export default class Automod {
 			case "warn":
 				{
 					if (warn.type === "blacklisted") await message.delete().catch((e) => null);
-					await this.warn(message, message.author, warn);
+					await this.warn(message, message.author, warn, automod);
 				}
 				break;
 			case "mute":
