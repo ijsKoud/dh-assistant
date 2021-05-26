@@ -87,11 +87,11 @@ export default class Automod {
 
 		this.client.log(
 			"INFO",
-			`warns ${warns.filter((w) => w.userId === user.id).length} - left: ${
-				warns.filter((w) => w.userId === user.id).length % 2
+			`warns ${warns.filter((w) => w.userId === user.id).length + 1} - left: ${
+				(warns.filter((w) => w.userId === user.id).length + 1) % 2
 			}`
 		);
-		if (warns.filter((w) => w.userId === user.id).length % 2 === 0)
+		if ((warns.filter((w) => w.userId === user.id).length + 1) % 2 === 0)
 			this.mute(
 				message,
 				await this.client.utils.fetchMember(user.id, guild),
