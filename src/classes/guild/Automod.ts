@@ -87,7 +87,7 @@ export default class Automod {
 
 		this.client.log(
 			"INFO",
-			`warns ${warns.filter((w) => w.userId === user.id).length + 1} - left: ${
+			`warns (${user.id}) ${warns.filter((w) => w.userId === user.id).length + 1} - left: ${
 				(warns.filter((w) => w.userId === user.id).length + 1) % 2
 			}`
 		);
