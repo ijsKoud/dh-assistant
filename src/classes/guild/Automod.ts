@@ -86,7 +86,7 @@ export default class Automod {
 		await this.client.loggingHandler.warn(message, moderator, warn);
 
 		const userWarns = await Warn.find({ guildId: message.guild.id, userId: user.id });
-		if (userWarns.length % 2 === 0 && userWarns.length)
+		if (userWarns.length % 2 === 0 && userWarns.length && automod.mutes.duration)
 			this.mute(
 				message,
 				await this.client.utils.fetchMember(data.userId, guild),
