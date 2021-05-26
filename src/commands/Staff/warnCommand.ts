@@ -44,6 +44,6 @@ export default class warnCommand extends Command {
 			reason,
 		};
 
-		await this.client.automod.warn(message, member.user, warn);
+		await this.client.automod.warn(message, member.user, warn, message.guild.automod);
 	}
 }
