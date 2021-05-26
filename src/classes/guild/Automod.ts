@@ -85,16 +85,11 @@ export default class Automod {
 		const guild = this.client.guilds.cache.get(data.guildId);
 		await this.client.loggingHandler.warn(message, moderator, warn);
 
-		this.client.log(
-			"INFO",
-			`warns (${user.id}) ${warns.filter((w) => w.userId === user.id).length + 1} - left: ${
-				(warns.filter((w) => w.userId === user.id).length + 1) % 2
-			}`
-		);
-		if ((warns.filter((w) => w.userId === user.id).length + 1) % 2 === 0)
+		const userWarns = await Warn.find({ guildId: message.guild.id, userId: user.id });
+		if (userWarns.length % 2 === 0 && userWarns.length)
 			this.mute(
 				message,
-				await this.client.utils.fetchMember(user.id, guild),
+				await this.client.utils.fetchMember(data.userId, guild),
 				{
 					...warn,
 					type: "mute",
