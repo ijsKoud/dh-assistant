@@ -10,7 +10,7 @@ export default class wrongChannel extends Inhibitor {
 
 	async exec(message: Message, command: Command) {
 		return message.guild && message.guild.id === process.env.GUILD
-			? ["general", "levels", "staff", "support"].includes(command.categoryID.toLowerCase()) &&
+			? ["general", "levels", "support"].includes(command.categoryID.toLowerCase()) &&
 					message.channel.id === "701791506226348124"
 			: false;
 	}
