@@ -53,7 +53,11 @@ export default class Automod {
 	}
 
 	public async warn(message: Message, user: User, data: iWarn, automod: iAutomod) {
-		const reason = this.types[data.type] || data.reason.substr(0, 1800);
+		const reason =
+			data.type === "blacklisted"
+				? data.reason.substr(0, 1800)
+				: this.types[data.type] || data.reason.substr(0, 1800);
+
 		const dm = await user
 			.send(this.client.responses.warn(message.guild.name, reason))
 			.catch((e) => null);
