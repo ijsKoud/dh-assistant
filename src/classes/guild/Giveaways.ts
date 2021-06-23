@@ -119,7 +119,8 @@ export default class Giveaway {
 		this.cache.delete(data?.messageId);
 	}
 
-	public parseMember(users: Collection<string, User>, guild: Guild) {
-		return Promise.all(users.map(async ({ id }) => await this.client.utils.fetchMember(id, guild)));
+	public async parseMember(users: Collection<string, User>, guild: Guild) {
+		const members = await guild.members.fetch();
+		return users.map(({ id }) => members.get(id));
 	}
 }
