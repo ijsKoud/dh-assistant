@@ -66,9 +66,9 @@ export default class Automod {
 			.send(
 				`>>> 💡 | **${
 					data.moderator === this.client.user.id ? "Automod - Warn" : "Warning given"
-				}**\nSuccessfully warned **${user.tag}** for **${reason}**.${
-					dm ? "" : "\nℹ | I was unable to DM this user, their warn has been recorded."
-				}`
+				}**\nSuccessfully warned **${user.tag}** for **${
+					data.type === "blacklisted" ? this.types["blacklisted"] : reason
+				}**.${dm ? "" : "\nℹ | I was unable to DM this user, their warn has been recorded."}`
 			)
 			.catch((e) => null);
 

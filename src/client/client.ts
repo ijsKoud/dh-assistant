@@ -154,12 +154,7 @@ export default class dhClient extends AkairoClient {
 			process,
 		});
 
-		[
-			this.commandHandler,
-			this.listenerHandler,
-			this.inhibitorHandler,
-			this.timeoutHandler,
-		].forEach((x) => x.loadAll());
+		[this.commandHandler, this.listenerHandler, this.inhibitorHandler].forEach((x) => x.loadAll());
 
 		this.Api.start();
 	}

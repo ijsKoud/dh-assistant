@@ -15,6 +15,7 @@ export default class ready extends Listener {
 
 	async exec() {
 		await Promise.all(this.client.guilds.cache.map(async (g) => await this.loadConfig(g)));
+		await this.client.timeoutHandler.loadAll();
 		await this.client.giveaways.loadAll();
 		await this.setStatus();
 
