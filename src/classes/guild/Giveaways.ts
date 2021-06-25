@@ -98,7 +98,7 @@ export default class Giveaway {
 
 		if (valid?.length)
 			for (let i = 0; i < data.winners; i++) {
-				let random = Math.floor(Math.random() * users.length);
+				let random = Math.floor(Math.random() * valid.length);
 				let user = valid[random];
 
 				valid = valid.filter((u) => u?.id !== user.id);
