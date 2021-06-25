@@ -91,7 +91,7 @@ export default class Giveaway {
 	): Promise<User[]> {
 		let valid = (await this.parseMember(await reaction.users.fetch(), guild))
 			?.filter((u) => !u?.user?.bot)
-			.filter((x) => x !== null);
+			.filter((x) => x);
 
 		if (data.requiredRole) valid = valid.filter((u) => u.roles.cache.has(data.requiredRole));
 		let users: User[] = [];
