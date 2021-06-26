@@ -134,7 +134,7 @@ export default class Transcript {
 			const tag = document.createElement("span");
 			tag.setAttribute("class", "chat__bot-tag");
 			tag.appendChild(
-				document.createTextNode(message.system ? "SYTEM" : message.author.bot ? "BOT" : "UNKOWN")
+				document.createTextNode(message.system ? "SYSTEM" : message.author.bot ? "BOT" : "UNKOWN")
 			);
 			messagesDiv.append(tag, document.createTextNode("\n"));
 		}
@@ -143,7 +143,9 @@ export default class Transcript {
 		const timestamp = document.createElement("span");
 		timestamp.setAttribute("class", "chat__timestamp");
 		timestamp.appendChild(
-			document.createTextNode(moment(message.createdAt).tz("Europe/London").format("DD/MM/YYYY h:mm:ss a"))
+			document.createTextNode(
+				moment(message.createdAt).tz("Europe/London").format("DD/MM/YYYY h:mm:ss a")
+			)
 		);
 		messagesDiv.appendChild(timestamp);
 		messages.map((m) => messagesDiv.appendChild(this.getMessage(document, m)));
@@ -163,7 +165,10 @@ export default class Transcript {
 		if (message.editedTimestamp) {
 			const edited = document.createElement("span");
 			edited.setAttribute("class", "chat__edited-timestamp");
-			edited.setAttribute("title", moment(message.editedAt).tz("Europe/London").format("DD/MM/YYYY h:mm:ss a"));
+			edited.setAttribute(
+				"title",
+				moment(message.editedAt).tz("Europe/London").format("DD/MM/YYYY h:mm:ss a")
+			);
 			edited.append("(edited)");
 			div.appendChild(edited);
 		}
@@ -324,7 +329,8 @@ export default class Transcript {
 			const div = document.createElement("div");
 
 			const imgRegex = /^.*(jpg|png|gif|webp|tiff|psd|raw|bmp|heif|indd)$/g;
-			const videoRegex = /^.*(webm|mpg|mp2|mpeg|mpe|mpv|ogg|mp4|m4p|m4v|avi|wmv|mov|qt|flv|swf|avchd)$/g;
+			const videoRegex =
+				/^.*(webm|mpg|mp2|mpeg|mpe|mpv|ogg|mp4|m4p|m4v|avi|wmv|mov|qt|flv|swf|avchd)$/g;
 			const audioRegex = /^.*(pcm|wav|aiff|mp3|acc|ogg|wma|flac|alac)$/g;
 
 			const attachment = message.attachments.find((a) => url === a.url);
