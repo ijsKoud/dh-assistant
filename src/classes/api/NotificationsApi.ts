@@ -9,7 +9,6 @@ export default class NotificationsApi {
 		"UCkMrp3dJhWz2FcGTzywQGWg",
 		"UCo3SvWfQGaKdKAE_b_hn-Sg",
 		"UCtj4a6GdkoRRYnkKzf5S_Mw",
-		"UCUzcruQJ-eqsSP_U4igNu6A",
 		"UCp2yuh619SvvZow35rIymzA",
 		"UCPCAmZwDZRxbDo_0P2QUMXQ",
 	];
