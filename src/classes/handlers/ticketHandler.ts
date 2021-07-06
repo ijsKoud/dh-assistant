@@ -26,12 +26,9 @@ export default class ticketHandler {
 	constructor(private client: modtechClient) {}
 
 	public async handleDM(message: Message): Promise<void> {
-		const [caseId, ...content] = (message.content || "").trim().split(/ +/g);
-		if (!caseId) return;
-
-		let ticket = this.tickets.get(caseId.slice(1, -1));
+		let ticket = this.tickets.find((t) => t.userId === message.author.id);
 		if (!ticket) {
-			ticket = await this.getTicket(caseId.slice(1, -1));
+			ticket = await Ticket.findOne({ userId: message.author.id });
 			if (!ticket) return;
 
 			this.tickets.set(ticket.caseId, ticket);
@@ -43,11 +40,11 @@ export default class ticketHandler {
 		if (!channel) return this.close(ticket);
 
 		const files = this.client.utils.getAttachments(message.attachments);
-		if (!content.join(" ") && !files.length) return;
+		if (!message.content && !files.length) return;
 
 		try {
 			await channel.send(
-				this.response(content.join(" ") || "no message content", message.author) +
+				this.response(message.content || "no message content", message.author) +
 					`Messages from the ticket claimer sent to this channel will automatically be sent to the ticket creator. Use \`${process.env.PREFIX}\` at the beginning of your message to stop this.`,
 				{
 					files,
@@ -324,19 +321,85 @@ export default class ticketHandler {
 			await channel.send(`>>> 🗑 | Deleting this ticket in **5 seconds**!`).catch((e) => null);
 		}
 
-		const user = await this.client.utils.fetchUser(data.userId);
-		if (user)
-			await user
-				.send(
-					`>>> 🎫 | Your ticket \`[${data.caseId}]\` has been closed, thanks for getting in touch!\nIf you have time, please give our staff team some feedback: https://forms.gle/CbEVRuGPywjZausd9`
-				)
-				.catch((e) => null);
-
 		const timeout = setTimeout(async () => {
 			await channel?.delete?.()?.catch?.((e) => null);
 			await Ticket.findOneAndDelete({ caseId: data.caseId }).catch((e) => null);
 		}, 5e3);
 		this.timeouts.set(data.caseId, timeout);
+
+		const user = await this.client.utils.fetchUser(data.userId);
+		if (user) {
+			const dm = await user
+				.send(
+					`>>> 🎫 | Your ticket \`[${data.caseId}]\` has been closed, thanks for getting in touch!`
+				)
+				.catch((e) => null);
+
+			if (!dm) return;
+
+			const filter = (reaction: MessageReaction, u: User) => {
+				return ["⛔", "🔴", "🟠", "🟢"].includes(reaction.emoji.name) && u.id === user.id;
+			};
+
+			const sendFeedback = async (reaction: string, content: string) => {
+				const channel = await this.client.utils.getChannel("780907238561677322");
+				await channel.send(
+					new MessageEmbed()
+						.setDescription(content || "No extra comments")
+						.setTitle(`Feedback - ${reaction}`)
+						.setFooter(
+							`Feedback from ${user.tag}`,
+							user.displayAvatarURL({ dynamic: true, size: 4096 })
+						)
+				);
+			};
+
+			const msg: Message = await user
+				.send(
+					`>>> Before you go, we'd really appreciate your feedback. Please react below with how you feel about your support that you received today.\n${[
+						"⛔ - I do not wish to give feedback",
+						"🔴 - Poor",
+						"🟠 - Okay",
+						"🟢 - great",
+					].join("\n")}`
+				)
+				.catch(() => null);
+
+			if (!msg) return;
+			["⛔", "🔴", "🟠", "🟢"].forEach((r) => msg.react(r));
+
+			const r = await this.client.utils.awaitReactions(msg, filter);
+			const reaction = r.first();
+			if (!reaction) return;
+
+			if (reaction.emoji.name === "⛔") {
+				await user.send(">>> That's okay, thank you for contacting us today!").catch((e) => null);
+				return;
+			}
+
+			const msg2 = await user
+				.send(
+					">>> Thank you for your rating. If you have any more comments, please leave them below. Otherwise just say `N/A`!"
+				)
+				.catch(() => null);
+
+			const reactions = {
+				"🔴": "Poor",
+				"🟠": "Okay",
+				"🟢": "great",
+			};
+			if (!msg) {
+				await sendFeedback(reactions[reaction.emoji.name], "");
+				return;
+			}
+
+			const filter2 = (m: Message) => m.content && m.author.id === user.id;
+			const res = await this.client.utils.awaitMessages(msg2, filter2);
+			const feedback = res.first();
+
+			await sendFeedback(reactions[reaction.emoji.name], feedback?.content);
+			await user.send("Thanks for your feedback!");
+		}
 	}
 
 	private async transcript(channel: TextChannel, caseId: string) {
