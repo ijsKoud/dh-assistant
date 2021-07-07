@@ -360,7 +360,7 @@ export default class ticketHandler {
 						"⛔ - I do not wish to give feedback",
 						"🔴 - Poor",
 						"🟠 - Okay",
-						"🟢 - great",
+						"🟢 - Great",
 					].join("\n")}`
 				)
 				.catch(() => null);
@@ -386,7 +386,7 @@ export default class ticketHandler {
 			const reactions = {
 				"🔴": "Poor",
 				"🟠": "Okay",
-				"🟢": "great",
+				"🟢": "Great",
 			};
 			if (!msg) {
 				await sendFeedback(reactions[reaction.emoji.name], "");
