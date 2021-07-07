@@ -328,6 +328,7 @@ export default class ticketHandler {
 		this.timeouts.set(data.caseId, timeout);
 
 		const user = await this.client.utils.fetchUser(data.userId);
+		const claimer = await this.client.utils.fetchUser(data.claimerId);
 		if (user) {
 			const dm = await user
 				.send(
@@ -346,6 +347,10 @@ export default class ticketHandler {
 				await channel.send(
 					new MessageEmbed()
 						.setDescription(content || "No extra comments")
+						.setAuthor(
+							`Ticket Claimer: ${claimer.tag}`,
+							claimer.displayAvatarURL({ dynamic: true, size: 4096 })
+						)
 						.setTitle(`Feedback - ${reaction}`)
 						.setFooter(
 							`Feedback from ${user.tag}`,
