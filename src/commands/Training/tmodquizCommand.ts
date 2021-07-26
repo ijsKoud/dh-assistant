@@ -62,6 +62,12 @@ const questions = [
 		reactions: [],
 		correct: "",
 	},
+	{
+		type: 2,
+		msg: "You have just claimed a ticket. What is your 'greeting'?",
+		reactions: [],
+		correct: "",
+	},
 ];
 
 export default class tmodquizCommand extends Command {
@@ -86,10 +92,12 @@ export default class tmodquizCommand extends Command {
 		if (entry !== message.author.id)
 			return message.util.send("The provided access code is not for this user.");
 
+		const multiple = questions.filter((q) => q.type === 1).length;
+		const written = questions.filter((q) => q.type === 2).length;
 		try {
 			const dm = await message.author.createDM();
 			await dm.send(
-				">>> ◻ | **Trail Mod Quiz**\nThis quiz has 7 multiple choice and 3 written questions. Good luck!"
+				`>>> ◻ | **Trail Mod Quiz**\nThis quiz has ${multiple} multiple choice and ${written} written questions. Good luck!`
 			);
 
 			this.client.trainingCodes.delete(code);
@@ -97,8 +105,8 @@ export default class tmodquizCommand extends Command {
 			let i = 1;
 			const answers: { question: string; answer: string; correct: boolean | null }[] = [];
 			for (const q of questions) {
-				if (i === 1) await dm.send("**✔ Section 1: Multiple Choice (7q)**");
-				if (i === 8) await dm.send("**✏ Section 2: Written Questions (3q)**");
+				if (i === 1) await dm.send(`**✔ Section 1: Multiple Choice (${multiple}q)**`);
+				if (i === 8) await dm.send(`**✏ Section 2: Written Questions (${written}q)**`);
 
 				if (q.type === 1) {
 					const msg = await dm.send(q.msg);
