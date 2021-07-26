@@ -4,7 +4,7 @@ import { Command } from "discord-akairo";
 const questions = [
 	{
 		type: 1,
-		msg: "How many warnings should you give before a mute?\n\n1️⃣ - One\n2️⃣ - Five\n3️⃣ - Three\n4️⃣ - None",
+		msg: "How many warnings should you give before a mute?\n\n1️⃣ - One\n2️⃣ - Five\n3️⃣ - two\n4️⃣ - None",
 		reactions: ["1️⃣", "2️⃣", "3️⃣", "4️⃣"],
 		correct: "3️⃣",
 	},
