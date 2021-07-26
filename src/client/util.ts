@@ -57,6 +57,11 @@ export default class util {
 		filter: CollectorFilter,
 		options: AwaitReactionsOptions = { max: 1, time: 6e4, errors: ["time"] }
 	): Promise<Collection<string, MessageReaction>> {
+		options = Object.assign(options, {
+			max: 1,
+			time: 6e4,
+			errors: ["time"],
+		}) as AwaitReactionsOptions;
 		return await message
 			.awaitReactions(filter, options)
 			.catch((e) => new Collection<string, MessageReaction>());
@@ -67,6 +72,12 @@ export default class util {
 		filter: CollectorFilter,
 		options: AwaitMessagesOptions = { max: 1, time: 6e4, errors: ["time"] }
 	): Promise<Collection<string, Message>> {
+		options = Object.assign(options, {
+			max: 1,
+			time: 6e4,
+			errors: ["time"],
+		}) as AwaitMessagesOptions;
+
 		const coll = await message.channel
 			.awaitMessages(filter, options)
 			.catch((e) => new Collection<string, Message>());
