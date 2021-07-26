@@ -34,6 +34,7 @@ declare module "discord-akairo" {
 	interface AkairoClient {
 		config: Collection<string, iConfig>;
 		Automod: Collection<string, iAutomod>;
+		trainingCodes: Collection<string, string>;
 
 		inhibitorHandler: InhibitorHandler;
 		commandHandler: CommandHandler;
@@ -83,6 +84,7 @@ declare module "discord.js" {
 export default class dhClient extends AkairoClient {
 	public config = new Collection<string, iConfig>();
 	public Automod = new Collection<string, iAutomod>();
+	public trainingCodes = new Collection<string, string>();
 
 	public loggingHandler = new LoggingHandler(this);
 	public ticketHandler = new ticketHandler(this);
