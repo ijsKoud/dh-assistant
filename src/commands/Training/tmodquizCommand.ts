@@ -28,7 +28,7 @@ const questions = [
 	},
 	{
 		type: 1,
-		msg: "What is a valid reason for being inactive for over a week without filing an LOA?\n\n(don't let them change their previous answers at this reveals answer to LOA question) :one: - Cause of an emergency / you physically not being able to be on your device\n:two: - Cause you have lost motivation\n:three: - Cause you were dared to (don't know who would dare you to do that but we move on)\n:four: - Cause you are going on holiday",
+		msg: "What is a valid reason for being inactive for over a week without filing an LOA?\n:one: - Cause of an emergency / you physically not being able to be on your device\n:two: - Cause you have lost motivation\n:three: - Cause you were dared to (don't know who would dare you to do that but we move on)\n:four: - Cause you are going on holiday",
 		reactions: ["1️⃣", "2️⃣", "3️⃣", "4️⃣"],
 		correct: "1️⃣",
 	},
