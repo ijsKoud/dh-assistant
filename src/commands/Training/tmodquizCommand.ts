@@ -139,6 +139,11 @@ export default class tmodquizCommand extends Command {
 				new MessageEmbed()
 					.setColor(this.client.hex)
 					.setTitle("Quiz Results")
+					.setDescription(
+						`Multiple Choice: **${
+							answers.filter((a) => a.correct).length < 5 ? "failed" : "passed"
+						}**`
+					)
 					.setAuthor(
 						`${message.author.tag}`,
 						message.author.displayAvatarURL({ dynamic: true, size: 4096 })
