@@ -45,6 +45,24 @@ const questions = [
 		correct: "1️⃣",
 	},
 	{
+		type: 1,
+		msg: "What is the correct way to warn a user?\n\n:one: - Give the user a warn via DMs\n:two: - Ask the Senior team to post a warn message in #mod-logs\n:three: - Use ;warn <user> <reason> in #staff-commands\n:four: - Nothing, we don't use warnings",
+		reactions: ["1️⃣", "2️⃣", "3️⃣", "4️⃣"],
+		correct: "3️⃣",
+	},
+	{
+		type: 1,
+		msg: "How do you delete multiple messages in 1 channel?\n\n:one: - You manually delete them\n:two: - You ask the senior team to do it\n:three: - You use ;purge <amount> to purge it\n:four: - Discord will do it, you just have to sit back and relax",
+		reactions: ["1️⃣", "2️⃣", "3️⃣", "4️⃣"],
+		correct: "3️⃣",
+	},
+	{
+		type: 1,
+		msg: "What do you do when you want to check someones warns?\n\n:one: - You use the ;warnings [user] command\n:two: - You check #mod-logs\n:three: - You spam ping DaanGamesDG#7621 to check the Database\n:four: - You ask a Manager to do it for you",
+		reactions: ["1️⃣", "2️⃣", "3️⃣", "4️⃣"],
+		correct: "1️⃣",
+	},
+	{
 		type: 2,
 		msg: "What would you do if someone is implicitly trying to suggest something sexual through their messages? This question is based on opinion, therefore there is no definite right or wrong answer.",
 		reactions: [],
@@ -95,6 +113,7 @@ export default class tmodquizCommand extends Command {
 		const multiple = questions.filter((q) => q.type === 1).length;
 		const written = questions.filter((q) => q.type === 2).length;
 		try {
+			await message.util.send("Check your DMs!");
 			const dm = await message.author.createDM();
 			await dm.send(
 				`>>> ◻ | **Trail Mod Quiz**\nThis quiz has ${multiple} multiple choice and ${written} written questions. Good luck!`
@@ -102,12 +121,8 @@ export default class tmodquizCommand extends Command {
 
 			this.client.trainingCodes.delete(code);
 
-			let i = 1;
 			const answers: { question: string; answer: string; correct: boolean | null }[] = [];
 			for (const q of questions) {
-				if (i === 1) await dm.send(`**✔ Section 1: Multiple Choice (${multiple}q)**`);
-				if (i === 8) await dm.send(`**✏ Section 2: Written Questions (${written}q)**`);
-
 				if (q.type === 1) {
 					const msg = await dm.send(q.msg);
 					await Promise.all(q.reactions.map((r) => msg.react(r)));
@@ -135,8 +150,6 @@ export default class tmodquizCommand extends Command {
 
 					answers.push({ question: q.msg, answer: m, correct: null });
 				}
-
-				i++;
 			}
 
 			const submit = await dm.send(
