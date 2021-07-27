@@ -129,7 +129,7 @@ export default class tmodquizCommand extends Command {
 
 					const filter = (reaction: MessageReaction, user: User) =>
 						q.reactions.includes(reaction.emoji.name) && user.id === message.author.id;
-					const raw = await this.client.utils.awaitReactions(msg, filter);
+					const raw = await this.client.utils.awaitReactions(msg, filter, { time: 36e5 });
 					const reaction = raw.first()?.emoji.name;
 					if (!reaction) {
 						await dm.send("No reaction received, ending the quiz...");
@@ -141,7 +141,7 @@ export default class tmodquizCommand extends Command {
 					const msg = await dm.send(`${q.msg}\n\nNote: answers are shortened to 1024 characters.`);
 
 					const filter = (msg: Message) => msg.author.id === message.author.id;
-					const raw = await this.client.utils.awaitMessages(msg, filter, { time: 6e5 });
+					const raw = await this.client.utils.awaitMessages(msg, filter, { time: 36e5 });
 					const m = raw.first()?.content;
 					if (!m) {
 						await dm.send("No message received, ending the quiz...");
