@@ -10,7 +10,6 @@ export default class NotificationsApi {
 		"UCo3SvWfQGaKdKAE_b_hn-Sg",
 		"UCtj4a6GdkoRRYnkKzf5S_Mw",
 		"UCp2yuh619SvvZow35rIymzA",
-		"UCPCAmZwDZRxbDo_0P2QUMXQ",
 	];
 	public notifier: any;
 	public server: Express;
