@@ -2,6 +2,7 @@ import { Listener } from "discord-akairo";
 import { Collection } from "discord.js";
 import { Message } from "discord.js";
 
+const blocks = [/h/g];
 export default class messageListener extends Listener {
 	constructor() {
 		super("message", {
@@ -18,7 +19,8 @@ export default class messageListener extends Listener {
 
 		if (
 			!message.content.startsWith(message.prefix) &&
-			!this.client.levelManager.lvlBlacklisted.includes(message.channel.id)
+			!this.client.levelManager.lvlBlacklisted.includes(message.channel.id) &&
+			!blocks.some((reg) => reg.test(message.content.toLowerCase()))
 		) {
 			const data =
 				(await this.client.levelManager.getUser(message.author.id, message.guild.id)) ||
