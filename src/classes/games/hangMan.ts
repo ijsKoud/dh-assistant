@@ -113,7 +113,7 @@ export default class hangMan {
 			`|          ${this.wrong > 5 ? "👞👞" : this.wrong > 4 ? "👞" : ""}`,
 			"|_____________",
 			"```",
-			`Quessed: ${this.guessed.length ? this.guessed.join(", ") : "None"}\n`,
+			`Guessed: ${this.guessed.length ? this.guessed.join(", ") : "None"}\n`,
 			`Word: ${this.word
 				.split("")
 				.map((l) => (this.guessed.includes(l) ? l : "**_**"))
