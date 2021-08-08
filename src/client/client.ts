@@ -36,6 +36,8 @@ declare module "discord-akairo" {
 		Automod: Collection<string, iAutomod>;
 		trainingCodes: Collection<string, string>;
 
+		adcooldown: Map<string, { cooldown: number; timeout: NodeJS.Timeout }>;
+
 		inhibitorHandler: InhibitorHandler;
 		commandHandler: CommandHandler;
 		listenerHandler: ListenerHandler;
@@ -85,6 +87,8 @@ export default class dhClient extends AkairoClient {
 	public config = new Collection<string, iConfig>();
 	public Automod = new Collection<string, iAutomod>();
 	public trainingCodes = new Collection<string, string>();
+
+	public adcooldown = new Map();
 
 	public loggingHandler = new LoggingHandler(this);
 	public ticketHandler = new ticketHandler(this);

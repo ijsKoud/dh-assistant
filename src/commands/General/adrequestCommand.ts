@@ -1,5 +1,6 @@
 import { Message, MessageEmbed } from "discord.js";
 import { Command } from "discord-akairo";
+import ms from "ms";
 
 export default class adrequestCommand extends Command {
 	constructor() {
@@ -10,7 +11,6 @@ export default class adrequestCommand extends Command {
 				content: "Ad request",
 				usage: "adrequest <ad>",
 			},
-			cooldown: 36e5 * 2,
 			args: [
 				{
 					id: "msg",
@@ -22,21 +22,26 @@ export default class adrequestCommand extends Command {
 	}
 
 	async exec(message: Message, { msg }: { msg: string }) {
-		if (!msg) {
-			setTimeout(
-				() => delete this.client.commandHandler.cooldowns.get(message.author.id)?.["adrequest"],
-				2e3
+		const cooldown = this.client.adcooldown.get(message.author.id);
+		if (cooldown) {
+			await message.delete().catch();
+			return message.util.send(
+				`Cooldown is active, please try again in \`${ms(cooldown.cooldown - Date.now())}\`!`
 			);
+		}
+
+		if (!msg) {
 			return message.util.send("Uhm, why didn't you provide a message?");
 		}
 
 		if (
 			!message.member.hasPermission("USE_EXTERNAL_EMOJIS", { checkAdmin: true, checkOwner: true })
-		)
+		) {
+			await message.delete().catch();
 			return message.util.send(
 				"Uhm, sorry only users with level 5+ role, boosters, channel members, content creators and staff members are able to do this."
 			);
-
+		}
 		const channel = await this.client.utils.getChannel("710223624442871970");
 		//const channel = await this.client.utils.getChannel("781841366795288576");
 		const m = await channel.send(
@@ -50,6 +55,18 @@ export default class adrequestCommand extends Command {
 
 		[this.client.emoji.greentick, this.client.emoji.redcross].forEach((e) => m.react(e));
 
-		return message.delete();
+		const time =
+			message.member?.roles.cache.has("720005552322773053") ||
+			message.member?.roles.cache.has("762249312024526849")
+				? 36e5
+				: 36e5 * 2;
+		const timeout = setTimeout(() => this.client.adcooldown.delete(message.author.id), time);
+
+		this.client.adcooldown.set(message.author.id, {
+			cooldown: Date.now() + time,
+			timeout,
+		});
+
+		return message.delete().catch();
 	}
 }
