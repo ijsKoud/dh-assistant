@@ -1,7 +1,7 @@
 {
-	"name": "bot-template",
-	"version": "1.0.0",
-	"description": "Personal discord bot template by DaanGamesDG",
+	"name": "dh-assistant",
+	"version": "4.0.0",
+	"description": "The open-source multi-purpose Discord bot for Draavo's Hangout",
 	"main": "dist/src/index.js",
 	"author": "DaanGamesDG <daan@daangamesdg.wtf>",
 	"license": "MIT",

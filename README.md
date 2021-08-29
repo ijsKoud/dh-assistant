@@ -1,21 +1,14 @@
-<h1 align="center">bot-template</h1>
+<h1 align="center">DH Assistant (v4)</h1>
 
-> Personal discord bot template by DaanGamesDG
+> The open-source multi-purpose Discord bot for Draavo's Hangout
+
+## Information
+
+Please read this if you are thinking of hosting this bot yourself. This project is open-sourced because I do not earn money with it. You are allowed to host it yourself, but do not show in any way that this bot is created by you. I didn't use complicated licenses because I don't want to go through all that copyright shit, I only need you guys to leave the credits where they are, that's all. Very simple.
 
 ## Install
 
-```sh
-yarn install
-```
-
-## Usage
-
-_You can also use `npm` instead of `yarn`_
-
-- **yarn run dev** _(starts dev script)_
-- **yarn run build** _(compiles the code and saves it in the dist)_
-- **yarn run start** _(runs the compiled code)_
-- **yarn run lint** _(runs eslint to check your files)_
+Coming soon
 
 ## Author
 
