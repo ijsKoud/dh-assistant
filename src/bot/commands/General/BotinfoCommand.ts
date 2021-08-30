@@ -8,7 +8,6 @@ import ms from "ms";
 
 @ApplyOptions<Command.Options>({
 	name: "botinfo",
-	aliases: ["botinfo"],
 	description: "Information about this bot",
 	requiredClientPermissions: ["EMBED_LINKS"],
 })

@@ -6,7 +6,7 @@ import { Args } from "@sapphire/framework";
 
 @ApplyOptions<Command.Options>({
 	name: "help",
-	aliases: ["help", "commands"],
+	aliases: ["commands"],
 	description: "A list of all the commands",
 	usage: "[command]",
 	requiredClientPermissions: ["EMBED_LINKS"],

@@ -5,7 +5,6 @@ import { Message, User } from "discord.js";
 
 @ApplyOptions<Command.Options>({
 	name: "botblacklist",
-	aliases: ["botblacklist"],
 	description: "Botblacklists a user/guild",
 	usage: "<user>",
 	preconditions: ["OwnerOnly"],

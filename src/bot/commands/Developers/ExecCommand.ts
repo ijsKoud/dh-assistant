@@ -7,7 +7,7 @@ import type { Message } from "discord.js";
 
 @ApplyOptions<Command.Options>({
 	name: "exec",
-	aliases: ["exec", "execute", "terminal"],
+	aliases: ["execute", "terminal"],
 	description: "Execute any command using exec",
 	preconditions: ["OwnerOnly"],
 	usage: "<...command>",

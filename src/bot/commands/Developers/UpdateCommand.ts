@@ -6,7 +6,6 @@ import { exec } from "child_process";
 
 @ApplyOptions<Command.Options>({
 	name: "update",
-	aliases: ["update"],
 	description: "Fetches and compiles the code from GitHub, restarts to finish the update",
 	usage: "[--no-restart|--update-deps|--no-fetch]",
 	flags: ["no-restart", "update-deps", "no-fetch"],

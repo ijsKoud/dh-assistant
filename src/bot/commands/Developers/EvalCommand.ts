@@ -8,7 +8,7 @@ import { inspect } from "util";
 
 @ApplyOptions<Command.Options>({
 	name: "eval",
-	aliases: ["ev", "eval", "e"],
+	aliases: ["ev", "e"],
 	description: "Evals any JavaScript code 💻",
 	flags: ["async", "hidden", "showHidden", "silent", "s"],
 	options: ["depth"],

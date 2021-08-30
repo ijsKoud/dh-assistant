@@ -5,7 +5,7 @@ import ms from "ms";
 
 @ApplyOptions<Command.Options>({
 	name: "ping",
-	aliases: ["ping", "pong"],
+	aliases: ["pong"],
 	description: "Ping! Pong! 🏓",
 	requiredClientPermissions: ["EMBED_LINKS"],
 })

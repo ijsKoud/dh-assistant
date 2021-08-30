@@ -5,7 +5,6 @@ import { Args } from "@sapphire/framework";
 
 @ApplyOptions<Command.Options>({
 	name: "avatar",
-	aliases: ["avatar"],
 	description: "Shows the avatar of a user",
 	requiredClientPermissions: ["EMBED_LINKS"],
 })
