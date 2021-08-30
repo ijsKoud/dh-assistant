@@ -77,7 +77,6 @@ export namespace Command {
 	export type Options = SubCommandPluginCommand.Options & {
 		hidden?: boolean;
 		usage?: string;
-		permissions?: PermissionResolvable;
 	};
 
 	export type Context = CommandContext;
