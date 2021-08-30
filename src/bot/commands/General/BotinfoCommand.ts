@@ -7,12 +7,12 @@ import { Message } from "discord.js";
 import ms from "ms";
 
 @ApplyOptions<Command.Options>({
-	name: "info",
-	aliases: ["info", "botinfo"],
+	name: "botinfo",
+	aliases: ["botinfo"],
 	description: "Information about this bot",
 	requiredClientPermissions: ["EMBED_LINKS"],
 })
-export default class InfoCommand extends Command {
+export default class BotinfoCommand extends Command {
 	public async run(message: Message): Promise<void> {
 		const core = cpus()[0];
 		await message.reply({
