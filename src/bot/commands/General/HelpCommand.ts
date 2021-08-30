@@ -9,6 +9,7 @@ import { Args } from "@sapphire/framework";
 	aliases: ["help", "commands"],
 	description: "A list of all the commands",
 	usage: "[command]",
+	requiredClientPermissions: ["EMBED_LINKS"],
 })
 export default class PingCommand extends Command {
 	public async run(message: Message, args: Args, context: Command.Context): Promise<void> {

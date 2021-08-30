@@ -7,6 +7,7 @@ import ms from "ms";
 	name: "ping",
 	aliases: ["ping", "pong"],
 	description: "Ping! Pong! 🏓",
+	requiredClientPermissions: ["EMBED_LINKS"],
 })
 export default class PingCommand extends Command {
 	public async run(message: Message): Promise<void> {
