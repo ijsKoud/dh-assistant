@@ -6,6 +6,7 @@ import { Args } from "@sapphire/framework";
 @ApplyOptions<Command.Options>({
 	name: "avatar",
 	description: "Shows the avatar of a user",
+	usage: "[user]",
 	requiredClientPermissions: ["EMBED_LINKS"],
 })
 export default class AvatarCommand extends Command {
