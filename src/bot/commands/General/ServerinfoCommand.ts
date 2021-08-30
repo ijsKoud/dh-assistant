@@ -11,7 +11,7 @@ const levels: Record<"NONE" | "TIER_1" | "TIER_2" | "TIER_3", string> = {
 
 @ApplyOptions<Command.Options>({
 	name: "serverinfo",
-	description: "Information about this bot",
+	description: "Shows you the information about this server",
 	requiredClientPermissions: ["EMBED_LINKS"],
 	preconditions: ["GuildOnly"],
 })
