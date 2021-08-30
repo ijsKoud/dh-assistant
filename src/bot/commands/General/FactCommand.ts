@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/Command";
 import { ApplyOptions } from "@sapphire/decorators";
-import { Message, Util } from "discord.js";
+import { Message, MessageActionRow, MessageButton, Util } from "discord.js";
 import axios from "axios";
 
 @ApplyOptions<Command.Options>({
@@ -11,22 +11,19 @@ import axios from "axios";
 export default class FactCommand extends Command {
 	public async run(message: Message) {
 		const { data } = await axios
-			.get<Res>("https://uselessfacts.jsph.pl/random.json?language=en")
+			.get<string>("https://daangamesdg.wtf/api/fact")
 			.catch(() => ({ data: null }));
 		if (!data)
 			return message.reply(
 				`>>> ${this.container.client.constants.emojis.redcross} | Unable to find a fact, please try again later.`
 			);
 
-		await message.reply(`From **${data.source}**: \`${Util.escapeMarkdown(data.text)}\``);
+		const actionRow = new MessageActionRow().addComponents(
+			new MessageButton()
+				.setURL("https://daangamesdg.wtf/api/fact?all=true")
+				.setLabel("Source")
+				.setStyle("LINK")
+		);
+		await message.reply({ content: `\`${Util.escapeMarkdown(data)}\``, components: [actionRow] });
 	}
-}
-
-interface Res {
-	id: string;
-	text: string;
-	source: string;
-	source_url: string;
-	language: string;
-	permalink: string;
 }
