@@ -10,7 +10,9 @@ export default class MessageCreateListener extends Listener {
 		if (
 			!message.content.startsWith(client.options.defaultPrefix?.toString() ?? "") &&
 			!client.levelManager.lvlBlacklisted.includes(message.channel.id) &&
-			message.guild
+			message.guild &&
+			!message.author.bot &&
+			!message.webhookId
 		) {
 			const id = `${message.author.id}-${message.guild.id}`;
 			const data =
