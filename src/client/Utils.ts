@@ -2,6 +2,7 @@ import axios from "axios";
 import {
 	AwaitMessageComponentOptions,
 	AwaitMessagesOptions,
+	ButtonInteraction,
 	Channel,
 	Collection,
 	DMChannel,
@@ -9,8 +10,11 @@ import {
 	Guild,
 	GuildChannel,
 	GuildMember,
+	Interaction,
 	Message,
+	MessageActionRow,
 	MessageAttachment,
+	MessageButton,
 	MessageComponentInteraction,
 	MessageEmbed,
 	MessageEmbedOptions,
@@ -144,6 +148,65 @@ export default class Utils {
 			: item instanceof User || item instanceof GuildMember
 			? /<@!?(\d{17,19})>/
 			: /<@&(\d{17,19})>/;
+	}
+
+	public pagination(
+		message: Message,
+		pages: MessageEmbed[],
+		buttons: MessageButton[],
+		timeout = 12e4,
+		pageNumber = 1
+	) {
+		let page = pageNumber;
+		const ids = buttons.map((c) => c.customId);
+
+		const filter = (i: Interaction) =>
+			i.isButton() && i.inGuild() && i.guildId === message.guildId && ids.includes(i.customId);
+		const collector = message.channel.createMessageComponentCollector({
+			time: timeout,
+			filter,
+		});
+
+		collector.on("collect", async (buttonInteraction: ButtonInteraction) => {
+			switch (buttonInteraction.customId) {
+				case ids[0]:
+					page = page === 1 ? pages.length : page - 1;
+					break;
+				case ids[2]:
+					page = page === pages.length ? 1 : page + 1;
+					break;
+				case ids[1]:
+					await message.delete().catch(() => void 0);
+					collector.stop("deleted");
+					break;
+				default:
+					break;
+			}
+
+			await buttonInteraction.deferUpdate().catch(() => void 0);
+			await message
+				.edit({
+					embeds: [pages[page - 1].setFooter(`Page ${page} / ${pages.length}`)],
+				})
+				.catch(() => void 0);
+		});
+
+		collector.on("end", (_, reason) => {
+			if (reason === "deleted") return;
+
+			const disabledRow = new MessageActionRow().addComponents(
+				buttons[0].setDisabled(true),
+				buttons[1].setDisabled(true),
+				buttons[2].setDisabled(true)
+			);
+
+			message
+				.edit({
+					embeds: [pages[page - 1].setFooter(`Page ${page} / ${pages.length}`)],
+					components: [disabledRow],
+				})
+				.catch(() => void 0);
+		});
 	}
 
 	public async awaitComponent(
