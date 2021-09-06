@@ -24,3 +24,10 @@ model modlog {
   startDate BigInt
   endDate   BigInt?
 }
+
+model Level {
+  id    String @id // userId-guildId
+  level Int
+  xp    Int
+  bg    Int
+}

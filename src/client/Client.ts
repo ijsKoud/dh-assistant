@@ -13,6 +13,7 @@ import Utils from "./Utils";
 import * as constants from "./constants";
 import BlacklistManager from "./structures/BlacklistManager";
 import { PrismaClient } from "@prisma/client";
+import LevelManager from "./structures/LevelManager";
 
 export default class Client extends SapphireClient {
 	public owners: string[];
@@ -24,6 +25,7 @@ export default class Client extends SapphireClient {
 
 	public prisma = new PrismaClient();
 
+	public levelManager = new LevelManager(this);
 	public blacklistManager: BlacklistManager = new BlacklistManager(this);
 	public loggers: Collection<string, Logger> = new Collection();
 	public utils: Utils = new Utils(this);
@@ -90,6 +92,7 @@ declare module "@sapphire/framework" {
 		isOwner(id: string): boolean;
 
 		prisma: PrismaClient;
+		levelManager: LevelManager;
 		blacklistManager: BlacklistManager;
 		utils: Utils;
 		loggers: Collection<string, Logger>;
