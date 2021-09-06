@@ -30,3 +30,11 @@ model Level {
   xp    Int
   bg    Int
 }
+
+model Session {
+  id           String @id
+  accessToken  String
+  refreshToken String
+  userId       String
+  lastUsed     BigInt
+}
