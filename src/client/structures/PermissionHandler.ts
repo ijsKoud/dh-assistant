@@ -4,6 +4,13 @@ import Client from "../Client";
 export default class PermissionHandler {
 	constructor(public client: Client) {}
 
+	public hasStaff(member: GuildMember): boolean {
+		const data = this.client.constants.roles;
+		const roles = [data.cet, data.trial, data.moderator, data.manager, data.senior];
+
+		return this._parse(roles, member);
+	}
+
 	public hasCet(member: GuildMember): boolean {
 		const data = this.client.constants.roles;
 		const roles = [data.cet, data.manager, data.senior];
@@ -50,9 +57,8 @@ export default class PermissionHandler {
 			...Object.keys(data.levels).map((k) => data.levels[k]),
 		];
 
-		if (options?.staff)
-			roles.push(...[data.cet, data.trial, data.moderator, data.manager, data.senior]);
 		if (options?.contentCreator) roles.push(...data.contentCreator);
+		if (options?.staff) return this.hasStaff(member) || this._parse(roles, member);
 
 		return this._parse(roles, member);
 	}
