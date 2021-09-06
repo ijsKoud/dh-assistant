@@ -16,8 +16,7 @@ model botBlacklist {
 
 model modlog {
   caseId    String  @id
-  userId    String
-  guildId   String
+  id        String // userId-guildId
   moderator String
   reason    String
   type      String
