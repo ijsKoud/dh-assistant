@@ -109,5 +109,12 @@ declare module "@sapphire/framework" {
 	interface Preconditions {
 		OwnerOnly: never;
 		Blacklisted: never;
+
+		// staff preconditions
+		CetOnly: never;
+		TrialModeratorOnly: never;
+		ModeratorOnly: never;
+		ManagerOnly: never;
+		SeniorOnly: never;
 	}
 }
