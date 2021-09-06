@@ -12,7 +12,7 @@ import moment from "moment";
 	description: "Shows the modlogs of a user",
 	usage: "[user]",
 	requiredClientPermissions: ["EMBED_LINKS"],
-	preconditions: ["GuildOnly"],
+	preconditions: ["GuildOnly", "TrialModeratorOnly"],
 })
 export default class ModlogsCommand extends Command {
 	public async run(message: Message, args: Args) {
