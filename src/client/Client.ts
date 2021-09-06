@@ -24,11 +24,12 @@ export default class Client extends SapphireClient {
 	}
 
 	public prisma = new PrismaClient();
+	public utils = new Utils(this);
 
 	public levelManager = new LevelManager(this);
-	public blacklistManager: BlacklistManager = new BlacklistManager(this);
-	public loggers: Collection<string, Logger> = new Collection();
-	public utils: Utils = new Utils(this);
+	public blacklistManager = new BlacklistManager(this);
+	public loggers = new Collection<string, Logger>();
+	public multipliers = new Collection<string, number>();
 
 	constructor(options: ClientOptions) {
 		super({
@@ -92,10 +93,13 @@ declare module "@sapphire/framework" {
 		isOwner(id: string): boolean;
 
 		prisma: PrismaClient;
+		utils: Utils;
+
 		levelManager: LevelManager;
 		blacklistManager: BlacklistManager;
-		utils: Utils;
+
 		loggers: Collection<string, Logger>;
+		multipliers: Collection<string, number>;
 	}
 
 	interface Preconditions {
