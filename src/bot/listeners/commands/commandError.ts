@@ -54,7 +54,7 @@ export class UserListener extends Listener {
 		}
 
 		const command = piece as Command;
-		logger.fatal(`[COMMAND] ${command.path}\n${error.stack || error.message}`);
+		logger.fatal(`[COMMAND] ${command.location}\n${error.stack || error.message}`);
 
 		try {
 			return message.reply(this.generateUnexpectedErrorMessage(args, error));
