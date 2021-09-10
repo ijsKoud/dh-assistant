@@ -1,4 +1,4 @@
-import { Command } from "../../../client/structures/Command";
+import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Message, MessageActionRow, MessageButton } from "discord.js";
 

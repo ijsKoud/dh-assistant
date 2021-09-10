@@ -8,7 +8,7 @@ import {
 	UserError,
 } from "@sapphire/framework";
 import { DiscordAPIError, HTTPError, Message } from "discord.js";
-import { Command } from "../../../client/structures/Command";
+import { Command } from "../../../client/structures/extensions";
 import { RESTJSONErrorCodes } from "discord-api-types/v9";
 import { ApplyOptions } from "@sapphire/decorators";
 import { codeBlock } from "@sapphire/utilities";

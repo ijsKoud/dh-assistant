@@ -62,7 +62,7 @@ declare module "@daangamesdg/logger" {
 	}
 }
 
-export default class Logger extends defaultLogger {
+export class Logger extends defaultLogger {
 	public webhook: WebhookClient | null = null;
 
 	constructor(options: LoggerOptions & { webhook?: string }) {

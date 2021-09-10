@@ -1,6 +1,6 @@
-import Client from "../Client";
+import Client from "../../Client";
 
-export default class BlacklistManager {
+export class BlacklistManager {
 	public blacklisted: string[] = [];
 
 	constructor(public client: Client) {}

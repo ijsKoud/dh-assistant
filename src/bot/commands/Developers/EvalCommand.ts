@@ -1,4 +1,4 @@
-import { Command } from "../../../client/structures/Command";
+import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { codeBlock } from "@sapphire/utilities";
 import { Args } from "@sapphire/framework";

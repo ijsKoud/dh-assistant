@@ -1,4 +1,4 @@
-import { Command } from "../../../client/structures/Command";
+import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { EmbedFieldData, Message, MessageEmbed } from "discord.js";
 import ms from "ms";

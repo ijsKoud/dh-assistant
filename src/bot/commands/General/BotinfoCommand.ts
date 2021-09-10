@@ -1,4 +1,4 @@
-import { Command } from "../../../client/structures/Command";
+import { Command } from "../../../client/structures/extensions";
 import { cpus, platform, totalmem, uptime } from "os";
 import { ApplyOptions } from "@sapphire/decorators";
 import { version } from "../../../../package.json";
