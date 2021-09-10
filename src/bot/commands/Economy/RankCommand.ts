@@ -34,7 +34,7 @@ export default class RankCommand extends Command {
 			level: stats.level.level,
 			rank: stats.i + 1,
 			required: stats.level.level * 75,
-			xp: client.levelManager.getTotal(stats.level.level, stats.level.xp),
+			xp: stats.level.xp,
 		}).build();
 
 		return message.reply({ files: [new MessageAttachment(file, "rankcard.png")] });
