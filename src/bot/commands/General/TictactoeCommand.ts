@@ -10,7 +10,7 @@ import { Tictactoe } from "../../../client/structures/games";
 	usage: "[user]",
 	requiredClientPermissions: ["EMBED_LINKS"],
 })
-export default class AvatarCommand extends Command {
+export default class TictactoeCommand extends Command {
 	public async run(message: Message, args: Args) {
 		const { value: member } = await args.pickResult("member");
 		if (!member || member.id === message.author.id)
