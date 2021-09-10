@@ -1,7 +1,7 @@
 import { Message, MessageEmbed, MessageCollector } from "discord.js";
 import ranWords from "random-words";
 
-export default class hangMan {
+export class hangMan {
 	private message: Message;
 	private embed!: MessageEmbed;
 	private embedMsg!: Message;

@@ -1,6 +1,6 @@
 import { Message, MessageCollector, MessageEmbed } from "discord.js";
 
-export default class Tictactoe {
+export class Tictactoe {
 	private message: Message;
 	private embed!: MessageEmbed;
 	private embedMsg!: Message;
