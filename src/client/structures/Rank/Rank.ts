@@ -7,6 +7,7 @@ import {
 	Image,
 } from "canvas";
 import { join } from "path";
+import { fillTextWithTwemoji, measureText } from "node-canvas-with-twemoji-and-discord-emoji";
 
 export class Rank {
 	protected canvas: Canvas;
@@ -21,15 +22,12 @@ export class Rank {
 
 	public async build(): Promise<Buffer> {
 		await this.loadBase(this.data.base);
-		this.drawName();
+		await this.drawName();
 
 		// add discrim (#0000)
 		this.ctx.fillStyle = "#212121";
-		this.ctx.fillText(
-			`#${this.data.discrim}`,
-			247 + 5 + this.ctx.measureText(this.data.username).width,
-			120
-		);
+		const { width } = measureText(this.ctx, this.data.username);
+		this.ctx.fillText(`#${this.data.discrim}`, 247 + 5 + width, 120);
 
 		// back of progressbar
 		this.ctx.fillStyle = "#181A1B";
@@ -129,7 +127,7 @@ export class Rank {
 		this.ctx.shadowOffsetX = 0;
 	}
 
-	protected drawName() {
+	protected async drawName() {
 		const max = 19;
 		this.ctx.font = "regular 30px Poppins";
 		this.ctx.fillStyle = "#fff";
@@ -139,7 +137,7 @@ export class Rank {
 			this.data.username = this.data.username.slice(0, 19) + "...";
 		}
 
-		this.ctx.fillText(this.data.username, 247, 120);
+		await fillTextWithTwemoji(this.ctx, this.data.username, 247, 120);
 	}
 }
 
