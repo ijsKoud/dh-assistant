@@ -5,8 +5,9 @@ import { Args } from "@sapphire/framework";
 import { Tictactoe } from "../../../client/structures/games";
 
 @ApplyOptions<Command.Options>({
-	name: "avatar",
-	description: "Shows the avatar of a user",
+	name: "tictactoe",
+	aliases: ["ttt"],
+	description: "Starts a game of tictactoe",
 	usage: "[user]",
 	requiredClientPermissions: ["EMBED_LINKS"],
 })
