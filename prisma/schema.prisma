@@ -15,7 +15,7 @@ model botBlacklist {
 }
 
 model modlog {
-  caseId    String  @id
+  caseId    Int     @id @default(autoincrement())
   id        String // userId-guildId
   moderator String
   reason    String
@@ -32,7 +32,7 @@ model Level {
 }
 
 model Session {
-  id           String @id
+  id           String @id // session id
   accessToken  String
   refreshToken String
   userId       String
