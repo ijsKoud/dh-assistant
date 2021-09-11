@@ -7,10 +7,4 @@ new Client({
 	intents: ["GUILDS", "GUILD_MESSAGES", "DIRECT_MESSAGES", "GUILD_PRESENCES", "GUILD_MEMBERS"],
 	debug: !!process.env.DEBUG,
 	partials: [],
-	activity: [
-		{
-			type: "LISTENING",
-			name: "DaanGamesDG",
-		},
-	],
 }).start();
