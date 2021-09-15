@@ -16,7 +16,7 @@ export default class PingCommand extends Command {
 		const embed: MessageEmbed = this.container.client.utils
 			.embed()
 			.setTitle(`Help Command - ${message.author.tag}`)
-			.setFooter("Bot created by DaanGamesDG#7621", "https://cdn.daangamesdg.wtf/discord/pfp.gif");
+			.setFooter("Bot created by DaanGamesDG#7621", "https://cdn.daangamesdg.xyz/discord/pfp.gif");
 
 		const cmd = await args.pickResult("string");
 		const command = this.container.stores.get("commands").get(cmd.value ?? "") as
