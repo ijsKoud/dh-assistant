@@ -1,4 +1,4 @@
-import { MessageEmbed, User } from "discord.js";
+import { ImageURLOptions, MessageEmbed, User } from "discord.js";
 import moment from "moment";
 import ms from "ms";
 
@@ -6,8 +6,12 @@ export class ModerationMessage {
 	static logs(
 		reason: string,
 		action: string,
-		user: User,
-		moderator: User,
+		user:
+			| User
+			| { displayAvatarURL: (options?: ImageURLOptions) => string; id: string; tag: string },
+		moderator:
+			| User
+			| { displayAvatarURL: (options?: ImageURLOptions) => string; id: string; tag: string },
 		caseId: string,
 		date: number,
 		duration?: number

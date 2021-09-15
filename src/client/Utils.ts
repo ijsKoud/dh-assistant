@@ -104,7 +104,7 @@ export default class Utils {
 			: null;
 	}
 
-	public async fetchMember(id: string, guild: Guild) {
+	public async fetchMember(id: string, guild: Guild | null | undefined) {
 		return typeof id === "string" && guild instanceof Guild
 			? this._resolve(guild.members.cache, id) || (await guild.members.fetch(id).catch(() => null))
 			: null;

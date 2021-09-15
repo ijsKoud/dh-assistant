@@ -7,6 +7,7 @@ import ms from "ms";
 import { ModerationMessage } from "./ModerationMessage";
 import { BadWordsSettings } from ".";
 import { Timeout, setTimeout as setLongTimeout } from "long-timeout";
+import moment from "moment";
 
 interface Filter {
 	count: number;
@@ -150,8 +151,12 @@ export class Automod {
 						this.client.loggingHandler.sendLogs(log, "mod", this.settings.logging.mod);
 
 						const timeout = setLongTimeout(() => {
+							const unmuteReason = `Automatic unmute from mute made by ${this.client.user?.toString()} <t:${moment(
+								result.date
+							).unix()}:R>`;
+
 							const finishLogs = ModerationMessage.logs(
-								result.reason,
+								unmuteReason,
 								"unmute",
 								message.author,
 								user,
