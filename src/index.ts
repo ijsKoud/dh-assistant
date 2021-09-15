@@ -4,7 +4,14 @@ config();
 import Client from "./client/Client";
 new Client({
 	owners: process.env.OWNERS?.split(" ") ?? [],
-	intents: ["GUILDS", "GUILD_MESSAGES", "DIRECT_MESSAGES", "GUILD_PRESENCES", "GUILD_MEMBERS"],
+	intents: [
+		"GUILDS",
+		"GUILD_MESSAGES",
+		"DIRECT_MESSAGES",
+		"GUILD_PRESENCES",
+		"GUILD_MEMBERS",
+		"GUILD_BANS",
+	],
 	debug: !!process.env.DEBUG,
 	partials: [],
 }).start();

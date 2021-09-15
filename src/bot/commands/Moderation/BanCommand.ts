@@ -53,7 +53,7 @@ export default class BanCommand extends Command {
 			data: {
 				reason: reason ?? "No reason provided",
 				id: `${user.id}-${message.guildId}`,
-				moderator: client.user?.id ?? "",
+				moderator: message.author.id,
 				startDate: BigInt(date),
 				endDate: BigInt(date + (duration ?? 0)),
 				type: duration ? "tempban" : "ban",

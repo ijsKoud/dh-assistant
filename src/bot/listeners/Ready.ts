@@ -29,8 +29,9 @@ export default class ReadyListener extends Listener {
 				case "tempban":
 					{
 						const automod = client.automod;
+						const date = Number(log.startDate);
+
 						const timeout = setLongTimeout(async () => {
-							const date = Number(log.startDate);
 							const reason = `Automatic unban from ban made by <@${log.moderator}> <t:${moment(
 								date
 							).unix()}:R>`;
@@ -51,15 +52,15 @@ export default class ReadyListener extends Listener {
 							const finishLogs = ModerationMessage.logs(
 								reason,
 								"unban",
-								moderator,
 								user,
+								moderator,
 								`Reference Case Id: ${log.caseId}`,
 								date
 							);
 
 							if (guild) await guild.bans.remove(userId, reason);
 							client.loggingHandler.sendLogs(finishLogs, "mod", automod.settings.logging.mod);
-						}, automod.settings.mute.duration);
+						}, date - Date.now());
 
 						automod.modTimeouts.set(log.id, timeout);
 					}
@@ -91,8 +92,8 @@ export default class ReadyListener extends Listener {
 							const finishLogs = ModerationMessage.logs(
 								reason,
 								"unmute",
-								moderator,
 								member.user,
+								moderator,
 								`Reference Case Id: ${log.caseId}`,
 								date,
 								client.automod.settings.mute.duration
