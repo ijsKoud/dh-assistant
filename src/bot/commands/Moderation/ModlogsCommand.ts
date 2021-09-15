@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { EmbedField, Message, MessageButton, MessageEmbed } from "discord.js";
+import { EmbedField, Message, MessageButton, MessageEmbed, Collection } from "discord.js";
 import { Args } from "@sapphire/framework";
 import { modlog } from ".prisma/client";
 import { v4 as uuid } from "uuid";
@@ -26,19 +26,18 @@ export default class ModlogsCommand extends Command {
 			});
 			if (!logs.length) return message.reply(">>> 🎉 | No modlogs found for this server.");
 
-			const sorted = logs
-				.map((x) => ({
-					userId: x.id.split("-")[0],
-					logs: logs.filter((v) => v.id === x.id).length,
-				}))
-				.sort((a, b) => b.logs - a.logs);
+			const tempCache = new Collection<string, number>();
+			logs.forEach((w) => tempCache.set(w.id, (tempCache.get(w.id) ?? 0) + 1));
+
+			const warns = tempCache.sort((a, b) => b - a).map((amount, id) => ({ id, logs: amount }));
 
 			const embed = client.utils
 				.embed()
 				.setTitle(`Modlogs - ${message.guild.name}`)
+				.setURL(`${process.env.DASHBOARD}/modlogs`)
 				.setDescription(
-					sorted
-						.map((m) => `\`${m.logs}\` - <@!${m.userId}>`)
+					warns
+						.map((m) => `\`${m.logs}\` - <@!${m.id.split("-")[0]}>`)
 						.join("\n")
 						.substr(0, 4096)
 				);
