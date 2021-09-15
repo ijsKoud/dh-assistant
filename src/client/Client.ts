@@ -14,6 +14,8 @@ import * as constants from "./constants";
 import { PrismaClient } from "@prisma/client";
 import { LevelManager, BlacklistManager } from "./structures/managers";
 import { PermissionHandler } from "./structures/handlers";
+import { Automod } from "./structures/Moderation";
+import LoggingHandler from "./structures/handlers/LoggingHandler";
 
 export default class Client extends SapphireClient {
 	public owners: string[];
@@ -26,9 +28,13 @@ export default class Client extends SapphireClient {
 	public prisma = new PrismaClient();
 	public utils = new Utils(this);
 
+	public automod = new Automod(this);
+
 	public levelManager = new LevelManager(this);
 	public blacklistManager = new BlacklistManager(this);
+
 	public permissionHandler = new PermissionHandler(this);
+	public loggingHandler = new LoggingHandler(this);
 
 	public loggers = new Collection<string, Logger>();
 	public multipliers = new Collection<string, number>();
@@ -97,9 +103,13 @@ declare module "@sapphire/framework" {
 		prisma: PrismaClient;
 		utils: Utils;
 
+		automod: Automod;
+
 		levelManager: LevelManager;
 		blacklistManager: BlacklistManager;
+
 		permissionHandler: PermissionHandler;
+		loggingHandler: LoggingHandler;
 
 		loggers: Collection<string, Logger>;
 		multipliers: Collection<string, number>;

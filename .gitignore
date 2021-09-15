@@ -5,3 +5,5 @@ prisma/migrations/
 .env
 yarn.lock
 yarn-error.log
+
+automod.json

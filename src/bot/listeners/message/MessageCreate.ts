@@ -6,13 +6,14 @@ import { Message } from "discord.js";
 export default class MessageCreateListener extends Listener {
 	public async run(message: Message) {
 		const { client } = this.container;
+		if (message.author.bot || message.system || message.webhookId) return;
+
+		client.automod.run(message);
 
 		if (
 			!message.content.startsWith(client.options.defaultPrefix?.toString() ?? "") &&
 			!client.levelManager.lvlBlacklisted.includes(message.channel.id) &&
-			message.guild &&
-			!message.author.bot &&
-			!message.webhookId
+			message.guild
 		) {
 			const id = `${message.author.id}-${message.guild.id}`;
 			const data =
@@ -24,17 +25,14 @@ export default class MessageCreateListener extends Listener {
 			});
 
 			if (lvl?.lvlUp && message.member) {
-				await client.levelManager.rankUser(message.member, {
-					...lvl.lvl,
-					level: lvl.lvl.level + 1,
-				});
+				await client.levelManager.rankUser(message.member, lvl.lvl);
 
-				await message.reply({
-					allowedMentions: { repliedUser: true },
-					content: `Congratulations **${message.author.tag}**, you have got level **${
-						lvl.lvl.level + 1
-					}**!`,
-				});
+				await message
+					.reply({
+						allowedMentions: { repliedUser: true },
+						content: `Congratulations **${message.author.tag}**, you have got level **${lvl.lvl.level}**!`,
+					})
+					.catch(() => void 0);
 			}
 		}
 	}

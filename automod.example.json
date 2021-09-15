@@ -1,0 +1,102 @@
+{
+	"mute": {
+		"role": "",
+		"duration": 1e4
+	},
+	"logging": {
+		"message": "",
+		"mod": "",
+		"member": "",
+		"join": "",
+		"appeals": ""
+	},
+	"globalWhitelisted": [],
+	"thresholds": {
+		"caps": {
+			"type": "verbal",
+			"enabled": true,
+			"whitelisted": [],
+			"message": "Hey, **too many caps!**",
+			"reason": "Automatic action carried out for exceeding the caps limit",
+			"threshold": {
+				"value": 0.75,
+				"duration": 0
+			}
+		},
+		"invite": {
+			"type": "warn",
+			"enabled": true,
+			"whitelisted": [],
+			"message": "Hey {user}, invite links are **not** allowed here!",
+			"reason": "Automatic action carried out for posting an invite link to **{name}** in {channel}: `.gg/{code}`",
+			"threshold": {
+				"value": 0,
+				"duration": 0
+			}
+		},
+		"mention": {
+			"type": "warn",
+			"enabled": true,
+			"whitelisted": [],
+			"message": "Hey {user}, stop mass mentioning users!",
+			"reason": "Automatic action carried out for mass mentioning users ({count}/{limit} in {duration})",
+			"threshold": {
+				"value": 5,
+				"duration": 2e3
+			}
+		},
+		"spam": {
+			"type": "warn",
+			"enabled": true,
+			"whitelisted": [],
+			"message": "Hey {user}, spam is **not** allowed!",
+			"reason": "Automatic action carried out for hitting the message rate limit ({messages}/{duration})",
+			"threshold": {
+				"value": 7,
+				"duration": 5e3
+			}
+		},
+		"badWords": {
+			"type": "warn",
+			"enabled": true,
+			"whitelisted": [],
+			"message": "Hey {user}, that is **not** allowed here!",
+			"reason": "Automatic action carried out for using blacklisted word(s) ({words})",
+			"blacklistedWords": [
+				"shit",
+				"shite",
+				"sh!t",
+				"sh1t",
+				"cunt",
+				"bitch",
+				"b!tch",
+				"b1tch",
+				"dick",
+				"d!ck",
+				"d1ck",
+				"fuk",
+				"pussy",
+				"ahole",
+				"shitty",
+				"blowjob",
+				"middle_finger",
+				"🖕",
+				"faggot",
+				"f@​ggot",
+				"f@​gg0t",
+				"fagg0t",
+				"cock",
+				"nigger",
+				"nigg3r",
+				"n1gg3r",
+				"n1gger",
+				"nigga",
+				"nigg@​",
+				"n1gg@​",
+				"n1gg",
+				"fuck"
+			],
+			"whitelistedWords": ["cocktail"]
+		}
+	}
+}
