@@ -1,7 +1,7 @@
 {
 	"mute": {
 		"role": "",
-		"duration": 1e4
+		"duration": 6e5
 	},
 	"logging": {
 		"message": "",
