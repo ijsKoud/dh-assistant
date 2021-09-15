@@ -4,6 +4,20 @@ import Client from "../../Client";
 export class PermissionHandler {
 	constructor(public client: Client) {}
 
+	public isHigher(mod: GuildMember, offender: GuildMember): string {
+		if (
+			offender.roles.highest.position >= mod.roles.highest.position &&
+			!this.client.isOwner(mod.id)
+		)
+			return "mod-low";
+		if (offender.guild.ownerId === offender.id) return "owner";
+		if (offender.id === this.client.user?.id) return "bot";
+		if (offender.roles.highest.position >= (offender.guild.me?.roles.highest.position ?? 0))
+			return "bot-low";
+
+		return "";
+	}
+
 	public hasStaff(member: GuildMember): boolean {
 		const data = this.client.constants.roles;
 		const roles = [data.cet, data.trial, data.moderator, data.manager, data.senior];

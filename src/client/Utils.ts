@@ -23,6 +23,7 @@ import {
 	Role,
 	User,
 } from "discord.js";
+import ms from "ms";
 import Client from "./Client";
 
 export default class Utils {
@@ -30,6 +31,15 @@ export default class Utils {
 
 	public formatTime(time: number | string, type: "t" | "T" | "d" | "D" | "f" | "F" | "R"): string {
 		return `<t:${time}:${type}>`;
+	}
+
+	public parseTime(time: string): number {
+		const permanent = ["p", "perm", "permanent"];
+
+		time = time.toLowerCase();
+		if (permanent.includes(time)) return 0;
+
+		return ms(time);
 	}
 
 	public async robloxUser(
