@@ -99,7 +99,7 @@ export default class BanCommand extends Command {
 				client.loggingHandler.sendLogs(finishLogs, "mod", client.automod.settings.logging.mod);
 			}, duration);
 
-			client.automod.modTimeouts.set(`${user.id}-${message.guildId}`, timeout);
+			client.automod.modTimeouts.set(`${user.id}-${message.guildId}-ban`, timeout);
 		}
 
 		await user.send({ embeds: [dm] }).catch(() => void 0);
