@@ -169,7 +169,7 @@ export class Automod {
 							this.client.loggingHandler.sendLogs(finishLogs, "mod", this.settings.logging.mod);
 						}, this.settings.mute.duration);
 
-						this.modTimeouts.set(id, timeout);
+						this.modTimeouts.set(`${id}-mute`, timeout);
 
 						const embed = ModerationMessage.dm(
 							result.reason,
