@@ -30,6 +30,9 @@ export default class ReadyListener extends Listener {
 					{
 						const automod = client.automod;
 						const date = Number(log.startDate);
+						const finished = Number(log.endDate);
+
+						if (finished < Date.now()) return;
 
 						const timeout = setLongTimeout(async () => {
 							const reason = `Automatic unban from ban made by <@${log.moderator}> <t:${moment(
@@ -55,12 +58,12 @@ export default class ReadyListener extends Listener {
 								user,
 								moderator,
 								`Reference Case Id: ${log.caseId}`,
-								date
+								finished
 							);
 
 							if (guild) await guild.bans.remove(userId, reason);
 							client.loggingHandler.sendLogs(finishLogs, "mod", automod.settings.logging.mod);
-						}, date - Date.now());
+						}, finished - Date.now());
 
 						automod.modTimeouts.set(log.id, timeout);
 					}
@@ -68,8 +71,12 @@ export default class ReadyListener extends Listener {
 				case "mute":
 					{
 						const automod = client.automod;
+						const date = Number(log.startDate);
+						const finished = Number(log.endDate);
+
+						if (finished < Date.now()) return;
+
 						const timeout = setLongTimeout(async () => {
-							const date = Number(log.startDate);
 							const reason = `Automatic unmute from mute made by <@${log.moderator}> <t:${moment(
 								date
 							).unix()}:R>`;
@@ -95,14 +102,14 @@ export default class ReadyListener extends Listener {
 								member.user,
 								moderator,
 								`Reference Case Id: ${log.caseId}`,
-								date,
+								finished,
 								client.automod.settings.mute.duration
 							);
 
 							if (member instanceof GuildMember)
 								await member.roles.remove(automod.settings.mute.role).catch(() => void 0);
 							client.loggingHandler.sendLogs(finishLogs, "mod", automod.settings.logging.mod);
-						}, automod.settings.mute.duration);
+						}, finished - Date.now());
 
 						automod.modTimeouts.set(log.id, timeout);
 					}
