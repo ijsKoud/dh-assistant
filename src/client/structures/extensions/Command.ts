@@ -2,6 +2,7 @@ import { Args, CommandContext, PieceContext, UserError } from "@sapphire/framewo
 import { SubCommandPluginCommand } from "@sapphire/plugin-subcommands";
 import type { PermissionResolvable } from "discord.js";
 import { sep } from "path";
+import Client from "../../Client";
 
 export abstract class Command extends SubCommandPluginCommand<Args, Command> {
 	public readonly hidden: boolean;
@@ -15,12 +16,17 @@ export abstract class Command extends SubCommandPluginCommand<Args, Command> {
 	public readonly clientPermissions: PermissionResolvable;
 
 	public readonly fullCategory: readonly string[];
+	public client: Client;
 
 	public constructor(context: PieceContext, options: Command.Options) {
 		super(context, {
 			cooldownDelay: 5e3,
 			cooldownLimit: 2,
 			generateDashLessAliases: true,
+			cooldownFilteredUsers: [
+				...(options.cooldownFilteredUsers ?? []),
+				...(process.env.OWNERS ?? "").split(/ +/g),
+			],
 			...options,
 		});
 
@@ -39,6 +45,8 @@ export abstract class Command extends SubCommandPluginCommand<Args, Command> {
 
 		this.permissions = options.requiredUserPermissions ?? [];
 		this.clientPermissions = options.requiredClientPermissions ?? [];
+
+		this.client = this.container.client as Client;
 
 		const paths = context.path.split(sep);
 		this.fullCategory = paths.slice(paths.indexOf("commands") + 1, -1);
