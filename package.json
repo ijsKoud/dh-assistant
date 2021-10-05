@@ -25,15 +25,15 @@
 		"uuid": "^8.3.2"
 	},
 	"devDependencies": {
-		"@types/ms": "^0.7.31",
-		"@types/node": "^16.3.1",
-		"@types/random-words": "^1.1.2",
-		"@types/uuid": "^8.3.1",
-		"@typescript-eslint/eslint-plugin": "^4.28.2",
-		"@typescript-eslint/parser": "^4.28.2",
-		"@types/long-timeout": "^0.1.0",
-		"eslint": "^7.30.0",
-		"typescript": "^4.4.2"
+		"@types/ms": "0.7.31",
+		"@types/node": "16.10.2",
+		"@types/random-words": "1.1.2",
+		"@types/uuid": "8.3.1",
+		"@typescript-eslint/eslint-plugin": "4.33.0",
+		"@typescript-eslint/parser": "4.33.0",
+		"@types/long-timeout": "0.1.0",
+		"eslint": "7.32.0",
+		"typescript": "4.4.3"
 	},
 	"scripts": {
 		"build": "tsc --build",
