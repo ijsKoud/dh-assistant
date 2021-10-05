@@ -46,7 +46,7 @@ export default class ModlogsCommand extends Command {
 		}
 
 		const logs = await client.prisma.modlog.findMany({
-			where: { id: `${message.author.id}-${message.guild.id}` },
+			where: { id: `${user.id}-${message.guild.id}` },
 		});
 		if (!logs.length) return message.reply(">>> 🎉 | No modlogs found for this user.");
 
