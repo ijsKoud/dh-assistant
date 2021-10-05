@@ -13,7 +13,7 @@
 		"@sapphire/framework": "^2.0.0-next.db6febd5.0",
 		"@sapphire/plugin-subcommands": "^1.0.6",
 		"@sapphire/type": "^2.0.1",
-		"axios": "^0.21.1",
+		"axios": "^0.22.0",
 		"canvas": "^2.8.0",
 		"discord.js": "^13.1.0",
 		"dotenv": "^10.0.0",
