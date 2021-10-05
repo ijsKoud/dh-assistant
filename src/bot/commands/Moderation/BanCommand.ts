@@ -13,41 +13,43 @@ import moment from "moment";
 	usage: "<user> <duration> <reason>",
 	requiredClientPermissions: ["BAN_MEMBERS"],
 	preconditions: ["GuildOnly", "ModeratorOnly"],
+	options: ["duration"],
 })
 export default class BanCommand extends Command {
 	public async run(message: ModMessage, args: Args) {
 		if (!message.guild) return;
 		const { client } = this.container;
-		const { redcross } = client.constants.emojis;
+		const { redcross, loading } = client.constants.emojis;
 
 		const { value: user } = await args.pickResult("user");
-		const { value: durationOption } = await args.pickResult("string");
 		const { value: reason } = await args.restResult("string");
+		const durationOption = args.getOption("duration");
 		if (!user) return message.reply(`>>> ${redcross} | Couldn't find that user on discord at all.`);
+
+		const msg = await message.reply(`>>> ${loading} | Banning **${user.tag}**...`);
 
 		const member = await client.utils.fetchMember(user.id, message.guild);
 		if (member)
 			switch (client.permissionHandler.isHigher(message.member, member)) {
 				case "mod-low":
-					return message.reply(`>>> ${redcross} | You can't ban this user due to role hierarchy.`);
+					return msg.edit(`>>> ${redcross} | You can't ban this user due to role hierarchy.`);
 				case "owner":
-					return message.reply(
+					return msg.edit(
 						`>>> ${redcross} | You can't ban this user because they are the owner of this server.`
 					);
 				case "bot":
-					return message.reply(
+					return msg.edit(
 						`>>> ${redcross} | After all the hard work I have done for you, you want to ban me??`
 					);
 				case "bot-low":
-					return message.reply(`>>> ${redcross} | I can't ban this user due to role hierarchy.`);
+					return msg.edit(`>>> ${redcross} | I can't ban this user due to role hierarchy.`);
 			}
 
 		const ban = await message.guild.bans.fetch(user).catch(() => null);
-		if (ban)
-			return message.reply(`>>> ${redcross} | This user is already banned from this server.`);
+		if (ban) return msg.edit(`>>> ${redcross} | This user is already banned from this server.`);
 
 		const date = Date.now();
-		const duration = client.utils.parseTime(durationOption ?? "") || undefined;
+		const duration = client.utils.parseTime(durationOption ?? "p") || undefined;
 
 		const banLog = await client.prisma.modlog.create({
 			data: {
@@ -105,7 +107,7 @@ export default class BanCommand extends Command {
 		await user.send({ embeds: [dm] }).catch(() => void 0);
 		await message.guild.bans.create(user, { reason });
 
-		await message.reply(
+		await msg.edit(
 			`>>> 🔨 | Successfully banned **${user.tag}** ${
 				duration ? `for **${ms(duration, { long: true })}**` : ""
 			}`.trim() + "."
