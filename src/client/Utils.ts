@@ -47,18 +47,18 @@ export default class Utils {
 	): Promise<{ rover: string | null; bloxlink: string | null }> {
 		try {
 			const { data: rover } = await axios
-				.get("https://verify.eryn.io/api/user/" + user)
+				.get<{ robloxUsername: string }>("https://verify.eryn.io/api/user/" + user)
 				.catch(() => ({ data: null }));
 			const { data: bloxlink } = await axios
-				.get("https://api.blox.link/v1/user/" + user)
+				.get<{ primaryAccount: string }>("https://api.blox.link/v1/user/" + user)
 				.catch(() => ({ data: null }));
 			const { data: acc } = await axios
-				.get("https://api.roblox.com/users/" + bloxlink?.primaryAccount)
+				.get<{ Username: string }>("https://api.roblox.com/users/" + bloxlink?.primaryAccount)
 				.catch(() => ({ data: null }));
 
 			return {
-				rover: rover?.robloxUsername,
-				bloxlink: acc?.Username,
+				rover: rover?.robloxUsername ?? null,
+				bloxlink: acc?.Username ?? null,
 			};
 		} catch (e) {
 			this.client.loggers.get("bot")?.error(e);
