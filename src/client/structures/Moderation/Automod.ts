@@ -377,7 +377,7 @@ export class Automod {
 			guild: message.guildId,
 			reason: this.replace(InviteSettings.reason, {
 				channel: message.channel.toString(),
-				name: invite.guild?.name || invite.channel.name,
+				name: (invite.guild?.name || invite.channel.name) ?? "unknown name",
 				code: invite.code,
 			}),
 			message: this.replace(InviteSettings.message, { user: message.member.toString() }),

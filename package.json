@@ -15,7 +15,7 @@
 		"@sapphire/type": "^2.0.1",
 		"axios": "^0.22.0",
 		"canvas": "^2.8.0",
-		"discord.js": "^13.1.0",
+		"discord.js": "^13.2.0",
 		"dotenv": "^10.0.0",
 		"long-timeout": "^0.1.1",
 		"moment": "^2.29.1",
