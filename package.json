@@ -9,7 +9,7 @@
 	"dependencies": {
 		"@daangamesdg/logger": "^1.1.0",
 		"@prisma/client": "^3.0.2",
-		"@sapphire/decorators": "^2.2.0",
+		"@sapphire/decorators": "^3.0.0",
 		"@sapphire/framework": "^2.0.0-next.db6febd5.0",
 		"@sapphire/plugin-subcommands": "^1.0.6",
 		"@sapphire/type": "^2.0.1",
