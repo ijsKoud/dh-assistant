@@ -1,6 +1,7 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Message, MessageActionRow, MessageButton } from "discord.js";
+import { emojis } from "../../../client/constants";
 
 @ApplyOptions<Command.Options>({
 	name: "Leaderboard",
@@ -15,10 +16,7 @@ export default class RankCommand extends Command {
 
 		const { client } = this.container;
 		const data = (await client.levelManager.getLevels(message.guild.id))?.slice(0, 10);
-		if (!data)
-			return message.reply(
-				`>>> ${client.constants.emojis.redcross} | Uhm, no one earned xp yet. How?`
-			);
+		if (!data) return message.reply(`>>> ${emojis.redcross} | Uhm, no one earned xp yet. How?`);
 
 		const embed = client.utils
 			.embed()

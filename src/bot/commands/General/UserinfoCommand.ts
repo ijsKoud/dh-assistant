@@ -4,6 +4,7 @@ import { Message } from "discord.js";
 import { Args } from "@sapphire/framework";
 import axios from "axios";
 import moment from "moment";
+import { emojis } from "../../../client/constants";
 
 @ApplyOptions<Command.Options>({
 	name: "info",
@@ -15,9 +16,7 @@ import moment from "moment";
 export default class ServerinfoCommand extends Command {
 	public async run(message: Message, args: Args): Promise<void> {
 		const { client } = this.container;
-		const msg = await message.reply(
-			`>>> ${client.constants.emojis.loading} | Getting user information...`
-		);
+		const msg = await message.reply(`>>> ${emojis.loading} | Getting user information...`);
 
 		let { value: user } = await args.pickResult("user");
 		if (!user) user = message.author;
@@ -66,7 +65,7 @@ export default class ServerinfoCommand extends Command {
 				"• Global User Statistics",
 				[
 					`> 🤔 | **Reputation**: ${rep.upvotes - rep.downvotes < 0 ? "bad" : "good"}`,
-					`> 🔨 | **Globally banned**: ${banned ? "🔨" : client.constants.emojis.redcross}`,
+					`> 🔨 | **Globally banned**: ${banned ? "🔨" : emojis.redcross}`,
 					`> ⚖ | **Conclusion**: ${
 						rep.upvotes - rep.downvotes < 0 || banned ? "untrustable" : "trustable"
 					}`,

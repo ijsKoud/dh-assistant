@@ -1,6 +1,7 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Message } from "discord.js";
+import { channels, emojis } from "../../../client/constants";
 
 const files: string[] = [
 	"https://cdn.discordapp.com/attachments/727992822036430859/799944907333828628/UwU_Violation.mp4",
@@ -31,7 +32,6 @@ const files: string[] = [
 })
 export default class PingCommand extends Command {
 	public async run(message: Message) {
-		const { channels, emojis } = this.container.client.constants;
 		if (!channels.uwu.includes(message.channelId) && message.channel.type !== "DM")
 			return message.reply(
 				`>>> ${emojis.redcross} | You can only use this command in ${channels.uwu

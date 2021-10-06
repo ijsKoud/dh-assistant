@@ -3,7 +3,6 @@ import { BitFieldResolvable, Collection, IntentsString, PartialTypes } from "dis
 import { join } from "path";
 import { Logger } from "./structures/extensions";
 import Utils from "./Utils";
-import * as constants from "./constants";
 import { PrismaClient } from "@prisma/client";
 import { LevelManager, BlacklistManager } from "./structures/managers";
 import { PermissionHandler } from "./structures/handlers";
@@ -12,7 +11,6 @@ import LoggingHandler from "./structures/handlers/LoggingHandler";
 
 export default class Client extends SapphireClient {
 	public owners: string[];
-	public constants = constants;
 
 	public isOwner(id: string): boolean {
 		return this.owners.includes(id);
@@ -84,7 +82,6 @@ declare module "@sapphire/framework" {
 	// eslint-disable-next-line @typescript-eslint/no-shadow
 	class SapphireClient {
 		owners: string[];
-		constants: typeof constants;
 		isOwner(id: string): boolean;
 
 		prisma: PrismaClient;

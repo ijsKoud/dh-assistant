@@ -2,6 +2,7 @@ import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Message, MessageActionRow, MessageButton, Util } from "discord.js";
 import axios from "axios";
+import { emojis } from "../../../client/constants";
 
 @ApplyOptions<Command.Options>({
 	name: "fact",
@@ -15,7 +16,7 @@ export default class FactCommand extends Command {
 			.catch(() => ({ data: null }));
 		if (!data)
 			return message.reply(
-				`>>> ${this.container.client.constants.emojis.redcross} | Unable to find a fact, please try again later.`
+				`>>> ${emojis.redcross} | Unable to find a fact, please try again later.`
 			);
 
 		const actionRow = new MessageActionRow().addComponents(

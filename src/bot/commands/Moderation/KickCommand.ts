@@ -2,6 +2,7 @@ import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Args } from "@sapphire/framework";
 import { ModMessage, ModerationMessage } from "../../../client/structures/Moderation";
+import { emojis } from "../../../client/constants";
 
 @ApplyOptions<Command.Options>({
 	name: "kick",
@@ -15,26 +16,26 @@ export default class KickCommand extends Command {
 	public async run(message: ModMessage, args: Args) {
 		if (!message.guild) return;
 		const { client } = this.container;
-		const { redcross, loading } = client.constants.emojis;
 
 		const { value: member } = await args.pickResult("member");
 		const { value: reason } = await args.restResult("string");
-		if (!member) return message.reply(`>>> ${redcross} | Couldn't find that user in this server.`);
+		if (!member)
+			return message.reply(`>>> ${emojis.redcross} | Couldn't find that user in this server.`);
 
-		const msg = await message.reply(`>>> ${loading} | Kicking **${member.user.tag}**...`);
+		const msg = await message.reply(`>>> ${emojis.loading} | Kicking **${member.user.tag}**...`);
 		switch (client.permissionHandler.isHigher(message.member, member)) {
 			case "mod-low":
-				return msg.edit(`>>> ${redcross} | You can't kick this user due to role hierarchy.`);
+				return msg.edit(`>>> ${emojis.redcross} | You can't kick this user due to role hierarchy.`);
 			case "owner":
 				return msg.edit(
-					`>>> ${redcross} | You can't kick this user because they are the owner of this server.`
+					`>>> ${emojis.redcross} | You can't kick this user because they are the owner of this server.`
 				);
 			case "bot":
 				return msg.edit(
-					`>>> ${redcross} | After all the hard work I have done for you, you want to kick me??`
+					`>>> ${emojis.redcross} | After all the hard work I have done for you, you want to kick me??`
 				);
 			case "bot-low":
-				return msg.edit(`>>> ${redcross} | I can't kick this user due to role hierarchy.`);
+				return msg.edit(`>>> ${emojis.redcross} | I can't kick this user due to role hierarchy.`);
 		}
 
 		const date = Date.now();

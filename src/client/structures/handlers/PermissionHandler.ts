@@ -1,5 +1,6 @@
 import { GuildMember } from "discord.js";
 import Client from "../../Client";
+import { roles as ConstantRoles } from "../../constants";
 
 export class PermissionHandler {
 	constructor(public client: Client) {}
@@ -19,43 +20,48 @@ export class PermissionHandler {
 	}
 
 	public hasStaff(member: GuildMember): boolean {
-		const data = this.client.constants.roles;
-		const roles = [data.cet, data.trial, data.moderator, data.manager, data.senior];
+		const roles = [
+			ConstantRoles.cet,
+			ConstantRoles.trial,
+			ConstantRoles.moderator,
+			ConstantRoles.manager,
+			ConstantRoles.senior,
+		];
 
 		return this._parse(roles, member);
 	}
 
 	public hasCet(member: GuildMember): boolean {
-		const data = this.client.constants.roles;
-		const roles = [data.cet, data.manager, data.senior];
+		const roles = [ConstantRoles.cet, ConstantRoles.manager, ConstantRoles.senior];
 
 		return this._parse(roles, member);
 	}
 
 	public hasTrial(member: GuildMember): boolean {
-		const data = this.client.constants.roles;
-		const roles = [data.trial, data.moderator, data.manager, data.senior];
+		const roles = [
+			ConstantRoles.trial,
+			ConstantRoles.moderator,
+			ConstantRoles.manager,
+			ConstantRoles.senior,
+		];
 
 		return this._parse(roles, member);
 	}
 
 	public hasMod(member: GuildMember): boolean {
-		const data = this.client.constants.roles;
-		const roles = [data.moderator, data.manager, data.senior];
+		const roles = [ConstantRoles.moderator, ConstantRoles.manager, ConstantRoles.senior];
 
 		return this._parse(roles, member);
 	}
 
 	public hasManager(member: GuildMember): boolean {
-		const data = this.client.constants.roles;
-		const roles = [data.manager, data.senior];
+		const roles = [ConstantRoles.manager, ConstantRoles.senior];
 
 		return this._parse(roles, member);
 	}
 
 	public hasSenior(member: GuildMember): boolean {
-		const data = this.client.constants.roles;
-		const roles = [data.senior];
+		const roles = [ConstantRoles.senior];
 
 		return this._parse(roles, member);
 	}
@@ -64,14 +70,13 @@ export class PermissionHandler {
 		member: GuildMember,
 		options?: { staff?: boolean; contentCreator?: boolean }
 	): boolean {
-		const data = this.client.constants.roles;
 		const roles = [
-			data.boost,
-			data.youtubeMember,
-			...Object.keys(data.levels).map((k) => data.levels[k]),
+			ConstantRoles.boost,
+			ConstantRoles.youtubeMember,
+			...Object.keys(ConstantRoles.levels).map((k) => ConstantRoles.levels[k]),
 		];
 
-		if (options?.contentCreator) roles.push(...data.contentCreator);
+		if (options?.contentCreator) roles.push(...ConstantRoles.contentCreator);
 		if (options?.staff) return this.hasStaff(member) || this._parse(roles, member);
 
 		return this._parse(roles, member);
