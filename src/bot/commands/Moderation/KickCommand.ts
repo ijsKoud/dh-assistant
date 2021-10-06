@@ -14,7 +14,6 @@ import { emojis } from "../../../client/constants";
 })
 export default class KickCommand extends Command {
 	public async run(message: ModMessage, args: Args) {
-		if (!message.guild) return;
 		const { client } = this.container;
 
 		const { value: member } = await args.pickResult("member");

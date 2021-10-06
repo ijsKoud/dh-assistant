@@ -1,10 +1,11 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { EmbedField, Message, MessageButton, MessageEmbed, Collection } from "discord.js";
+import { EmbedField, MessageButton, MessageEmbed, Collection } from "discord.js";
 import { Args } from "@sapphire/framework";
 import { modlog } from ".prisma/client";
 import { v4 as uuid } from "uuid";
 import moment from "moment";
+import { ModMessage } from "../../../client/structures/Moderation";
 
 @ApplyOptions<Command.Options>({
 	name: "modlogs",
@@ -15,9 +16,7 @@ import moment from "moment";
 	preconditions: ["GuildOnly", "TrialModeratorOnly"],
 })
 export default class ModlogsCommand extends Command {
-	public async run(message: Message, args: Args) {
-		if (!message.guild) return;
-
+	public async run(message: ModMessage, args: Args) {
 		const { client } = this.container;
 		const { value: user } = await args.pickResult("user");
 		if (!user) {

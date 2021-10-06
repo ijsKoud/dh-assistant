@@ -18,7 +18,6 @@ import { emojis } from "../../../client/constants";
 })
 export default class BanCommand extends Command {
 	public async run(message: ModMessage, args: Args) {
-		if (!message.guild) return;
 		const { client } = this.container;
 
 		const { value: user } = await args.pickResult("user");
