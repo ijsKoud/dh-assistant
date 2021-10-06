@@ -15,7 +15,6 @@ import { emojis } from "../../../client/constants";
 })
 export default class SayCommand extends Command {
 	public async run(message: Message, args: Args) {
-		const { client } = this.container;
 		let { value: channel } = await args.pickResult("guildTextChannel");
 		const { value: msg } = await args.restResult("string");
 
@@ -34,7 +33,7 @@ export default class SayCommand extends Command {
 
 		await channel.send({
 			content: msg.slice(0, 2000),
-			files: client.utils.getAttachments(message.attachments),
+			files: this.client.utils.getAttachments(message.attachments),
 			allowedMentions: { users: [] },
 		});
 

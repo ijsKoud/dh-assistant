@@ -18,8 +18,6 @@ import { emojis } from "../../../client/constants";
 })
 export default class BanCommand extends Command {
 	public async run(message: ModMessage, args: Args) {
-		const { client } = this.container;
-
 		const { value: user } = await args.pickResult("user");
 		const { value: reason } = await args.restResult("string");
 		const durationOption = args.getOption("duration");
@@ -28,9 +26,9 @@ export default class BanCommand extends Command {
 
 		const msg = await message.reply(`>>> ${emojis.loading} | Banning **${user.tag}**...`);
 
-		const member = await client.utils.fetchMember(user.id, message.guild);
+		const member = await this.client.utils.fetchMember(user.id, message.guild);
 		if (member)
-			switch (client.permissionHandler.isHigher(message.member, member)) {
+			switch (this.client.permissionHandler.isHigher(message.member, member)) {
 				case "mod-low":
 					return msg.edit(
 						`>>> ${emojis.redcross} | You can't ban this user due to role hierarchy.`
@@ -52,9 +50,9 @@ export default class BanCommand extends Command {
 			return msg.edit(`>>> ${emojis.redcross} | This user is already banned from this server.`);
 
 		const date = Date.now();
-		const duration = client.utils.parseTime(durationOption ?? "p") || undefined;
+		const duration = this.client.utils.parseTime(durationOption ?? "p") || undefined;
 
-		const banLog = await client.prisma.modlog.create({
+		const banLog = await this.client.prisma.modlog.create({
 			data: {
 				reason: reason ?? "No reason provided",
 				id: `${user.id}-${message.guildId}`,
@@ -84,7 +82,7 @@ export default class BanCommand extends Command {
 			duration
 		);
 
-		client.loggingHandler.sendLogs(log, "mod", client.automod.settings.logging.mod);
+		this.client.loggingHandler.sendLogs(log, "mod", this.client.automod.settings.logging.mod);
 		if (duration) {
 			const timeout = setLongTimeout(() => {
 				const unbanReason = `Automatic unban from tempban made by ${message.author.toString()} <t:${moment(
@@ -101,10 +99,14 @@ export default class BanCommand extends Command {
 				);
 
 				message.guild.bans.remove(user, unbanReason);
-				client.loggingHandler.sendLogs(finishLogs, "mod", client.automod.settings.logging.mod);
+				this.client.loggingHandler.sendLogs(
+					finishLogs,
+					"mod",
+					this.client.automod.settings.logging.mod
+				);
 			}, duration);
 
-			client.automod.modTimeouts.set(`${user.id}-${message.guildId}-ban`, timeout);
+			this.client.automod.modTimeouts.set(`${user.id}-${message.guildId}-ban`, timeout);
 		}
 
 		await user.send({ embeds: [dm] }).catch(() => void 0);

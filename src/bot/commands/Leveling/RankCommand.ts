@@ -1,9 +1,10 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { Message, MessageAttachment } from "discord.js";
+import { MessageAttachment } from "discord.js";
 import { Args } from "@sapphire/framework";
 import Rank from "../../../client/structures/Rank";
 import { emojis } from "../../../client/constants";
+import { ModMessage } from "../../../client/structures/Moderation";
 
 @ApplyOptions<Command.Options>({
 	name: "rank",
@@ -14,14 +15,11 @@ import { emojis } from "../../../client/constants";
 	preconditions: ["GuildOnly"],
 })
 export default class RankCommand extends Command {
-	public async run(message: Message, args: Args) {
-		if (!message.guild) return;
-
-		const { client } = this.container;
+	public async run(message: ModMessage, args: Args) {
 		let { value: user } = await args.pickResult("user");
 		if (!user) user = message.author;
 
-		const ranks = await client.levelManager.getLevels(message.guild.id);
+		const ranks = await this.client.levelManager.getLevels(message.guild.id);
 		const stats = ranks.find((r) => r.level.id.startsWith(user?.id ?? ""));
 		if (!stats)
 			return message.reply(`>>> ${emojis.redcross} | No leveling stats found for **${user.tag}**`);

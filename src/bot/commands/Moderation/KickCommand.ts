@@ -14,15 +14,13 @@ import { emojis } from "../../../client/constants";
 })
 export default class KickCommand extends Command {
 	public async run(message: ModMessage, args: Args) {
-		const { client } = this.container;
-
 		const { value: member } = await args.pickResult("member");
 		const { value: reason } = await args.restResult("string");
 		if (!member)
 			return message.reply(`>>> ${emojis.redcross} | Couldn't find that user in this server.`);
 
 		const msg = await message.reply(`>>> ${emojis.loading} | Kicking **${member.user.tag}**...`);
-		switch (client.permissionHandler.isHigher(message.member, member)) {
+		switch (this.client.permissionHandler.isHigher(message.member, member)) {
 			case "mod-low":
 				return msg.edit(`>>> ${emojis.redcross} | You can't kick this user due to role hierarchy.`);
 			case "owner":
@@ -38,7 +36,7 @@ export default class KickCommand extends Command {
 		}
 
 		const date = Date.now();
-		const banLog = await client.prisma.modlog.create({
+		const banLog = await this.client.prisma.modlog.create({
 			data: {
 				reason: reason ?? "No reason provided",
 				id: `${member.id}-${message.guildId}`,
@@ -65,7 +63,7 @@ export default class KickCommand extends Command {
 			date
 		);
 
-		client.loggingHandler.sendLogs(log, "mod", client.automod.settings.logging.mod);
+		this.client.loggingHandler.sendLogs(log, "mod", this.client.automod.settings.logging.mod);
 		await member.send({ embeds: [dm] }).catch(() => void 0);
 		await member.kick(reason ?? `Kicked by ${message.author.id}`);
 

@@ -17,10 +17,9 @@ import { ModMessage } from "../../../client/structures/Moderation";
 })
 export default class ModlogsCommand extends Command {
 	public async run(message: ModMessage, args: Args) {
-		const { client } = this.container;
 		const { value: user } = await args.pickResult("user");
 		if (!user) {
-			const logs = await client.prisma.modlog.findMany({
+			const logs = await this.client.prisma.modlog.findMany({
 				where: { id: { endsWith: message.guild.id } },
 			});
 			if (!logs.length) return message.reply(">>> 🎉 | No modlogs found for this server.");
@@ -30,7 +29,7 @@ export default class ModlogsCommand extends Command {
 
 			const warns = tempCache.sort((a, b) => b - a).map((amount, id) => ({ id, logs: amount }));
 
-			const embed = client.utils
+			const embed = this.client.utils
 				.embed()
 				.setTitle(`Modlogs - ${message.guild.name}`)
 				.setURL(`${process.env.DASHBOARD}/modlogs`)
@@ -44,12 +43,12 @@ export default class ModlogsCommand extends Command {
 			return message.reply({ embeds: [embed] });
 		}
 
-		const logs = await client.prisma.modlog.findMany({
+		const logs = await this.client.prisma.modlog.findMany({
 			where: { id: `${user.id}-${message.guild.id}` },
 		});
 		if (!logs.length) return message.reply(">>> 🎉 | No modlogs found for this user.");
 
-		const embed = client.utils
+		const embed = this.client.utils
 			.embed()
 			.setTitle(`${logs.length} warnings found for ${user.tag}`)
 			.setURL(`${process.env.DASHBOARD}/modlogs/${user.id}`);
@@ -72,7 +71,7 @@ export default class ModlogsCommand extends Command {
 				.setCustomId(`${uuid().slice(0, 20)}-${message.guildId}-next`),
 		];
 		const msg = await message.reply({ embeds: [embeds[0]] });
-		client.utils.pagination(msg, embeds, buttons);
+		this.client.utils.pagination(msg, embeds, buttons);
 	}
 
 	private generateEmbeds(items: modlog[], base: MessageEmbed): MessageEmbed[] {

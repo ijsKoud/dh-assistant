@@ -15,13 +15,12 @@ import { emojis } from "../../../client/constants";
 })
 export default class ServerinfoCommand extends Command {
 	public async run(message: Message, args: Args): Promise<void> {
-		const { client } = this.container;
 		const msg = await message.reply(`>>> ${emojis.loading} | Getting user information...`);
 
 		let { value: user } = await args.pickResult("user");
 		if (!user) user = message.author;
 
-		const embed = client.utils
+		const embed = this.client.utils
 			.embed()
 			.setAuthor(`${user.tag} - user info`, user.displayAvatarURL({ dynamic: true, size: 4096 }));
 
@@ -57,7 +56,7 @@ export default class ServerinfoCommand extends Command {
 				},
 			}));
 
-		const roblox = await client.utils.robloxUser(user.id);
+		const roblox = await this.client.utils.robloxUser(user.id);
 
 		embed
 			.setThumbnail(user.displayAvatarURL({ dynamic: true, size: 4096 }))
@@ -76,10 +75,10 @@ export default class ServerinfoCommand extends Command {
 				[
 					`> 👤 | **User**: ${user.tag} (${user.toString()})`,
 					`> 🥽 | **User ID**: \`${user.id}\``,
-					`> 📆 | **Created at**: ${client.utils.formatTime(
+					`> 📆 | **Created at**: ${this.client.utils.formatTime(
 						moment(user.createdTimestamp).unix(),
 						"f"
-					)} | ${client.utils.formatTime(moment(user.createdTimestamp).unix(), "R")}`,
+					)} | ${this.client.utils.formatTime(moment(user.createdTimestamp).unix(), "R")}`,
 				].join("\n")
 			)
 			.addField(
@@ -92,7 +91,7 @@ export default class ServerinfoCommand extends Command {
 			.setFooter("The global stats are fetched from an api - discordrep & KSoft Ban");
 
 		if (message.guild) {
-			const member = await client.utils.fetchMember(user.id, message.guild);
+			const member = await this.client.utils.fetchMember(user.id, message.guild);
 			if (member) {
 				const r = member.roles.cache
 					.sort((a, b) => b.position - a.position)
@@ -103,17 +102,17 @@ export default class ServerinfoCommand extends Command {
 					r.length < 10
 						? r.map((role) => role.toString()).join(", ")
 						: r.length > 10
-						? client.utils.trimArray(r).join(", ")
+						? this.client.utils.trimArray(r).join(", ")
 						: "none";
 
 				embed.setColor(member.displayHexColor || process.env.COLOUR);
 				embed.addField(
 					"• Member Information",
 					[
-						`> 📆 | **Joined at**: ${client.utils.formatTime(
+						`> 📆 | **Joined at**: ${this.client.utils.formatTime(
 							moment(member.joinedTimestamp ?? 0).unix(),
 							"f"
-						)} | ${client.utils.formatTime(moment(member.joinedTimestamp ?? 0).unix(), "R")}`,
+						)} | ${this.client.utils.formatTime(moment(member.joinedTimestamp ?? 0).unix(), "R")}`,
 						`> 📂 | **Roles**: ${roles}`,
 					].join("\n")
 				);
