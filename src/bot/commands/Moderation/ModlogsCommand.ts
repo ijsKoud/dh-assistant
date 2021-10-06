@@ -5,7 +5,7 @@ import { Args } from "@sapphire/framework";
 import { modlog } from ".prisma/client";
 import { v4 as uuid } from "uuid";
 import moment from "moment";
-import { ModMessage } from "../../../client/structures/Moderation";
+import { GuildMessage } from "../../../client/structures/Moderation";
 
 @ApplyOptions<Command.Options>({
 	name: "modlogs",
@@ -16,7 +16,7 @@ import { ModMessage } from "../../../client/structures/Moderation";
 	preconditions: ["GuildOnly", "TrialModeratorOnly"],
 })
 export default class ModlogsCommand extends Command {
-	public async run(message: ModMessage, args: Args) {
+	public async run(message: GuildMessage, args: Args) {
 		const { value: user } = await args.pickResult("user");
 		if (!user) {
 			const logs = await this.client.prisma.modlog.findMany({

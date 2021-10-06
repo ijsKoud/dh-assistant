@@ -2,7 +2,7 @@ import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { MessageActionRow, MessageButton } from "discord.js";
 import { emojis } from "../../../client/constants";
-import { ModMessage } from "../../../client/structures/Moderation";
+import { GuildMessage } from "../../../client/structures/Moderation";
 
 @ApplyOptions<Command.Options>({
 	name: "Leaderboard",
@@ -12,7 +12,7 @@ import { ModMessage } from "../../../client/structures/Moderation";
 	preconditions: ["GuildOnly"],
 })
 export default class RankCommand extends Command {
-	public async run(message: ModMessage) {
+	public async run(message: GuildMessage) {
 		const data = (await this.client.levelManager.getLevels(message.guild.id))?.slice(0, 10);
 		if (!data) return message.reply(`>>> ${emojis.redcross} | Uhm, no one earned xp yet. How?`);
 

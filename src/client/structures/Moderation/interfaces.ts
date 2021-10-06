@@ -53,4 +53,4 @@ export interface CheckResults {
 	date: number;
 }
 
-export type ModMessage = Message & { guild: Guild; guildId: string; member: GuildMember };
+export type GuildMessage = Message & { guild: Guild; guildId: string; member: GuildMember };

@@ -1,5 +1,5 @@
 import { readFile } from "fs/promises";
-import { CheckResults, ModerationSettings, ModMessage, ThresholdsSetting } from "./interfaces";
+import { CheckResults, ModerationSettings, GuildMessage, ThresholdsSetting } from "./interfaces";
 import Client from "../../Client";
 import { join } from "path";
 import { Invite, Message } from "discord.js";
@@ -57,7 +57,7 @@ export class Automod {
 	}
 
 	public async run(message: Message): Promise<void> {
-		const msg = message as ModMessage;
+		const msg = message as GuildMessage;
 		const results = await Promise.all([
 			this.caps(msg),
 			this.inviteLinks(msg),
@@ -186,7 +186,7 @@ export class Automod {
 		});
 	}
 
-	protected caps(message: ModMessage): CheckResults | null {
+	protected caps(message: GuildMessage): CheckResults | null {
 		const { caps } = this.settings.thresholds;
 		if (this.bypass(message, caps)) return null;
 
@@ -224,7 +224,7 @@ export class Automod {
 		return null;
 	}
 
-	protected spam(message: ModMessage): CheckResults | null {
+	protected spam(message: GuildMessage): CheckResults | null {
 		const { spam } = this.settings.thresholds;
 		if (this.bypass(message, spam)) return null;
 
@@ -288,7 +288,7 @@ export class Automod {
 		return null;
 	}
 
-	protected mention(message: ModMessage): CheckResults | null {
+	protected mention(message: GuildMessage): CheckResults | null {
 		const { mention } = this.settings.thresholds;
 		if (this.bypass(message, mention)) return null;
 
@@ -358,7 +358,7 @@ export class Automod {
 		return null;
 	}
 
-	protected async inviteLinks(message: ModMessage): Promise<CheckResults | null> {
+	protected async inviteLinks(message: GuildMessage): Promise<CheckResults | null> {
 		const { invite: InviteSettings } = this.settings.thresholds;
 		if (this.bypass(message, InviteSettings)) return null;
 
@@ -387,7 +387,7 @@ export class Automod {
 		};
 	}
 
-	protected badWords(message: ModMessage): CheckResults | null {
+	protected badWords(message: GuildMessage): CheckResults | null {
 		const { badWords } = this.settings.thresholds;
 		if (this.bypass(message, badWords)) return null;
 

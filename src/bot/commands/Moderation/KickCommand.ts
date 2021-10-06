@@ -1,7 +1,7 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Args } from "@sapphire/framework";
-import { ModMessage, ModerationMessage } from "../../../client/structures/Moderation";
+import { GuildMessage, ModerationMessage } from "../../../client/structures/Moderation";
 import { emojis } from "../../../client/constants";
 
 @ApplyOptions<Command.Options>({
@@ -13,7 +13,7 @@ import { emojis } from "../../../client/constants";
 	preconditions: ["GuildOnly", "TrialModeratorOnly"],
 })
 export default class KickCommand extends Command {
-	public async run(message: ModMessage, args: Args) {
+	public async run(message: GuildMessage, args: Args) {
 		const { value: member } = await args.pickResult("member");
 		const { value: reason } = await args.restResult("string");
 		if (!member)

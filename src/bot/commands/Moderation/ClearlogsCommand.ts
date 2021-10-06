@@ -1,7 +1,7 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Args } from "@sapphire/framework";
-import { ModMessage } from "../../../client/structures/Moderation";
+import { GuildMessage } from "../../../client/structures/Moderation";
 import { emojis } from "../../../client/constants";
 
 @ApplyOptions<Command.Options>({
@@ -13,7 +13,7 @@ import { emojis } from "../../../client/constants";
 	flags: ["user"],
 })
 export default class ClearlogsCommand extends Command {
-	public async run(message: ModMessage, args: Args) {
+	public async run(message: GuildMessage, args: Args) {
 		const { value: id } = await args.pickResult("string");
 		const userFlag = args.getFlags("user");
 		if (userFlag) {

@@ -4,7 +4,7 @@ import { MessageAttachment } from "discord.js";
 import { Args } from "@sapphire/framework";
 import Rank from "../../../client/structures/Rank";
 import { emojis } from "../../../client/constants";
-import { ModMessage } from "../../../client/structures/Moderation";
+import { GuildMessage } from "../../../client/structures/Moderation";
 
 @ApplyOptions<Command.Options>({
 	name: "rank",
@@ -15,7 +15,7 @@ import { ModMessage } from "../../../client/structures/Moderation";
 	preconditions: ["GuildOnly"],
 })
 export default class RankCommand extends Command {
-	public async run(message: ModMessage, args: Args) {
+	public async run(message: GuildMessage, args: Args) {
 		let { value: user } = await args.pickResult("user");
 		if (!user) user = message.author;
 
