@@ -36,7 +36,7 @@ export default class KickCommand extends Command {
 		}
 
 		const date = Date.now();
-		const banLog = await this.client.prisma.modlog.create({
+		const kickLog = await this.client.prisma.modlog.create({
 			data: {
 				reason: reason ?? "No reason provided",
 				id: `${member.id}-${message.guildId}`,
@@ -50,7 +50,7 @@ export default class KickCommand extends Command {
 			reason ?? "No reason provided",
 			"kick",
 			member.user,
-			`Case Id: ${banLog.id}`,
+			`Case Id: ${kickLog.id}`,
 			date
 		);
 
@@ -59,7 +59,7 @@ export default class KickCommand extends Command {
 			"kick",
 			member.user,
 			message.author,
-			`Case Id: ${banLog.caseId}`,
+			`Case Id: ${kickLog.caseId}`,
 			date
 		);
 
