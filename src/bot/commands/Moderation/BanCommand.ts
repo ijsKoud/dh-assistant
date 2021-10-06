@@ -10,7 +10,7 @@ import moment from "moment";
 	name: "ban",
 	aliases: ["b"],
 	description: "Bans a user from the server",
-	usage: "<user> <duration> <reason>",
+	usage: "<user> <reason> [--duration=<duration>]",
 	requiredClientPermissions: ["BAN_MEMBERS"],
 	preconditions: ["GuildOnly", "ModeratorOnly"],
 	options: ["duration"],
