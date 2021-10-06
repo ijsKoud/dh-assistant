@@ -1,12 +1,5 @@
 import { SapphireClient } from "@sapphire/framework";
-import {
-	ActivitiesOptions,
-	BitFieldResolvable,
-	Collection,
-	IntentsString,
-	PartialTypes,
-	PresenceStatusData,
-} from "discord.js";
+import { BitFieldResolvable, Collection, IntentsString, PartialTypes } from "discord.js";
 import { join } from "path";
 import { Logger } from "./structures/extensions";
 import Utils from "./Utils";
@@ -47,10 +40,6 @@ export default class Client extends SapphireClient {
 			defaultPrefix: process.env.PREFIX,
 			partials: options.partials,
 			loadDefaultErrorListeners: false,
-			presence: {
-				activities: options.activity,
-				status: options.status,
-			},
 		});
 
 		this.owners = options.owners;
@@ -88,8 +77,6 @@ interface ClientOptions {
 	intents: BitFieldResolvable<IntentsString, number>;
 	owners: string[];
 	partials?: PartialTypes[] | undefined;
-	activity?: ActivitiesOptions[] | undefined;
-	status?: PresenceStatusData | undefined;
 	debug?: boolean;
 }
 
