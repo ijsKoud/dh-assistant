@@ -85,7 +85,7 @@ export default class ModlogsCommand extends Command {
 
 			const map: EmbedField[] = current.map((data) => {
 				return {
-					name: `${data.caseId} | ${data.type}`,
+					name: `${data.caseId} | ${this.client.utils.capitalize(data.type)}`,
 					value: `Date: ${this.container.client.utils.formatTime(
 						moment(Number(data.startDate)).unix(),
 						"R"
