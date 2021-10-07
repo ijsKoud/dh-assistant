@@ -25,14 +25,14 @@ export default class ReadyListener extends Listener {
 		const filtered = logs.filter((log) => ["tempban", "mute"].includes(log.type));
 
 		filtered.forEach((log) => {
+			if (log.timeoutFinished) return;
+
 			switch (log.type) {
 				case "tempban":
 					{
 						const automod = client.automod;
 						const date = Number(log.startDate);
 						const finished = Number(log.endDate);
-
-						if (finished < Date.now()) return;
 
 						const timeout = setLongTimeout(async () => {
 							const reason = `Automatic unban from ban made by <@${log.moderator}> <t:${moment(
@@ -62,6 +62,10 @@ export default class ReadyListener extends Listener {
 							);
 
 							if (guild) await guild.bans.remove(userId, reason);
+							await client.prisma.modlog.update({
+								where: { caseId: log.caseId },
+								data: { timeoutFinished: true },
+							});
 							client.loggingHandler.sendLogs(finishLogs, "mod", automod.settings.logging.mod);
 						}, finished - Date.now());
 
@@ -73,8 +77,6 @@ export default class ReadyListener extends Listener {
 						const automod = client.automod;
 						const date = Number(log.startDate);
 						const finished = Number(log.endDate);
-
-						if (finished < Date.now()) return;
 
 						const timeout = setLongTimeout(async () => {
 							const reason = `Automatic unmute from mute made by <@${log.moderator}> <t:${moment(
@@ -108,6 +110,10 @@ export default class ReadyListener extends Listener {
 
 							if (member instanceof GuildMember)
 								await member.roles.remove(automod.settings.mute.role).catch(() => void 0);
+							await client.prisma.modlog.update({
+								where: { caseId: log.caseId },
+								data: { timeoutFinished: true },
+							});
 							client.loggingHandler.sendLogs(finishLogs, "mod", automod.settings.logging.mod);
 						}, finished - Date.now());
 

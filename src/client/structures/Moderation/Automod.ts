@@ -133,6 +133,7 @@ export class Automod {
 								startDate: BigInt(result.date),
 								endDate: BigInt(result.date + this.settings.mute.duration),
 								type: "mute",
+								timeoutFinished: false,
 							},
 						});
 
@@ -150,7 +151,7 @@ export class Automod {
 
 						this.client.loggingHandler.sendLogs(log, "mod", this.settings.logging.mod);
 
-						const timeout = setLongTimeout(() => {
+						const timeout = setLongTimeout(async () => {
 							const unmuteReason = `Automatic unmute from mute made by ${this.client.user?.toString()} <t:${moment(
 								result.date
 							).unix()}:R>`;
@@ -165,7 +166,11 @@ export class Automod {
 								this.settings.mute.duration
 							);
 
-							message.member?.roles.remove(this.settings.mute.role).catch(() => void 0);
+							await message.member?.roles.remove(this.settings.mute.role).catch(() => void 0);
+							await this.client.prisma.modlog.update({
+								where: { caseId: mute.caseId },
+								data: { timeoutFinished: true },
+							});
 							this.client.loggingHandler.sendLogs(finishLogs, "mod", this.settings.logging.mod);
 						}, this.settings.mute.duration);
 

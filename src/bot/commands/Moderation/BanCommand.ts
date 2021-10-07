@@ -60,6 +60,7 @@ export default class BanCommand extends Command {
 				startDate: BigInt(date),
 				endDate: BigInt(date + (duration ?? 0)),
 				type: duration ? "tempban" : "ban",
+				timeoutFinished: false,
 			},
 		});
 
@@ -84,7 +85,7 @@ export default class BanCommand extends Command {
 
 		this.client.loggingHandler.sendLogs(log, "mod", this.client.automod.settings.logging.mod);
 		if (duration) {
-			const timeout = setLongTimeout(() => {
+			const timeout = setLongTimeout(async () => {
 				const unbanReason = `Automatic unban from tempban made by ${message.author.toString()} <t:${moment(
 					date
 				).unix()}:R>`;
@@ -106,6 +107,10 @@ export default class BanCommand extends Command {
 				);
 			}, duration);
 
+			await this.client.prisma.modlog.update({
+				where: { caseId: banLog.caseId },
+				data: { timeoutFinished: true },
+			});
 			this.client.automod.modTimeouts.set(`${user.id}-${message.guildId}-ban`, timeout);
 		}
 
