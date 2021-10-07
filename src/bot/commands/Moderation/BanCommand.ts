@@ -86,7 +86,7 @@ export default class BanCommand extends Command {
 		this.client.loggingHandler.sendLogs(log, "mod", this.client.automod.settings.logging.mod);
 		if (duration) {
 			const timeout = setLongTimeout(async () => {
-				const unbanReason = `Automatic unban from tempban made by ${message.author.toString()} <t:${moment(
+				const unbanReason = `Automatic unban from ban made by ${message.author.toString()} <t:${moment(
 					date
 				).unix()}:R>`;
 				const finishLogs = ModerationMessage.logs(
@@ -110,7 +110,10 @@ export default class BanCommand extends Command {
 					this.client.automod.settings.logging.mod
 				);
 			}, duration);
-			this.client.automod.modTimeouts.set(`${user.id}-${message.guildId}-ban`, timeout);
+			this.client.automod.modTimeouts.set(`${user.id}-${message.guildId}-ban`, {
+				timeout,
+				caseId: banLog.caseId,
+			});
 		}
 
 		await user.send({ embeds: [dm] }).catch(() => void 0);

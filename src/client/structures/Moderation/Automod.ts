@@ -15,13 +15,18 @@ interface Filter {
 	timer: NodeJS.Timeout;
 }
 
+interface ModTimeout {
+	caseId: number;
+	timeout: Timeout;
+}
+
 export class Automod {
 	public settings!: ModerationSettings;
 
 	public spamfilter: Map<string, Filter> = new Map();
 	public mentionfilter: Map<string, Filter> = new Map();
 
-	public modTimeouts: Map<string, Timeout> = new Map();
+	public modTimeouts: Map<string, ModTimeout> = new Map();
 
 	constructor(public client: Client) {
 		this.loadSettings();
@@ -174,7 +179,10 @@ export class Automod {
 							this.client.loggingHandler.sendLogs(finishLogs, "mod", this.settings.logging.mod);
 						}, this.settings.mute.duration);
 
-						this.modTimeouts.set(`${id}-mute`, timeout);
+						this.modTimeouts.set(`${id}-mute`, {
+							timeout,
+							caseId: mute.caseId,
+						});
 
 						const embed = ModerationMessage.dm(
 							result.reason,

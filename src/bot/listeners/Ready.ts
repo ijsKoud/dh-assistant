@@ -69,7 +69,10 @@ export default class ReadyListener extends Listener {
 							client.loggingHandler.sendLogs(finishLogs, "mod", automod.settings.logging.mod);
 						}, finished - Date.now());
 
-						automod.modTimeouts.set(log.id, timeout);
+						automod.modTimeouts.set(`${log.id}-ban`, {
+							timeout,
+							caseId: log.caseId,
+						});
 					}
 					break;
 				case "mute":
@@ -117,7 +120,10 @@ export default class ReadyListener extends Listener {
 							client.loggingHandler.sendLogs(finishLogs, "mod", automod.settings.logging.mod);
 						}, finished - Date.now());
 
-						automod.modTimeouts.set(log.id, timeout);
+						automod.modTimeouts.set(`${log.id}-mute`, {
+							timeout,
+							caseId: log.caseId,
+						});
 					}
 					break;
 				default:
