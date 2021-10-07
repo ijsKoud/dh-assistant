@@ -10,7 +10,7 @@
 		"@daangamesdg/logger": "^1.1.0",
 		"@prisma/client": "^3.2.1",
 		"@sapphire/decorators": "^3.0.0",
-		"@sapphire/framework": "^2.0.0-next.5e915d08.0",
+		"@sapphire/framework": "^2.0.0-pr-293.ce43166f.0",
 		"@sapphire/plugin-subcommands": "^1.0.6",
 		"@sapphire/type": "^2.0.1",
 		"axios": "^0.22.0",
