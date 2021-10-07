@@ -100,17 +100,16 @@ export default class BanCommand extends Command {
 				);
 
 				message.guild.bans.remove(user, unbanReason);
+				await this.client.prisma.modlog.update({
+					where: { caseId: banLog.caseId },
+					data: { timeoutFinished: true },
+				});
 				this.client.loggingHandler.sendLogs(
 					finishLogs,
 					"mod",
 					this.client.automod.settings.logging.mod
 				);
 			}, duration);
-
-			await this.client.prisma.modlog.update({
-				where: { caseId: banLog.caseId },
-				data: { timeoutFinished: true },
-			});
 			this.client.automod.modTimeouts.set(`${user.id}-${message.guildId}-ban`, timeout);
 		}
 
