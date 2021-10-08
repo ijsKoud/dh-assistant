@@ -4,7 +4,7 @@ import { Args } from "@sapphire/framework";
 import { GuildMessage, ModerationMessage } from "../../../client/structures/Moderation";
 import { emojis } from "../../../client/constants";
 import { clearTimeout as clearLongTimeout } from "long-timeout";
-import { modlog } from ".prisma/client";
+import { modlog } from "@prisma/client";
 
 @ApplyOptions<Command.Options>({
 	name: "unban",
@@ -12,7 +12,7 @@ import { modlog } from ".prisma/client";
 	usage: "<user> [reason]",
 	preconditions: ["GuildOnly", "ModeratorOnly"],
 })
-export default class ReasonCommand extends Command {
+export default class UnbanCommand extends Command {
 	public async run(message: GuildMessage, args: Args) {
 		const { value: user } = await args.pickResult("user");
 		const { value: reason } = await args.restResult("string");
