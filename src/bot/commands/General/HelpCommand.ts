@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { EmbedFieldData, Message, MessageEmbed } from "discord.js";
+import { EmbedFieldData, Message, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
 import ms from "ms";
 import { Args } from "@sapphire/framework";
 
@@ -16,7 +16,10 @@ export default class PingCommand extends Command {
 		const embed: MessageEmbed = this.container.client.utils
 			.embed()
 			.setTitle(`Help Command - ${message.author.tag}`)
-			.setFooter("Bot created by DaanGamesDG#7621", "https://cdn.daangamesdg.xyz/discord/pfp.gif");
+			.setFooter(
+				"DH Assistant created by DaanGamesDG#7621",
+				"https://cdn.daangamesdg.xyz/discord/pfp.gif"
+			);
 
 		const cmd = await args.pickResult("string");
 		const command = this.container.stores.get("commands").get(cmd.value ?? "") as
@@ -60,6 +63,12 @@ export default class PingCommand extends Command {
 			embed.setFields(fields);
 		}
 
-		await message.reply({ embeds: [embed] });
+		const createButton = (url: string, label: string): MessageButton =>
+			new MessageButton().setURL(url).setStyle("LINK").setLabel(label);
+		const component = new MessageActionRow().addComponents(
+			createButton("https://daangamesdg.wtf/github/dh-assistant", "GitHub"),
+			createButton(process.env.DASHBOARD ?? "https://daangamesdg.wtf/notfound", "Dashboard")
+		);
+		await message.reply({ embeds: [embed], components: [component] });
 	}
 }
