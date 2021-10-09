@@ -74,13 +74,13 @@ export class Rank {
 	}
 
 	protected registerFonts() {
-		const base = join(__dirname, "assets", "fonts");
+		const base = join(process.cwd(), "assets", "fonts");
 		registerFont(join(base, "regular.ttf"), { family: "Poppins", weight: "regular" });
 		registerFont(join(base, "semiBold.ttf"), { family: "Poppins", weight: "bold" });
 	}
 
 	protected async loadBase(id = "base") {
-		const img = await loadImage(join(__dirname, "assets", "images", `${id}.png`));
+		const img = await loadImage(join(process.cwd(), "assets", "images", `${id}.png`));
 		this.ctx.drawImage(img, 0, 0);
 	}
 
