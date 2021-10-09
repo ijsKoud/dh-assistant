@@ -12,7 +12,7 @@ export class LevelManager {
 
 	public async createUser(user: string, guild: string): Promise<Level> {
 		return this.client.prisma.level.create({
-			data: { id: `${user}-${guild}`, bg: 0, level: 1, xp: 0 },
+			data: { id: `${user}-${guild}`, level: 1, xp: 0 },
 		});
 	}
 

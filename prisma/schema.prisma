@@ -29,7 +29,7 @@ model Level {
   id    String @id // userId-guildId
   level Int
   xp    Int
-  bg    Int
+  bg    Int    @default(1)
 }
 
 model Session {
