@@ -1,4 +1,4 @@
-import { ImageURLOptions, MessageEmbed, User } from "discord.js";
+import { HexColorString, ImageURLOptions, MessageEmbed, User } from "discord.js";
 import moment from "moment";
 import ms from "ms";
 
@@ -27,7 +27,7 @@ export class ModerationMessage {
 		).substr(0, 4096);
 
 		const embed = new MessageEmbed()
-			.setColor(process.env.COLOUR as `#${string}`)
+			.setColor(this.getColour(action))
 			.setAuthor(
 				`${moderator.tag} (${moderator.id})`,
 				moderator.displayAvatarURL({ dynamic: true, size: 4096 })
@@ -65,5 +65,23 @@ export class ModerationMessage {
 			.setDescription(description);
 
 		return embed;
+	}
+
+	static getColour(type: string): HexColorString {
+		switch (type) {
+			case "ban":
+				return "#FD5B5E";
+			case "tempban":
+			case "softban":
+				return "#F6945B";
+			case "warn":
+			case "mute":
+				return "#FFDA69";
+			case "unmute":
+			case "unban":
+				return "#62FEA3";
+			default:
+				return "#2F3136";
+		}
 	}
 }
