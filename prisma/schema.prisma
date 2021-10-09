@@ -33,9 +33,8 @@ model Level {
 }
 
 model Session {
-  id           String @id // session id
-  accessToken  String
-  refreshToken String
-  userId       String
-  lastUsed     BigInt
+  id          String   @id // session id
+  accessToken String
+  userId      String
+  date        DateTime
 }
