@@ -13,7 +13,7 @@ import { GuildMessage } from "../../../client/structures/Moderation";
 })
 export default class XpboostCommand extends Command {
 	public async run(message: GuildMessage, args: Args) {
-		const { value: multiplier } = await args.peekResult("integer");
+		const { value: multiplier } = await args.pickResult("integer");
 
 		const userOption = args.getOption("user");
 		if (userOption) {
