@@ -34,7 +34,7 @@ export default class RankCommand extends Command {
 			rank: stats.i + 1,
 			required: stats.level.level * 75,
 			xp: stats.level.xp,
-			base: stats.level.bg ? `base-${stats.level.bg}` : "base",
+			base: `base-${stats.level.bg}`,
 		}).build();
 
 		return message.reply({ files: [new MessageAttachment(file, "rankcard.png")] });
