@@ -1,7 +1,7 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Args } from "@sapphire/framework";
-import { GuildMessage } from "../../../client/structures/Moderation";
+import { GuildMessage, ModerationMessage } from "../../../client/structures/Moderation";
 import { emojis } from "../../../client/constants";
 
 @ApplyOptions<Command.Options>({
@@ -30,6 +30,17 @@ export default class ClearlogsCommand extends Command {
 			await this.client.prisma.modlog.deleteMany({
 				where: { id: `${user.id}-${message.guild.id}` },
 			});
+
+			const log = ModerationMessage.logs(
+				`Modlogs deleted by ${message.author.toString()}`,
+				"clearlogs",
+				user,
+				message.author,
+				"Not logged in Database",
+				Date.now()
+			);
+			this.client.loggingHandler.sendLogs(log, "mod", this.client.automod.settings.logging.mod);
+
 			return msg.edit(
 				`>>> ${emojis.greentick} | Successfully deleted all the modlogs of **${user.tag}**.`
 			);
@@ -40,6 +51,22 @@ export default class ClearlogsCommand extends Command {
 		if (!modlog) return;
 
 		await this.client.prisma.modlog.delete({ where: { caseId: modlog.caseId } });
+
+		const user = (await this.client.utils.fetchUser(modlog.id.split("-")[0])) || {
+			displayAvatarURL: () => "https://cdn.daangamesdg.xyz/discord/wumpus.png",
+			id: "unknown",
+			tag: "User#0000",
+		};
+		const log = ModerationMessage.logs(
+			`Modlog deleted by ${message.author.toString()}`,
+			"removelog",
+			user,
+			message.author,
+			`Deleted Id: ${modlog.caseId}`,
+			Date.now()
+		);
+		this.client.loggingHandler.sendLogs(log, "mod", this.client.automod.settings.logging.mod);
+
 		await msg.edit(
 			`>>> ${emojis.greentick} | Successfully deleted modlog with the id **${modlog.caseId}**.`
 		);

@@ -20,14 +20,14 @@ export abstract class Command extends SubCommandPluginCommand<Args, Command> {
 
 	public constructor(context: PieceContext, options: Command.Options) {
 		super(context, {
-			cooldownDelay: 5e3,
-			cooldownLimit: 2,
+			...options,
+			cooldownDelay: options.cooldownDelay ?? 5e3,
+			cooldownLimit: options.cooldownLimit ?? 2,
 			generateDashLessAliases: true,
 			cooldownFilteredUsers: [
 				...(options.cooldownFilteredUsers ?? []),
 				...(process.env.OWNERS ?? "").split(/ +/g),
 			],
-			...options,
 		});
 
 		if (!options.name)
