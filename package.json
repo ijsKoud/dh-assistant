@@ -30,8 +30,8 @@
 		"@types/node": "16.10.2",
 		"@types/random-words": "1.1.2",
 		"@types/uuid": "8.3.1",
-		"@typescript-eslint/eslint-plugin": "4.33.0",
-		"@typescript-eslint/parser": "4.33.0",
+		"@typescript-eslint/eslint-plugin": "5.0.0",
+		"@typescript-eslint/parser": "5.0.0",
 		"cross-env": "^7.0.3",
 		"eslint": "7.32.0",
 		"typescript": "4.4.3"
