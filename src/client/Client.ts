@@ -8,6 +8,7 @@ import { LevelManager, BlacklistManager } from "./structures/managers";
 import { PermissionHandler } from "./structures/handlers";
 import { Automod } from "./structures/Moderation";
 import LoggingHandler from "./structures/handlers/LoggingHandler";
+import { TicketHandler } from "./structures/handlers/TicketHandler";
 
 export default class Client extends SapphireClient {
 	public owners: string[];
@@ -24,6 +25,7 @@ export default class Client extends SapphireClient {
 	public levelManager = new LevelManager(this);
 	public blacklistManager = new BlacklistManager(this);
 
+	public ticketHandler = new TicketHandler(this);
 	public permissionHandler = new PermissionHandler(this);
 	public loggingHandler = new LoggingHandler(this);
 
@@ -92,6 +94,7 @@ declare module "@sapphire/framework" {
 		levelManager: LevelManager;
 		blacklistManager: BlacklistManager;
 
+		ticketHandler: TicketHandler;
 		permissionHandler: PermissionHandler;
 		loggingHandler: LoggingHandler;
 

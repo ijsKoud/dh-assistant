@@ -9,6 +9,24 @@ export default class MessageCreateListener extends Listener {
 		if (message.author.bot || message.system || message.webhookId) return;
 
 		client.automod.run(message);
+		this.handleLeveling(message);
+		this.handleTickets(message);
+	}
+
+	private async handleTickets(message: Message) {
+		const { client } = this.container;
+
+		if (
+			/<((@!?\d+)|(:.+?:\d+))>/g.test(message.content.trim().split(/ +/g)[0] ?? "") &&
+			message.mentions.members?.has(client.user?.id ?? "") &&
+			message.content.trim().split(/ +/g).length === 1 &&
+			message.guild
+		)
+			return client.ticketHandler.handleMention(message);
+	}
+
+	private async handleLeveling(message: Message) {
+		const { client } = this.container;
 
 		if (
 			!message.content.startsWith(client.options.defaultPrefix?.toString() ?? "") &&
