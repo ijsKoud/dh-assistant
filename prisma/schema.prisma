@@ -38,3 +38,10 @@ model Session {
   userId      String
   date        DateTime
 }
+
+model Ticket {
+  caseId  Int     @id @default(autoincrement())
+  id      String // userId-guildId
+  closed  Boolean
+  claimer String?
+}
