@@ -33,7 +33,7 @@ export class Automod {
 	}
 
 	public async loadSettings(): Promise<void> {
-		const data = await readFile(join(process.cwd(), "automod.json"), "utf-8");
+		const data = await readFile(join(process.cwd(), "config", "automod.json"), "utf-8");
 		this.settings = JSON.parse(data);
 	}
 
