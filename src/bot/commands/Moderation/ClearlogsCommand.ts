@@ -53,7 +53,7 @@ export default class ClearlogsCommand extends Command {
 		await this.client.prisma.modlog.delete({ where: { caseId: modlog.caseId } });
 
 		const user = (await this.client.utils.fetchUser(modlog.id.split("-")[0])) || {
-			displayAvatarURL: () => "https://cdn.daangamesdg.xyz/discord/wumpus.png",
+			displayAvatarURL: () => "https://static.daangamesdg.xyz/discord/wumpus.png",
 			id: "unknown",
 			tag: "User#0000",
 		};

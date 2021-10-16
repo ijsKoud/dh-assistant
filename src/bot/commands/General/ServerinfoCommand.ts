@@ -27,7 +27,7 @@ export default class ServerinfoCommand extends Command {
 					.setTitle(`Server Info: ${message.guild.name}`)
 					.setThumbnail(
 						message.guild.iconURL({ dynamic: true, size: 4096 }) ??
-							"https://cdn.daangamesdg.xyz/discord/wumpus.png"
+							"https://static.daangamesdg.xyz/discord/wumpus.png"
 					)
 					.setFields([
 						{

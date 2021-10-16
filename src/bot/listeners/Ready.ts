@@ -42,12 +42,12 @@ export default class ReadyListener extends Listener {
 							const [userId, guildId] = log.id.split("-");
 							const guild = client.guilds.cache.get(guildId);
 							const user = (await client.utils.fetchUser(userId)) || {
-								displayAvatarURL: () => "https://cdn.daangamesdg.xyz/discord/wumpus.png",
+								displayAvatarURL: () => "https://static.daangamesdg.xyz/discord/wumpus.png",
 								id: userId,
 								tag: "User#0000",
 							};
 							const moderator = (await client.utils.fetchUser(log.moderator)) || {
-								displayAvatarURL: () => "https://cdn.daangamesdg.xyz/discord/wumpus.png",
+								displayAvatarURL: () => "https://static.daangamesdg.xyz/discord/wumpus.png",
 								id: log.moderator,
 								tag: "User#0000",
 							};
@@ -90,13 +90,13 @@ export default class ReadyListener extends Listener {
 							const guild = client.guilds.cache.get(guildId);
 							const member = (await client.utils.fetchMember(userId, guild)) || {
 								user: {
-									displayAvatarURL: () => "https://cdn.daangamesdg.xyz/discord/wumpus.png",
+									displayAvatarURL: () => "https://static.daangamesdg.xyz/discord/wumpus.png",
 									id: userId,
 									tag: "User#0000",
 								},
 							};
 							const moderator = (await client.utils.fetchUser(log.moderator)) || {
-								displayAvatarURL: () => "https://cdn.daangamesdg.xyz/discord/wumpus.png",
+								displayAvatarURL: () => "https://static.daangamesdg.xyz/discord/wumpus.png",
 								id: log.moderator,
 								tag: "User#0000",
 							};

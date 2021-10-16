@@ -18,7 +18,7 @@ export default class PingCommand extends Command {
 			.setTitle(`Help Command - ${message.author.tag}`)
 			.setFooter(
 				"DH Assistant created by DaanGamesDG#7621",
-				"https://cdn.daangamesdg.xyz/discord/pfp.gif"
+				"https://static.daangamesdg.xyz/discord/pfp.gif"
 			);
 
 		const cmd = await args.pickResult("string");

@@ -59,7 +59,7 @@ export class ModerationMessage {
 
 		const embed = new MessageEmbed()
 			.setColor(process.env.COLOUR as `#${string}`)
-			.setAuthor("User#0000", "https://cdn.daangamesdg.xyz/discord/wumpus.png")
+			.setAuthor("User#0000", "https://static.daangamesdg.xyz/discord/wumpus.png")
 			.setFooter(caseId)
 			.setTimestamp(date)
 			.setDescription(description);
