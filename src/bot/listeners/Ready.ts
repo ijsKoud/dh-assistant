@@ -147,7 +147,8 @@ export default class ReadyListener extends Listener {
 
 		const url = `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCkMrp3dJhWz2FcGTzywQGWg&key=${process.env.YOUTUBE_API_KEY}`;
 		const { data } = await axios
-			.get(url)
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			.get<any>(url)
 			.catch(() => ({ data: { items: [{ statistics: { subscriberCount: "unkown" } }] } }));
 
 		const subCount = data.items[0].statistics.subscriberCount;
