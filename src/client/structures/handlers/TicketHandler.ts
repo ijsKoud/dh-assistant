@@ -1,4 +1,11 @@
-import { Message, Collection, MessageActionRow, MessageButton } from "discord.js";
+import {
+	Message,
+	Collection,
+	MessageActionRow,
+	MessageButton,
+	ButtonInteraction,
+	OverwriteResolvable,
+} from "discord.js";
 import { readFile } from "fs/promises";
 import { join } from "path";
 import Client from "../../Client";
@@ -26,6 +33,7 @@ export class TicketHandler {
 		const close = () => {
 			this.ticketOpening.delete(message.author.id);
 		};
+
 		if (
 			await this.client.prisma.ticket.findFirst({
 				where: { id },
@@ -98,11 +106,96 @@ export class TicketHandler {
 
 		close();
 	}
+
+	public async handleInteraction(interaction: ButtonInteraction): Promise<void> {
+		if (!interaction.inCachedGuild()) {
+			this.client.loggers
+				.get("bot")
+				?.error(
+					`[TicketHandler#handleInteraction]: Received interaction from uncached guild (${interaction.guildId})`
+				);
+			return;
+		}
+		if (interaction.channelId !== this.settings.channel) return;
+
+		const [userId, guildId, caseId] = interaction.customId.split(/-/g);
+		const id = `${userId}-${guildId}`;
+
+		const ticket = await this.client.prisma.ticket.findFirst({
+			where: { caseId: Number(caseId), id },
+		});
+		if (!ticket || ticket.claimer || ticket.channel || ticket.closed) return;
+
+		const deleteTicket = async () => {
+			await this.client.prisma.ticket.delete({ where: { caseId: Number(caseId) } });
+			await interaction.channel?.messages.delete(interaction.message.id).catch(() => void 0);
+
+			return;
+		};
+
+		const user = await this.client.utils.fetchUser(userId);
+		if (!user) return deleteTicket();
+
+		await interaction.channel?.messages.delete(interaction.message.id).catch(() => void 0);
+		ticket.claimer = interaction.user.id;
+
+		const overwrites = [
+			...new Set([interaction.user.id, this.client.user?.id ?? "", ...this.settings.allowedRoles]),
+		];
+
+		try {
+			const channel = await interaction.guild.channels.create(`ticket-${caseId}`, {
+				type: "GUILD_TEXT",
+				permissionOverwrites: [
+					...overwrites.map(
+						(_id): OverwriteResolvable => ({
+							id: _id,
+							allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ATTACH_FILES"],
+						})
+					),
+					{
+						id: interaction.guildId,
+						deny: ["VIEW_CHANNEL"],
+					},
+				],
+			});
+
+			if (this.settings.category)
+				await channel.setParent(this.settings.category, { lockPermissions: false });
+
+			const embed = this.client.utils
+				.embed()
+				.setTitle(`Ticket - ${ticket.caseId}`)
+				.setDescription(interaction.message.embeds[0].description ?? "Unknown reason")
+				.setFooter(
+					`claimed by ${interaction.user.tag}`,
+					interaction.user.displayAvatarURL({ dynamic: true, size: 512 })
+				);
+			await channel.send({ embeds: [embed] });
+
+			ticket.channel = channel.id;
+			await this.client.prisma.ticket.update({ where: { caseId: Number(caseId) }, data: ticket });
+
+			await user.send(
+				`>>> 🎫 | Your ticket has been claimed by **${
+					interaction.member.nickname ?? interaction.user.id
+				}** (${interaction.user.toString()}).`
+			);
+		} catch (err) {
+			this.client.loggers
+				.get("bot")
+				?.fatal(
+					`[TicketHandler#handleInteraction]: unable to complete ticket claiming ${caseId}`,
+					err
+				);
+		}
+	}
 }
 
 // interfaces
 interface TicketSettings {
 	channel: string;
+	category: string;
 	transcripts: string;
-	allowedRoles: string;
+	allowedRoles: string[];
 }

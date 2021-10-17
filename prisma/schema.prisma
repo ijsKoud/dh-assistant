@@ -44,4 +44,5 @@ model Ticket {
   id      String // userId-guildId
   closed  Boolean
   claimer String?
+  channel String?
 }
