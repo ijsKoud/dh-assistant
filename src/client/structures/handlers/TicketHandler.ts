@@ -7,6 +7,7 @@ import {
 	ButtonInteraction,
 	OverwriteResolvable,
 	TextChannel,
+	MessageOptions,
 } from "discord.js";
 import { readFile } from "fs/promises";
 import { join } from "path";
@@ -205,9 +206,13 @@ export class TicketHandler {
 						const channel = await this.client.utils.getChannel(ticket.channel);
 						if (!channel || !channel.isText()) return;
 
+						if (!message.content && !message.attachments.size) return;
 						await channel.send(this.getMessage(message));
 						await message.react(emojis.greentick).catch(() => void 0);
 					} catch (err) {
+						this.client.loggers
+							.get("bot")
+							?.error("Error while delivering a message from a ticket to the ticket channel", err);
 						message.reply(
 							`>>> ${emojis.error} | Unable to deliver the message to the correct channel, please try again or ask a moderator to close the ticket!`
 						);
@@ -223,9 +228,13 @@ export class TicketHandler {
 						const user = await this.client.utils.fetchUser(ticket.id.split("-")[0]);
 						if (!user) return;
 
+						if (!message.content && !message.attachments.size) return;
 						await user.send(this.getMessage(message));
 						await message.react(emojis.greentick).catch(() => void 0);
 					} catch (err) {
+						this.client.loggers
+							.get("bot")
+							?.error("Error while delivering a message from a ticket channel to the user", err);
 						message.reply(
 							`>>> ${emojis.error} | Unable to DM the user, please try again or close the ticket!`
 						);
@@ -237,10 +246,13 @@ export class TicketHandler {
 		}
 	}
 
-	protected getMessage(message: Message): string {
-		return `>>> 💬 | Reply from **${
-			message.member?.nickname || message.author.tag
-		}** (${message.author.toString()}): \`\`\`${message.content}\`\`\``;
+	protected getMessage(message: Message): MessageOptions {
+		return {
+			files: this.client.utils.getAttachments(message.attachments),
+			content: `>>> 💬 | Reply from **${
+				message.member?.nickname || message.author.tag
+			}** (${message.author.toString()}): \`\`\`${message.content || "no message content"}\`\`\``,
+		};
 	}
 
 	protected async getTicket(type: "DM" | "TEXT", message: Message): Promise<Ticket | null> {
