@@ -1,7 +1,7 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Message } from "discord.js";
-import { Args } from "@sapphire/framework";
+
 import { Tictactoe } from "../../../client/structures/games";
 
 @ApplyOptions<Command.Options>({
@@ -12,7 +12,7 @@ import { Tictactoe } from "../../../client/structures/games";
 	requiredClientPermissions: ["EMBED_LINKS"],
 })
 export default class TictactoeCommand extends Command {
-	public async messageRun(message: Message, args: Args) {
+	public async messageRun(message: Message, args: Command.Args) {
 		const { value: member } = await args.pickResult("member");
 		if (!member || member.id === message.author.id)
 			return message.reply(">>> 🔎 | I was unable to find the user.");

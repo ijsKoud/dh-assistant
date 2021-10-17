@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { Args } from "@sapphire/framework";
+
 import { GuildMessage, ModerationMessage } from "../../../client/structures/Moderation";
 import { emojis } from "../../../client/constants";
 
@@ -12,7 +12,7 @@ import { emojis } from "../../../client/constants";
 	options: ["author"],
 })
 export default class MessageCommand extends Command {
-	public async messageRun(message: GuildMessage, args: Args) {
+	public async messageRun(message: GuildMessage, args: Command.Args) {
 		const { value: member } = await args.pickResult("member");
 		const { value: DmMessage } = await args.restResult("string");
 		const author = args.getOption("author") ?? message.author.tag;

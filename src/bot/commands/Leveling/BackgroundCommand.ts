@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { Args } from "@sapphire/framework";
+
 import { emojis } from "../../../client/constants";
 import { GuildMessage } from "../../../client/structures/Moderation";
 import { readdir } from "fs/promises";
@@ -14,7 +14,7 @@ import { join } from "path";
 	options: ["user"],
 })
 export default class BackgroundCommand extends Command {
-	public async messageRun(message: GuildMessage, args: Args) {
+	public async messageRun(message: GuildMessage, args: Command.Args) {
 		const { value: backgroundId } = await args.pickResult("number");
 		if (!backgroundId)
 			return message.reply(

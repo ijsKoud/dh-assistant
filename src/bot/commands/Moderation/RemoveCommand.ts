@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { Args } from "@sapphire/framework";
+
 import { GuildMessage } from "../../../client/structures/Moderation";
 import { emojis } from "../../../client/constants";
 
@@ -12,7 +12,7 @@ import { emojis } from "../../../client/constants";
 	preconditions: ["GuildOnly", "TrialModeratorOnly"],
 })
 export default class RemoveCommand extends Command {
-	public async messageRun(message: GuildMessage, args: Args) {
+	public async messageRun(message: GuildMessage, args: Command.Args) {
 		const { value: channel } = await args.pickResult("guildChannel");
 		if (
 			!channel ||

@@ -1,7 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Message } from "discord.js";
-import { Args } from "@sapphire/framework";
 
 @ApplyOptions<Command.Options>({
 	name: "avatar",
@@ -10,7 +9,7 @@ import { Args } from "@sapphire/framework";
 	requiredClientPermissions: ["EMBED_LINKS"],
 })
 export default class AvatarCommand extends Command {
-	public async messageRun(message: Message, args: Args): Promise<void> {
+	public async messageRun(message: Message, args: Command.Args): Promise<void> {
 		let { value: user } = await args.pickResult("user");
 		if (!user) user = message.author;
 

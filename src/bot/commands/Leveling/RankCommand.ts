@@ -1,7 +1,7 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { MessageAttachment } from "discord.js";
-import { Args } from "@sapphire/framework";
+
 import Rank from "../../../client/structures/Rank";
 import { emojis } from "../../../client/constants";
 import { GuildMessage } from "../../../client/structures/Moderation";
@@ -15,7 +15,7 @@ import { GuildMessage } from "../../../client/structures/Moderation";
 	preconditions: ["GuildOnly"],
 })
 export default class RankCommand extends Command {
-	public async messageRun(message: GuildMessage, args: Args) {
+	public async messageRun(message: GuildMessage, args: Command.Args) {
 		let { value: member } = await args.pickResult("member");
 		if (!member) member = message.member;
 

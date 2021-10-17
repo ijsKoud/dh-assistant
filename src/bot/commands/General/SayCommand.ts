@@ -1,7 +1,7 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Message, TextChannel } from "discord.js";
-import { Args } from "@sapphire/framework";
+
 import { emojis } from "../../../client/constants";
 
 @ApplyOptions<Command.Options>({
@@ -14,7 +14,7 @@ import { emojis } from "../../../client/constants";
 	usage: "[channel] <text>",
 })
 export default class SayCommand extends Command {
-	public async messageRun(message: Message, args: Args) {
+	public async messageRun(message: Message, args: Command.Args) {
 		let { value: channel } = await args.pickResult("guildTextChannel");
 		const { value: msg } = await args.restResult("string");
 

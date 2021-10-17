@@ -1,7 +1,7 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Message } from "discord.js";
-import { Args } from "@sapphire/framework";
+
 import axios from "axios";
 import moment from "moment";
 import { emojis } from "../../../client/constants";
@@ -14,7 +14,7 @@ import { emojis } from "../../../client/constants";
 	requiredClientPermissions: ["EMBED_LINKS"],
 })
 export default class ServerinfoCommand extends Command {
-	public async messageRun(message: Message, args: Args): Promise<void> {
+	public async messageRun(message: Message, args: Command.Args): Promise<void> {
 		const msg = await message.reply(`>>> ${emojis.loading} | Getting user information...`);
 
 		let { value: user } = await args.pickResult("user");

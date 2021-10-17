@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { Args } from "@sapphire/framework";
+
 import { Message, User } from "discord.js";
 import { emojis } from "../../../client/constants";
 
@@ -11,7 +11,7 @@ import { emojis } from "../../../client/constants";
 	preconditions: ["OwnerOnly"],
 })
 export default class BotBlacklistCommand extends Command {
-	public async messagemessageRun(message: Message, args: Args) {
+	public async messagemessageRun(message: Message, args: Command.Args) {
 		const { value: id } = await args.pickResult("string");
 		if (!id) return message.reply(`>>> ${emojis.redcross} | No user/guild id provided.`);
 		if (this.client.blacklistManager.blacklisted.includes(id))

@@ -2,7 +2,6 @@ import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { EmbedFieldData, Message, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
 import ms from "ms";
-import { Args } from "@sapphire/framework";
 
 @ApplyOptions<Command.Options>({
 	name: "help",
@@ -12,7 +11,11 @@ import { Args } from "@sapphire/framework";
 	requiredClientPermissions: ["EMBED_LINKS"],
 })
 export default class PingCommand extends Command {
-	public async messageRun(message: Message, args: Args, context: Command.Context): Promise<void> {
+	public async messageRun(
+		message: Message,
+		args: Command.Args,
+		context: Command.Context
+	): Promise<void> {
 		const embed: MessageEmbed = this.container.client.utils
 			.embed()
 			.setTitle(`Help Command - ${message.author.tag}`)
@@ -46,7 +49,7 @@ export default class PingCommand extends Command {
 		} else {
 			const isOwner = this.container.client.isOwner(message.author.id);
 			const commands = [...this.container.stores.get("commands").values()] as Command[];
-			let categories = [...new Set(commands.map((c) => c.category))];
+			let categories = [...new Set(commands.map((c) => c.category ?? "General"))];
 
 			if (!isOwner) categories = categories.filter((c) => c.toLowerCase() !== "dev");
 

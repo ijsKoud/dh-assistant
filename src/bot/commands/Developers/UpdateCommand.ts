@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { Args } from "@sapphire/framework";
+
 import { Message } from "discord.js";
 import { exec } from "child_process";
 
@@ -12,7 +12,7 @@ import { exec } from "child_process";
 	preconditions: ["OwnerOnly"],
 })
 export default class UpdateCommand extends Command {
-	public async messageRun(message: Message, args: Args): Promise<void> {
+	public async messageRun(message: Message, args: Command.Args): Promise<void> {
 		this.container.client.loggers
 			.get("bot")
 			?.info(`Executing update - requested by ${message.author.tag}`);

@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { Args } from "@sapphire/framework";
+
 import { emojis } from "../../../client/constants";
 import { GuildMessage } from "../../../client/structures/Moderation";
 
@@ -11,7 +11,7 @@ import { GuildMessage } from "../../../client/structures/Moderation";
 	preconditions: ["GuildOnly", "ManagerOnly"],
 })
 export default class LeveleditCommand extends Command {
-	public async messageRun(message: GuildMessage, args: Args) {
+	public async messageRun(message: GuildMessage, args: Command.Args) {
 		const { value: member } = await args.pickResult("member");
 		const { value: type } = await args.pickResult("string");
 		const { value } = await args.pickResult("number");

@@ -1,7 +1,7 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Message } from "discord.js";
-import { Args } from "@sapphire/framework";
+
 import { emojis } from "../../../client/constants";
 
 const ball: string[] = [
@@ -34,7 +34,7 @@ const ball: string[] = [
 	requiredClientPermissions: ["EMBED_LINKS"],
 })
 export default class PingCommand extends Command {
-	public async messageRun(message: Message, args: Args) {
+	public async messageRun(message: Message, args: Command.Args) {
 		const { value: question } = await args.restResult("string");
 		if (!question || !question.trim().endsWith("?"))
 			return message.reply(`>>> ${emojis.redcross} | A question with a **?** is required!`);

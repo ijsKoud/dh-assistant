@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { Args } from "@sapphire/framework";
+
 import { emojis } from "../../../client/constants";
 import { GuildMessage } from "../../../client/structures/Moderation";
 
@@ -12,7 +12,7 @@ import { GuildMessage } from "../../../client/structures/Moderation";
 	options: ["user"],
 })
 export default class XpboostCommand extends Command {
-	public async messageRun(message: GuildMessage, args: Args) {
+	public async messageRun(message: GuildMessage, args: Command.Args) {
 		const { value: multiplier } = await args.pickResult("integer");
 
 		const userOption = args.getOption("user");

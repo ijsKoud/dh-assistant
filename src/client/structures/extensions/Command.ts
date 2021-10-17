@@ -1,10 +1,9 @@
-import { Args, CommandContext, PieceContext, UserError } from "@sapphire/framework";
+import { Args as CommandArgs, CommandContext, PieceContext, UserError } from "@sapphire/framework";
 import { SubCommandPluginCommand } from "@sapphire/plugin-subcommands";
 import type { PermissionResolvable } from "discord.js";
-import { sep } from "path";
 import Client from "../../Client";
 
-export abstract class Command extends SubCommandPluginCommand<Args, Command> {
+export abstract class Command extends SubCommandPluginCommand<CommandArgs, Command> {
 	public readonly hidden: boolean;
 	public readonly OwnerOnly: boolean;
 	public readonly usage: string;
@@ -15,7 +14,6 @@ export abstract class Command extends SubCommandPluginCommand<Args, Command> {
 	public readonly permissions: PermissionResolvable;
 	public readonly clientPermissions: PermissionResolvable;
 
-	public readonly fullCategory: readonly string[];
 	public client: Client;
 
 	public constructor(context: PieceContext, options: Command.Options) {
@@ -47,23 +45,6 @@ export abstract class Command extends SubCommandPluginCommand<Args, Command> {
 		this.clientPermissions = options.requiredClientPermissions ?? [];
 
 		this.client = this.container.client as Client;
-
-		const paths = context.path.split(sep);
-		this.fullCategory = paths.slice(paths.indexOf("commands") + 1, -1);
-	}
-
-	/**
-	 * The main category for the command
-	 */
-	public get category(): string {
-		return this.fullCategory.length > 0 ? this.fullCategory[0] : "General";
-	}
-
-	/**
-	 * The sub category for the command
-	 */
-	public get subCategory(): string {
-		return this.fullCategory.length > 1 ? this.fullCategory[1] : "General";
 	}
 
 	protected error(identifier: string | UserError, context?: unknown): never {
@@ -88,4 +69,5 @@ export namespace Command {
 	};
 
 	export type Context = CommandContext;
+	export type Args = CommandArgs;
 }

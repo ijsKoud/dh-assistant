@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { Args } from "@sapphire/framework";
+
 import { GuildMessage, ModerationMessage } from "../../../client/structures/Moderation";
 import { emojis } from "../../../client/constants";
 import { clearTimeout as clearLongTimeout } from "long-timeout";
@@ -13,7 +13,7 @@ import { modlog } from "@prisma/client";
 	preconditions: ["GuildOnly", "ModeratorOnly"],
 })
 export default class UnbanCommand extends Command {
-	public async messageRun(message: GuildMessage, args: Args) {
+	public async messageRun(message: GuildMessage, args: Command.Args) {
 		const { value: user } = await args.pickResult("user");
 		const { value: reason } = await args.restResult("string");
 		if (!user) return message.reply(`>>> ${emojis.redcross} | No user provided`);

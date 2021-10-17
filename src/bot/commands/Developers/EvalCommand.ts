@@ -1,7 +1,7 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { codeBlock } from "@sapphire/utilities";
-import { Args } from "@sapphire/framework";
+
 import type { Message } from "discord.js";
 import { Type } from "@sapphire/type";
 import { inspect } from "util";
@@ -16,7 +16,7 @@ import { inspect } from "util";
 	usage: "<code>",
 })
 export default class EvalCommand extends Command {
-	public async messageRun(message: Message, args: Args) {
+	public async messageRun(message: Message, args: Command.Args) {
 		const code = await args.rest("string");
 
 		const { result, success, type } = await this.eval(message, code, {
