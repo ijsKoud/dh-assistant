@@ -16,7 +16,7 @@ import { GuildMessage } from "../../../client/structures/Moderation";
 	preconditions: ["GuildOnly", "TrialModeratorOnly"],
 })
 export default class ModlogsCommand extends Command {
-	public async run(message: GuildMessage, args: Args) {
+	public async messageRun(message: GuildMessage, args: Args) {
 		const { value: user } = await args.pickResult("user");
 		if (!user) {
 			const logs = await this.client.prisma.modlog.findMany({

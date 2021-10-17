@@ -12,7 +12,7 @@ import { exec } from "child_process";
 	preconditions: ["OwnerOnly"],
 })
 export default class UpdateCommand extends Command {
-	public async run(message: Message, args: Args): Promise<void> {
+	public async messageRun(message: Message, args: Args): Promise<void> {
 		this.container.client.loggers
 			.get("bot")
 			?.info(`Executing update - requested by ${message.author.tag}`);

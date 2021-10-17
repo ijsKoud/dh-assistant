@@ -9,7 +9,7 @@ import { hangMan } from "../../../client/structures/games";
 	requiredClientPermissions: ["EMBED_LINKS"],
 })
 export default class HangmanCommand extends Command {
-	public async run(message: Message) {
+	public async messageRun(message: Message) {
 		new hangMan(message).start();
 	}
 }

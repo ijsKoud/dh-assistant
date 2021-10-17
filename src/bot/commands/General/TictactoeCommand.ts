@@ -12,7 +12,7 @@ import { Tictactoe } from "../../../client/structures/games";
 	requiredClientPermissions: ["EMBED_LINKS"],
 })
 export default class TictactoeCommand extends Command {
-	public async run(message: Message, args: Args) {
+	public async messageRun(message: Message, args: Args) {
 		const { value: member } = await args.pickResult("member");
 		if (!member || member.id === message.author.id)
 			return message.reply(">>> 🔎 | I was unable to find the user.");

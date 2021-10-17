@@ -14,7 +14,7 @@ import { emojis } from "../../../client/constants";
 	usage: "[channel] <text>",
 })
 export default class SayCommand extends Command {
-	public async run(message: Message, args: Args) {
+	public async messageRun(message: Message, args: Args) {
 		let { value: channel } = await args.pickResult("guildTextChannel");
 		const { value: msg } = await args.restResult("string");
 

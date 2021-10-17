@@ -13,7 +13,7 @@ import { emojis } from "../../../client/constants";
 	flags: ["user"],
 })
 export default class ClearlogsCommand extends Command {
-	public async run(message: GuildMessage, args: Args) {
+	public async messageRun(message: GuildMessage, args: Args) {
 		const { value: id } = await args.pickResult("string");
 		const userFlag = args.getFlags("user");
 		if (userFlag) {

@@ -12,7 +12,7 @@ import { emojis } from "../../../client/constants";
 	preconditions: ["GuildOnly", "TrialModeratorOnly"],
 })
 export default class RemoveCommand extends Command {
-	public async run(message: GuildMessage, args: Args) {
+	public async messageRun(message: GuildMessage, args: Args) {
 		const { value: channel } = await args.pickResult("guildChannel");
 		if (
 			!channel ||

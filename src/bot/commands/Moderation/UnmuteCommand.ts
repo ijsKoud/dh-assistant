@@ -13,7 +13,7 @@ import { modlog } from ".prisma/client";
 	preconditions: ["GuildOnly", "ModeratorOnly"],
 })
 export default class UnmuteCommand extends Command {
-	public async run(message: GuildMessage, args: Args) {
+	public async messageRun(message: GuildMessage, args: Args) {
 		const { value: member } = await args.pickResult("member");
 		const { value: reason } = await args.restResult("string");
 		if (!member) return message.reply(`>>> ${emojis.redcross} | No member provided`);

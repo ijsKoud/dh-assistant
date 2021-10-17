@@ -15,7 +15,7 @@ import { GuildMessage } from "../../../client/structures/Moderation";
 	preconditions: ["GuildOnly"],
 })
 export default class RankCommand extends Command {
-	public async run(message: GuildMessage, args: Args) {
+	public async messageRun(message: GuildMessage, args: Args) {
 		let { value: member } = await args.pickResult("member");
 		if (!member) member = message.member;
 

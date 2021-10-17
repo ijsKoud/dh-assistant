@@ -12,7 +12,7 @@ import { Args } from "@sapphire/framework";
 	requiredClientPermissions: ["EMBED_LINKS"],
 })
 export default class PingCommand extends Command {
-	public async run(message: Message, args: Args, context: Command.Context): Promise<void> {
+	public async messageRun(message: Message, args: Args, context: Command.Context): Promise<void> {
 		const embed: MessageEmbed = this.container.client.utils
 			.embed()
 			.setTitle(`Help Command - ${message.author.tag}`)

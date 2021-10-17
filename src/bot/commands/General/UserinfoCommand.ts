@@ -14,7 +14,7 @@ import { emojis } from "../../../client/constants";
 	requiredClientPermissions: ["EMBED_LINKS"],
 })
 export default class ServerinfoCommand extends Command {
-	public async run(message: Message, args: Args): Promise<void> {
+	public async messageRun(message: Message, args: Args): Promise<void> {
 		const msg = await message.reply(`>>> ${emojis.loading} | Getting user information...`);
 
 		let { value: user } = await args.pickResult("user");

@@ -17,7 +17,7 @@ import { emojis } from "../../../client/constants";
 	options: ["duration"],
 })
 export default class BanCommand extends Command {
-	public async run(message: GuildMessage, args: Args) {
+	public async messageRun(message: GuildMessage, args: Args) {
 		const { value: user } = await args.pickResult("user");
 		const { value: reason } = await args.restResult("string");
 		const durationOption = args.getOption("duration");

@@ -17,7 +17,7 @@ import { emojis } from "../../../client/constants";
 	options: ["duration"],
 })
 export default class MuteCommand extends Command {
-	public async run(message: GuildMessage, args: Args) {
+	public async messageRun(message: GuildMessage, args: Args) {
 		const { value: member } = await args.pickResult("member");
 		const { value: reason } = await args.restResult("string");
 		const durationOption = args.getOption("duration");

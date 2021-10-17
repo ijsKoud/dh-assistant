@@ -34,7 +34,7 @@ const ball: string[] = [
 	requiredClientPermissions: ["EMBED_LINKS"],
 })
 export default class PingCommand extends Command {
-	public async run(message: Message, args: Args) {
+	public async messageRun(message: Message, args: Args) {
 		const { value: question } = await args.restResult("string");
 		if (!question || !question.trim().endsWith("?"))
 			return message.reply(`>>> ${emojis.redcross} | A question with a **?** is required!`);

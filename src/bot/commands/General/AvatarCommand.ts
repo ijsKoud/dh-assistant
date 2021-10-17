@@ -10,7 +10,7 @@ import { Args } from "@sapphire/framework";
 	requiredClientPermissions: ["EMBED_LINKS"],
 })
 export default class AvatarCommand extends Command {
-	public async run(message: Message, args: Args): Promise<void> {
+	public async messageRun(message: Message, args: Args): Promise<void> {
 		let { value: user } = await args.pickResult("user");
 		if (!user) user = message.author;
 

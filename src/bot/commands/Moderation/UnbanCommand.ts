@@ -13,7 +13,7 @@ import { modlog } from "@prisma/client";
 	preconditions: ["GuildOnly", "ModeratorOnly"],
 })
 export default class UnbanCommand extends Command {
-	public async run(message: GuildMessage, args: Args) {
+	public async messageRun(message: GuildMessage, args: Args) {
 		const { value: user } = await args.pickResult("user");
 		const { value: reason } = await args.restResult("string");
 		if (!user) return message.reply(`>>> ${emojis.redcross} | No user provided`);

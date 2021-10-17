@@ -13,7 +13,7 @@ import type { Message } from "discord.js";
 	usage: "<...command>",
 })
 export default class ExecCommand extends Command {
-	public async run(message: Message, args: Args) {
+	public async messageRun(message: Message, args: Args) {
 		const command = await args.rest("string");
 		const { result, success } = await this.exec(command);
 

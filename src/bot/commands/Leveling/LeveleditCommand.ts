@@ -11,7 +11,7 @@ import { GuildMessage } from "../../../client/structures/Moderation";
 	preconditions: ["GuildOnly", "ManagerOnly"],
 })
 export default class LeveleditCommand extends Command {
-	public async run(message: GuildMessage, args: Args) {
+	public async messageRun(message: GuildMessage, args: Args) {
 		const { value: member } = await args.pickResult("member");
 		const { value: type } = await args.pickResult("string");
 		const { value } = await args.pickResult("number");

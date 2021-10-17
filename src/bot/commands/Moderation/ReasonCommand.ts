@@ -11,7 +11,7 @@ import { emojis } from "../../../client/constants";
 	preconditions: ["GuildOnly", "TrialModeratorOnly"],
 })
 export default class ReasonCommand extends Command {
-	public async run(message: GuildMessage, args: Args) {
+	public async messageRun(message: GuildMessage, args: Args) {
 		const { value: id } = await args.pickResult("number");
 		const { value: reason } = await args.restResult("string");
 		if (!id || isNaN(id)) return message.reply(`>>> ${emojis.redcross} | No modlog Id provided.`);

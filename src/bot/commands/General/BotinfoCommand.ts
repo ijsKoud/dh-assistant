@@ -12,7 +12,7 @@ import ms from "ms";
 	requiredClientPermissions: ["EMBED_LINKS"],
 })
 export default class BotinfoCommand extends Command {
-	public async run(message: Message): Promise<void> {
+	public async messageRun(message: Message): Promise<void> {
 		const core = cpus()[0];
 		await message.reply({
 			embeds: [

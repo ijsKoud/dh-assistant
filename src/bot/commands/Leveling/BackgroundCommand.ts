@@ -14,7 +14,7 @@ import { join } from "path";
 	options: ["user"],
 })
 export default class BackgroundCommand extends Command {
-	public async run(message: GuildMessage, args: Args) {
+	public async messageRun(message: GuildMessage, args: Args) {
 		const { value: backgroundId } = await args.pickResult("number");
 		if (!backgroundId)
 			return message.reply(

@@ -31,7 +31,7 @@ const files: string[] = [
 	requiredClientPermissions: ["EMBED_LINKS"],
 })
 export default class PingCommand extends Command {
-	public async run(message: Message) {
+	public async messageRun(message: Message) {
 		if (!channels.uwu.includes(message.channelId) && message.channel.type !== "DM")
 			return message.reply(
 				`>>> ${emojis.redcross} | You can only use this command in ${channels.uwu

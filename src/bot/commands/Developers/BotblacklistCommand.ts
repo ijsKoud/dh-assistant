@@ -11,7 +11,7 @@ import { emojis } from "../../../client/constants";
 	preconditions: ["OwnerOnly"],
 })
 export default class BotBlacklistCommand extends Command {
-	public async run(message: Message, args: Args) {
+	public async messagemessageRun(message: Message, args: Args) {
 		const { value: id } = await args.pickResult("string");
 		if (!id) return message.reply(`>>> ${emojis.redcross} | No user/guild id provided.`);
 		if (this.client.blacklistManager.blacklisted.includes(id))

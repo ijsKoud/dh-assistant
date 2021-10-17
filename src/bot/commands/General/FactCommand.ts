@@ -10,7 +10,7 @@ import { emojis } from "../../../client/constants";
 	description: "Shows you a useless fact",
 })
 export default class FactCommand extends Command {
-	public async run(message: Message) {
+	public async messageRun(message: Message) {
 		const { data } = await axios
 			.get<string>("https://daangamesdg.wtf/api/fact")
 			.catch(() => ({ data: null }));

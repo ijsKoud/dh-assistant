@@ -13,7 +13,7 @@ import { emojis } from "../../../client/constants";
 	preconditions: ["GuildOnly", "TrialModeratorOnly"],
 })
 export default class PurgeCommand extends Command {
-	public async run(message: GuildMessage, args: Args) {
+	public async messageRun(message: GuildMessage, args: Args) {
 		if (message.channel.type === "DM") return;
 		const { value: amount } = await args.pickResult("number");
 		if (!amount || isNaN(amount))

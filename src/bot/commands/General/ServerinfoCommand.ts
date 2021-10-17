@@ -16,7 +16,7 @@ const levels: Record<"NONE" | "TIER_1" | "TIER_2" | "TIER_3", string> = {
 	preconditions: ["GuildOnly"],
 })
 export default class ServerinfoCommand extends Command {
-	public async run(message: Message): Promise<void> {
+	public async messageRun(message: Message): Promise<void> {
 		if (!message.guild) return;
 
 		const owner = await message.guild.fetchOwner();
