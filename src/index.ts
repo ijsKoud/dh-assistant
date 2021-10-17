@@ -13,5 +13,5 @@ new Client({
 		"GUILD_BANS",
 	],
 	debug: !!process.env.DEBUG,
-	partials: [],
+	partials: ["CHANNEL", "GUILD_MEMBER", "MESSAGE", "USER"],
 }).start();

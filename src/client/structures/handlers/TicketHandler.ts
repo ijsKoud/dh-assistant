@@ -1,3 +1,4 @@
+import { Ticket } from ".prisma/client";
 import {
 	Message,
 	Collection,
@@ -5,6 +6,7 @@ import {
 	MessageButton,
 	ButtonInteraction,
 	OverwriteResolvable,
+	TextChannel,
 } from "discord.js";
 import { readFile } from "fs/promises";
 import { join } from "path";
@@ -14,6 +16,7 @@ import { GuildMessage } from "../Moderation";
 
 export class TicketHandler {
 	private ticketOpening = new Collection<string, boolean>();
+	private tickets = new Collection<number, Ticket>();
 	public settings!: TicketSettings;
 
 	constructor(public client: Client) {
@@ -189,6 +192,91 @@ export class TicketHandler {
 					err
 				);
 		}
+	}
+
+	public async handleMessage(message: Message): Promise<void> {
+		switch (message.channel.type) {
+			case "DM":
+				{
+					try {
+						const ticket = await this.getTicket("DM", message);
+						if (!ticket || !ticket.channel) return;
+
+						const channel = await this.client.utils.getChannel(ticket.channel);
+						if (!channel || !channel.isText()) return;
+
+						await channel.send(this.getMessage(message));
+						await message.react(emojis.greentick).catch(() => void 0);
+					} catch (err) {
+						message.reply(
+							`>>> ${emojis.error} | Unable to deliver the message to the correct channel, please try again or ask a moderator to close the ticket!`
+						);
+					}
+				}
+				break;
+			case "GUILD_TEXT":
+				{
+					try {
+						const ticket = await this.getTicket("TEXT", message);
+						if (!ticket) return;
+
+						const user = await this.client.utils.fetchUser(ticket.id.split("-")[0]);
+						if (!user) return;
+
+						await user.send(this.getMessage(message));
+						await message.react(emojis.greentick).catch(() => void 0);
+					} catch (err) {
+						message.reply(
+							`>>> ${emojis.error} | Unable to DM the user, please try again or close the ticket!`
+						);
+					}
+				}
+				break;
+			default:
+				break;
+		}
+	}
+
+	protected getMessage(message: Message): string {
+		return `>>> 💬 | Reply from **${
+			message.member?.nickname || message.author.tag
+		}** (${message.author.toString()}): \`\`\`${message.content}\`\`\``;
+	}
+
+	protected async getTicket(type: "DM" | "TEXT", message: Message): Promise<Ticket | null> {
+		if (type === "DM") {
+			let ticket: Ticket | null =
+				this.tickets.find((t) => t.id.includes(message.author.id)) ?? null;
+			if (!ticket) {
+				ticket = await this.client.prisma.ticket.findFirst({
+					where: { id: { contains: message.author.id } },
+				});
+				if (ticket) {
+					const id = ticket.caseId;
+
+					this.tickets.set(ticket.caseId, ticket);
+					setTimeout(() => this.tickets.delete(id), 5e3);
+				}
+			}
+
+			return ticket ?? null;
+		}
+
+		let id = Number((message.channel as TextChannel).name.split("-")[1]);
+		let ticket: Ticket | null = this.tickets.get(id) ?? null;
+		if (!ticket) {
+			ticket = await this.client.prisma.ticket.findFirst({
+				where: { caseId: id },
+			});
+			if (ticket) {
+				id = ticket.caseId;
+
+				this.tickets.set(ticket.caseId, ticket);
+				setTimeout(() => this.tickets.delete(id), 5e3);
+			}
+		}
+
+		return ticket ?? null;
 	}
 }
 

@@ -23,6 +23,9 @@ export default class MessageCreateListener extends Listener {
 			message.guild
 		)
 			return client.ticketHandler.handleMention(message);
+
+		if (message.channel.type === "DM" || message.channel.name.startsWith("ticket-"))
+			await client.ticketHandler.handleMessage(message);
 	}
 
 	private async handleLeveling(message: Message) {
