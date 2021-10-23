@@ -201,7 +201,7 @@ export class TicketHandler {
 				{
 					try {
 						const ticket = await this.getTicket("DM", message);
-						if (!ticket || !ticket.channel) return;
+						if (!ticket || !ticket.channel || ticket.closed) return;
 
 						const channel = await this.client.utils.getChannel(ticket.channel);
 						if (!channel || !channel.isText()) return;
@@ -223,7 +223,7 @@ export class TicketHandler {
 				{
 					try {
 						const ticket = await this.getTicket("TEXT", message);
-						if (!ticket) return;
+						if (!ticket || ticket.closed) return;
 
 						const user = await this.client.utils.fetchUser(ticket.id.split("-")[0]);
 						if (!user) return;
