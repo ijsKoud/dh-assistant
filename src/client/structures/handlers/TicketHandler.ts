@@ -187,7 +187,7 @@ export class TicketHandler {
 					`claimed by ${interaction.user.tag}`,
 					interaction.user.displayAvatarURL({ dynamic: true, size: 512 })
 				);
-			await channel.send({ embeds: [embed] });
+			await channel.send({ embeds: [embed] }).then(async (m) => await m.pin().catch(() => void 0));
 
 			ticket.channel = channel.id;
 			await this.client.prisma.ticket.update({ where: { caseId: Number(caseId) }, data: ticket });
