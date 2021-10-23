@@ -196,6 +196,7 @@ export class TicketHandler {
 	}
 
 	public async handleMessage(message: Message): Promise<void> {
+		if (message.content.startsWith(process.env.PREFIX ?? "=")) return;
 		switch (message.channel.type) {
 			case "DM":
 				{
