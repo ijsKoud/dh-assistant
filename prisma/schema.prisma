@@ -46,3 +46,7 @@ model Ticket {
   claimer String?
   channel String?
 }
+
+model TicketBlacklist {
+  id String @id
+}

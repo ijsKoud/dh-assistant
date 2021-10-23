@@ -38,12 +38,24 @@ export class TicketHandler {
 			this.ticketOpening.delete(message.author.id);
 		};
 
+		this.ticketOpening.set(message.author.id, true);
+
 		if (
 			await this.client.prisma.ticket.findFirst({
 				where: { id },
 			})
 		)
-			return;
+			return close();
+
+		if (await this.client.prisma.ticketBlacklist.findFirst({ where: { id: message.author.id } })) {
+			await message.author
+				.send(
+					`>>> ${emojis.redcross} | I was unable to create a ticket for you, this is because you are currently on our ticket blacklist.`
+				)
+				.catch(() => void 0);
+
+			return close();
+		}
 
 		try {
 			const dm = await message.author.createDM();
