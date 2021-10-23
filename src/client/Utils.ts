@@ -7,6 +7,7 @@ import {
 	Collection,
 	DMChannel,
 	Guild,
+	GuildMemberRoleManager,
 	Interaction,
 	Message,
 	MessageActionRow,
@@ -26,6 +27,12 @@ export default class Utils {
 
 	public formatTime(time: number | string, type: "t" | "T" | "d" | "D" | "f" | "F" | "R"): string {
 		return `<t:${time}:${type}>`;
+	}
+
+	public getColour(manager: GuildMemberRoleManager) {
+		return manager.hoist && manager.hoist.color > 0
+			? manager.hoist.hexColor
+			: manager.cache.filter((r) => r.color > 0).first()?.hexColor ?? "#fff";
 	}
 
 	public parseTime(time: string): number {

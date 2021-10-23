@@ -2,6 +2,9 @@ import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { GuildMessage } from "../../../client/structures/Moderation";
 import { emojis } from "../../../client/constants";
+import Transcript from "../../../client/structures/Transcript";
+import { MessageAttachment, TextChannel } from "discord.js";
+import { join } from "path";
 
 @ApplyOptions<Command.Options>({
 	name: "close",
@@ -29,7 +32,7 @@ export default class CloseCommand extends Command {
 		ticket.closed = true;
 		await this.client.prisma.ticket.update({ where: { caseId: ticket.caseId }, data: ticket });
 
-		const user = await this.client.utils.fetchUser(ticket.id.split("-")[1]);
+		const user = await this.client.utils.fetchUser(ticket.id.split("-")[0]);
 		const msg = await channel.send(`>>> ${emojis.loading} | Closing the ticket...`);
 		if (user)
 			await user.send(
@@ -38,7 +41,36 @@ export default class CloseCommand extends Command {
 				}** (${author.toString()})`
 			);
 
-		// to do: transcript the app
+		try {
+			const transcript = new Transcript({ client: this.client, channel: channel as TextChannel });
+			const path = join(process.cwd(), "transcripts", `ticket-${ticket.caseId}.html`);
+
+			await transcript.create(path);
+
+			const transcriptChannel = await this.client.utils.getChannel(
+				this.client.ticketHandler.settings.transcripts
+			);
+			if (transcriptChannel && transcriptChannel.isText()) {
+				const embed = this.client.utils
+					.embed()
+					.setTitle(`Transcript: ticket-${ticket.caseId}`)
+					.setDescription(
+						[
+							`Claimed by <@${ticket.claimer}>`,
+							`Closed by ${author.toString()}`,
+							`Owner: <@${ticket.id.split("-")[0]}>`,
+						].join("\n")
+					);
+
+				await transcriptChannel.send({
+					embeds: [embed],
+					attachments: [new MessageAttachment(path, `ticket-${ticket.caseId}.html`)],
+				});
+			}
+		} catch (err) {
+			this.client.loggers.get("bot")?.fatal("Unable to create ticket transcript:", err);
+			await channel.send(`>>> ${emojis.error} | Unable to create a ticket transcript.`);
+		}
 
 		await msg.edit(`>>> ${emojis.loading} | Closing the ticket in **5 seconds**...`);
 
