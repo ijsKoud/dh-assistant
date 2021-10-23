@@ -220,7 +220,7 @@ export class TicketHandler {
 						if (!channel || !channel.isText()) return;
 
 						if (!message.content && !message.attachments.size) return;
-						await channel.send(this.getMessage(message));
+						await channel.send(this.getMessage(message, true));
 						await message.react(emojis.greentick).catch(() => void 0);
 					} catch (err) {
 						this.client.loggers
@@ -242,7 +242,7 @@ export class TicketHandler {
 						if (!user) return;
 
 						if (!message.content && !message.attachments.size) return;
-						await user.send(this.getMessage(message));
+						await user.send(this.getMessage(message, false));
 						await message.react(emojis.greentick).catch(() => void 0);
 					} catch (err) {
 						this.client.loggers
@@ -259,12 +259,16 @@ export class TicketHandler {
 		}
 	}
 
-	protected getMessage(message: Message): MessageOptions {
+	protected getMessage(message: Message, warning: boolean): MessageOptions {
 		return {
 			files: this.client.utils.getAttachments(message.attachments),
 			content: `>>> 💬 | Reply from **${
 				message.member?.nickname || message.author.tag
-			}** (${message.author.toString()}): \`\`\`${message.content || "no message content"}\`\`\``,
+			}** (${message.author.toString()}): \`\`\`${message.content || "no message content"}\`\`\`${
+				warning
+					? `\nMessages from the ticket claimer sent to this channel will automatically be sent to the ticket creator. Use \`${this.client.options.defaultPrefix}\` at the beginning of your message to stop this.`
+					: ""
+			}`,
 		};
 	}
 
