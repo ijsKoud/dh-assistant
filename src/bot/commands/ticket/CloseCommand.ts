@@ -15,7 +15,7 @@ import { join } from "path";
 })
 export default class CloseCommand extends Command {
 	public async messageRun(message: GuildMessage): Promise<void> {
-		if (!message.channel.isText() || message.channel.type === "DM") return;
+		if (!message.channel.isText()) return;
 		if (!message.channel.name.startsWith("ticket-")) return;
 
 		const { channel, author, member } = message;
@@ -25,7 +25,7 @@ export default class CloseCommand extends Command {
 		if (
 			!ticket ||
 			ticket.closed ||
-			(!ticket.id.includes(author.id) && !this.client.permissionHandler.hasSenior(message.member))
+			(author.id !== ticket.claimer && !this.client.permissionHandler.hasSenior(message.member))
 		)
 			return;
 
