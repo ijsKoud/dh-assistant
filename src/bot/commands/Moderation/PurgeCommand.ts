@@ -14,7 +14,6 @@ import { emojis } from "../../../client/constants";
 })
 export default class PurgeCommand extends Command {
 	public async messageRun(message: GuildMessage, args: Command.Args) {
-		if (message.channel.type === "DM") return;
 		const { value: amount } = await args.pickResult("number");
 		if (!amount || isNaN(amount))
 			return message.reply(`>>> ${emojis.redcross} | Invalid amount provided.`);
