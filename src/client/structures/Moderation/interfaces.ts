@@ -1,4 +1,4 @@
-import { Guild, GuildMember, Message } from "discord.js";
+import { Guild, GuildChannel, GuildMember, Message } from "discord.js";
 
 export interface ModerationSettings {
 	mute: {
@@ -53,4 +53,9 @@ export interface CheckResults {
 	date: number;
 }
 
-export type GuildMessage = Message & { guild: Guild; guildId: string; member: GuildMember };
+export type GuildMessage = Message & {
+	guild: Guild;
+	guildId: string;
+	member: GuildMember;
+	channel: GuildChannel;
+};
