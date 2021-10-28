@@ -8,7 +8,7 @@ import { emojis } from "../../../client/constants";
 	aliases: ["whitelist"],
 	description: "blacklist/whitelist a user",
 	usage: "<user>",
-	preconditions: ["ManagerOnly"],
+	preconditions: ["ManagerOnly", "GuildOnly"],
 })
 export default class BlacklistCommand extends Command {
 	public async messageRun(message: GuildMessage, args: Command.Args) {

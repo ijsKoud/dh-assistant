@@ -11,7 +11,7 @@ import { join } from "path";
 	aliases: ["closeticket"],
 	description: "Close a ticket",
 	requiredClientPermissions: ["MANAGE_CHANNELS"],
-	preconditions: ["ModeratorOnly"],
+	preconditions: ["ModeratorOnly", "GuildOnly"],
 })
 export default class CloseCommand extends Command {
 	public async messageRun(message: GuildMessage): Promise<void> {
