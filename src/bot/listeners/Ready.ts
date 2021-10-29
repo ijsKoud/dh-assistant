@@ -8,13 +8,37 @@ import { GuildMember } from "discord.js";
 
 @ApplyOptions<ListenerOptions>({ once: true, event: "ready" })
 export default class ReadyListener extends Listener {
-	public run(): void {
+	public async run(): Promise<void> {
+		await this.setStatus();
+		await this.loadTimeouts();
+		this.loadGiveaways();
+
 		this.container.client.loggers
 			.get("bot")
 			?.info(`${this.container.client.user?.tag} has logged in!`);
+	}
 
-		this.setStatus();
-		this.loadTimeouts();
+	private loadGiveaways() {
+		const { client } = this.container;
+		const logger = client.loggers.get("giveaways");
+
+		const handle = () => {
+			const giveaways = client.giveawaysManager.giveaways;
+			const filtered = giveaways.filter(
+				(giveaway) => giveaway.ended && Date.now() - giveaway.endAt > 6048e5
+			);
+
+			logger?.info(
+				`Deleting ${filtered.length} from the ${giveaways.length} giveaways. They are all finished and 7 days or older!`
+			);
+			filtered.forEach(async (giveaway) => {
+				await client.giveawaysManager.deleteGiveaway(giveaway.messageId ?? "").catch(() => void 0);
+			});
+		};
+
+		handle();
+		logger?.info("Successfully initiated - running every minute");
+		setInterval(handle.bind(this), 6e4);
 	}
 
 	private async loadTimeouts() {

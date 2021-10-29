@@ -58,6 +58,9 @@ export default class Client extends SapphireClient {
 		const DataLogger = new Logger({ name: "DB", webhook: process.env.LOGS });
 		this.loggers.set("db", DataLogger);
 
+		const GiveawayLogger = new Logger({ name: "Giveaways", webhook: process.env.LOGS });
+		this.loggers.set("giveaways", GiveawayLogger);
+
 		if (options.debug)
 			this.on("debug", (msg) => {
 				botLogger.debug(msg);
@@ -105,6 +108,7 @@ declare module "@sapphire/framework" {
 		ticketHandler: TicketHandler;
 		permissionHandler: PermissionHandler;
 		loggingHandler: LoggingHandler;
+		giveawaysManager: GiveawaysManager;
 
 		requests: Collection<string, number>;
 		loggers: Collection<string, Logger>;
