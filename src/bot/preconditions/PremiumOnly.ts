@@ -16,7 +16,7 @@ export class PremiumOnlyPrecondition extends Precondition {
 						"Content Creators",
 						"Boosters",
 						"Channel members",
-						"Level 5+ const state = useSelector(state => state.state)",
+						"Level 5+",
 					]
 						.map((str) => `**${str}**`)
 						.join(", ")} are allowed to use this command`,
