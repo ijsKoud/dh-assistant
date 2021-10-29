@@ -50,3 +50,9 @@ model Ticket {
 model TicketBlacklist {
   id String @id
 }
+
+model Adrequest {
+  caseId    String @id
+  id        String // userId-guildId
+  messageId String
+}

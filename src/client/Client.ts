@@ -29,6 +29,7 @@ export default class Client extends SapphireClient {
 	public permissionHandler = new PermissionHandler(this);
 	public loggingHandler = new LoggingHandler(this);
 
+	public requests = new Collection<string, number>();
 	public loggers = new Collection<string, Logger>();
 	public multipliers = new Collection<string, number>();
 
@@ -98,6 +99,7 @@ declare module "@sapphire/framework" {
 		permissionHandler: PermissionHandler;
 		loggingHandler: LoggingHandler;
 
+		requests: Collection<string, number>;
 		loggers: Collection<string, Logger>;
 		multipliers: Collection<string, number>;
 	}
