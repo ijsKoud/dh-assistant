@@ -1,7 +1,5 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-
-import { emojis } from "../../../client/constants";
 import { GuildMessage } from "../../../client/structures/Moderation";
 
 @ApplyOptions<Command.Options>({
@@ -15,14 +13,18 @@ export default class LeveleditCommand extends Command {
 		const { value: member } = await args.pickResult("member");
 		const { value: type } = await args.pickResult("string");
 		const { value } = await args.pickResult("number");
-		if (!member) return message.reply(`>>> ${emojis.redcross} | No member provided.`);
-		if (!value) return message.reply(`>>> ${emojis.redcross} | No value provided.`);
+		if (!member)
+			return message.reply(`>>> ${this.client.constants.emojis.redcross} | No member provided.`);
+		if (!value)
+			return message.reply(`>>> ${this.client.constants.emojis.redcross} | No value provided.`);
 
 		const level = await this.client.prisma.level.findFirst({
 			where: { id: `${member.id}-${message.guildId}` },
 		});
 		if (!level)
-			return message.reply(`>>> ${emojis.redcross} | No leveling stats found for this user.`);
+			return message.reply(
+				`>>> ${this.client.constants.emojis.redcross} | No leveling stats found for this user.`
+			);
 
 		switch (type) {
 			case "xp":
@@ -33,13 +35,13 @@ export default class LeveleditCommand extends Command {
 				break;
 			default:
 				return message.reply(
-					`>>> ${emojis.redcross} | The provided type is not one of "xp", "level".`
+					`>>> ${this.client.constants.emojis.redcross} | The provided type is not one of "xp", "level".`
 				);
 		}
 
 		await this.client.prisma.level.update({ where: { id: level.id }, data: level });
 		await message.reply(
-			`>>> ${emojis.greentick} | Successfully updated the **${type}** of **${member.user.tag}** to \`${value}\`!`
+			`>>> ${this.client.constants.emojis.greentick} | Successfully updated the **${type}** of **${member.user.tag}** to \`${value}\`!`
 		);
 	}
 }

@@ -1,8 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-
 import { GuildMessage, ModerationMessage } from "../../../client/structures/Moderation";
-import { emojis } from "../../../client/constants";
 
 @ApplyOptions<Command.Options>({
 	name: "clearlogs",
@@ -20,11 +18,11 @@ export default class ClearlogsCommand extends Command {
 			const user = await this.client.utils.fetchUser(id ?? "");
 			if (!user)
 				return message.reply(
-					`>>> ${emojis.redcross} | I could not find that user on Discord at all.`
+					`>>> ${this.client.constants.emojis.redcross} | I could not find that user on Discord at all.`
 				);
 
 			const msg = await message.reply(
-				`>>> ${emojis.loading} | Deleting the modlogs of **${user.tag}**...`
+				`>>> ${this.client.constants.emojis.loading} | Deleting the modlogs of **${user.tag}**...`
 			);
 
 			await this.client.prisma.modlog.deleteMany({
@@ -42,11 +40,13 @@ export default class ClearlogsCommand extends Command {
 			this.client.loggingHandler.sendLogs(log, "mod", this.client.automod.settings.logging.mod);
 
 			return msg.edit(
-				`>>> ${emojis.greentick} | Successfully deleted all the modlogs of **${user.tag}**.`
+				`>>> ${this.client.constants.emojis.greentick} | Successfully deleted all the modlogs of **${user.tag}**.`
 			);
 		}
 
-		const msg = await message.reply(`>>> ${emojis.loading} | Deleting the modlog **${id}**...`);
+		const msg = await message.reply(
+			`>>> ${this.client.constants.emojis.loading} | Deleting the modlog **${id}**...`
+		);
 		const modlog = await this.client.prisma.modlog.findFirst({ where: { caseId: Number(id) } });
 		if (!modlog) return;
 
@@ -68,7 +68,7 @@ export default class ClearlogsCommand extends Command {
 		this.client.loggingHandler.sendLogs(log, "mod", this.client.automod.settings.logging.mod);
 
 		await msg.edit(
-			`>>> ${emojis.greentick} | Successfully deleted modlog with the id **${modlog.caseId}**.`
+			`>>> ${this.client.constants.emojis.greentick} | Successfully deleted modlog with the id **${modlog.caseId}**.`
 		);
 	}
 }

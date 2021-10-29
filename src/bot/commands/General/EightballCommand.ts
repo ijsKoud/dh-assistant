@@ -2,8 +2,6 @@ import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Message } from "discord.js";
 
-import { emojis } from "../../../client/constants";
-
 const ball: string[] = [
 	"🎱 | As I see it, yes,",
 	"🎱 | Better not tell you now,",
@@ -37,7 +35,9 @@ export default class PingCommand extends Command {
 	public async messageRun(message: Message, args: Command.Args) {
 		const { value: question } = await args.restResult("string");
 		if (!question || !question.trim().endsWith("?"))
-			return message.reply(`>>> ${emojis.redcross} | A question with a **?** is required!`);
+			return message.reply(
+				`>>> ${this.client.constants.emojis.redcross} | A question with a **?** is required!`
+			);
 
 		await message.reply(
 			`>>> ${ball[Math.floor(Math.random() * ball.length)]} **${message.author.username}**.`

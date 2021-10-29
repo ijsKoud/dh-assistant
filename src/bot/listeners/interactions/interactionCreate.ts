@@ -1,7 +1,6 @@
 import { Listener, ListenerOptions } from "@sapphire/framework";
 import { ApplyOptions } from "@sapphire/decorators";
 import { ButtonInteraction, Interaction } from "discord.js";
-import { channels } from "../../../client/constants";
 
 @ApplyOptions<ListenerOptions>({ event: "interactionCreate" })
 export default class InteractionCreateListener extends Listener {
@@ -21,7 +20,7 @@ export default class InteractionCreateListener extends Listener {
 		if (!adrequest) return;
 
 		const [userId] = adrequest.id.split(/-/g);
-		const channel = await client.utils.getChannel(channels.adchannel);
+		const channel = await client.utils.getChannel(client.constants.channels.adchannel);
 		if (!channel || !channel.isText() || channel.type !== "GUILD_TEXT") {
 			await interaction.deferReply();
 			await interaction.deleteReply();

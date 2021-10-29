@@ -1,7 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { GuildMessage } from "../../../client/structures/Moderation";
-import { emojis } from "../../../client/constants";
 
 @ApplyOptions<Command.Options>({
 	name: "blacklist",
@@ -15,7 +14,7 @@ export default class BlacklistCommand extends Command {
 		const { value: user } = await args.pickResult("user");
 		if (!user)
 			return message.reply(
-				`>>> ${emojis.redcross} | Was not able to find the user on Discord at all.`
+				`>>> ${this.client.constants.emojis.redcross} | Was not able to find the user on Discord at all.`
 			);
 
 		const blacklist = await this.client.prisma.ticketBlacklist.findFirst({
@@ -24,7 +23,7 @@ export default class BlacklistCommand extends Command {
 		if (blacklist) {
 			await this.client.prisma.ticketBlacklist.delete({ where: { id: user.id } });
 			return message.reply(
-				`>>> ${emojis.greentick} | Successfully removed the blacklist of **${
+				`>>> ${this.client.constants.emojis.greentick} | Successfully removed the blacklist of **${
 					user.tag
 				}** (${user.toString()})`
 			);
@@ -32,7 +31,7 @@ export default class BlacklistCommand extends Command {
 
 		await this.client.prisma.ticketBlacklist.create({ data: { id: user.id } });
 		return message.reply(
-			`>>> ${emojis.greentick} | Successfully added **${
+			`>>> ${this.client.constants.emojis.greentick} | Successfully added **${
 				user.tag
 			}** (${user.toString()}) to the blacklist`
 		);

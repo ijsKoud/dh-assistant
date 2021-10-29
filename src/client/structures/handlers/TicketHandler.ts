@@ -12,7 +12,6 @@ import {
 import { readFile } from "fs/promises";
 import { join } from "path";
 import Client from "../../Client";
-import { emojis } from "../../constants";
 import { GuildMessage } from "../Moderation";
 
 export class TicketHandler {
@@ -50,7 +49,7 @@ export class TicketHandler {
 		if (await this.client.prisma.ticketBlacklist.findFirst({ where: { id: message.author.id } })) {
 			await message.author
 				.send(
-					`>>> ${emojis.redcross} | I was unable to create a ticket for you, this is because you are currently on our ticket blacklist.`
+					`>>> ${this.client.constants.emojis.redcross} | I was unable to create a ticket for you, this is because you are currently on our ticket blacklist.`
 				)
 				.catch(() => void 0);
 
@@ -71,7 +70,7 @@ export class TicketHandler {
 
 			if (!firstMessage.content) {
 				await dm.send(
-					`>>> ${emojis.redcross} | No reason provided, we do not accept no reason for tickets.`
+					`>>> ${this.client.constants.emojis.redcross} | No reason provided, we do not accept no reason for tickets.`
 				);
 				return close();
 			}
@@ -84,13 +83,15 @@ export class TicketHandler {
 						"[TicketHandler]: Incorrect channel received for tickets, channel must be a text channel in this guild."
 					);
 				await dm.send(
-					`>>> ${emojis.redcross} | Sorry, something went wrong. Please try again later!`
+					`>>> ${this.client.constants.emojis.redcross} | Sorry, something went wrong. Please try again later!`
 				);
 
 				return close();
 			}
 
-			const createdMsg = await dm.send(`>>> ${emojis.loading} | Creating a ticket, please wait...`);
+			const createdMsg = await dm.send(
+				`>>> ${this.client.constants.emojis.loading} | Creating a ticket, please wait...`
+			);
 			const ticket = await this.client.prisma.ticket.create({
 				data: { closed: false, id },
 			});
@@ -107,16 +108,16 @@ export class TicketHandler {
 				new MessageButton()
 					.setCustomId(`${message.author.id}-${message.guild.id}-${ticket.caseId}`)
 					.setStyle("SUCCESS")
-					.setEmoji(emojis.greentick)
+					.setEmoji(this.client.constants.emojis.greentick)
 			);
 			await claimChannel.send({ embeds: [embed], components: [component] });
 
 			await createdMsg.edit(
-				`>>> ${emojis.greentick} | Ticket registered with the id \`${ticket.caseId}\`. If you don't receive an answer within **24 hours**, please contact a **Moderator+**.`
+				`>>> ${this.client.constants.emojis.greentick} | Ticket registered with the id \`${ticket.caseId}\`. If you don't receive an answer within **24 hours**, please contact a **Moderator+**.`
 			);
 		} catch (e) {
 			await message.reply(
-				`>>> ${emojis.error} | Something went wrong while processing your request, this is most of the times because your DM's are closed. Please try again later!`
+				`>>> ${this.client.constants.emojis.error} | Something went wrong while processing your request, this is most of the times because your DM's are closed. Please try again later!`
 			);
 		}
 
@@ -221,13 +222,13 @@ export class TicketHandler {
 
 						if (!message.content && !message.attachments.size) return;
 						await channel.send(this.getMessage(message, true));
-						await message.react(emojis.greentick).catch(() => void 0);
+						await message.react(this.client.constants.emojis.greentick).catch(() => void 0);
 					} catch (err) {
 						this.client.loggers
 							.get("bot")
 							?.error("Error while delivering a message from a ticket to the ticket channel", err);
 						message.reply(
-							`>>> ${emojis.error} | Unable to deliver the message to the correct channel, please try again or ask a moderator to close the ticket!`
+							`>>> ${this.client.constants.emojis.error} | Unable to deliver the message to the correct channel, please try again or ask a moderator to close the ticket!`
 						);
 					}
 				}
@@ -243,13 +244,13 @@ export class TicketHandler {
 
 						if (!message.content && !message.attachments.size) return;
 						await user.send(this.getMessage(message, false));
-						await message.react(emojis.greentick).catch(() => void 0);
+						await message.react(this.client.constants.emojis.greentick).catch(() => void 0);
 					} catch (err) {
 						this.client.loggers
 							.get("bot")
 							?.error("Error while delivering a message from a ticket channel to the user", err);
 						message.reply(
-							`>>> ${emojis.error} | Unable to DM the user, please try again or close the ticket!`
+							`>>> ${this.client.constants.emojis.error} | Unable to DM the user, please try again or close the ticket!`
 						);
 					}
 				}

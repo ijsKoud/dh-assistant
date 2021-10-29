@@ -1,7 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { GuildMessage } from "../../../client/structures/Moderation";
-import { emojis } from "../../../client/constants";
 
 @ApplyOptions<Command.Options>({
 	name: "gclear",
@@ -20,7 +19,7 @@ export default class GclearCommand extends Command {
 		});
 
 		await message.reply(
-			`>>> ${emojis.greentick} | I deleted **${i}** giveaways which wher for eligible deletion.`
+			`>>> ${this.client.constants.emojis.greentick} | I deleted **${i}** giveaways which wher for eligible deletion.`
 		);
 	}
 }

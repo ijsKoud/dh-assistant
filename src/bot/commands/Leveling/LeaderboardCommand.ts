@@ -1,7 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { MessageActionRow, MessageButton } from "discord.js";
-import { emojis } from "../../../client/constants";
 import { GuildMessage } from "../../../client/structures/Moderation";
 
 @ApplyOptions<Command.Options>({
@@ -14,7 +13,10 @@ import { GuildMessage } from "../../../client/structures/Moderation";
 export default class RankCommand extends Command {
 	public async messageRun(message: GuildMessage) {
 		const data = (await this.client.levelManager.getLevels(message.guild.id))?.slice(0, 10);
-		if (!data) return message.reply(`>>> ${emojis.redcross} | Uhm, no one earned xp yet. How?`);
+		if (!data)
+			return message.reply(
+				`>>> ${this.client.constants.emojis.redcross} | Uhm, no one earned xp yet. How?`
+			);
 
 		const embed = this.client.utils
 			.embed()

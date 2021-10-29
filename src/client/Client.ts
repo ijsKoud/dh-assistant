@@ -10,6 +10,8 @@ import { Automod } from "./structures/Moderation";
 import LoggingHandler from "./structures/handlers/LoggingHandler";
 import { TicketHandler } from "./structures/handlers/TicketHandler";
 import { GiveawaysManager } from "discord-giveaways";
+import { Constants } from "./types";
+import { readFileSync } from "fs";
 
 export default class Client extends SapphireClient {
 	public owners: string[];
@@ -18,6 +20,11 @@ export default class Client extends SapphireClient {
 		return this.owners.includes(id);
 	}
 
+	public constants: Constants = JSON.parse(
+		readFileSync(join(process.cwd(), "config", "constants.json"), {
+			encoding: "utf-8",
+		})
+	);
 	public prisma = new PrismaClient();
 	public utils = new Utils(this);
 
@@ -99,6 +106,7 @@ declare module "@sapphire/framework" {
 		owners: string[];
 		isOwner(id: string): boolean;
 
+		constants: Constants;
 		prisma: PrismaClient;
 		utils: Utils;
 

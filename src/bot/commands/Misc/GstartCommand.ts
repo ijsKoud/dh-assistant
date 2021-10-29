@@ -94,6 +94,7 @@ export default class GstartCommand extends Command {
 		if (!collector.content.match(/yes/g))
 			return msg.edit(base + "Prompt closed - cancellation request.");
 
+		// @ts-ignore
 		await this.client.giveawaysManager.start(channel as TextChannel, {
 			prize,
 			duration,

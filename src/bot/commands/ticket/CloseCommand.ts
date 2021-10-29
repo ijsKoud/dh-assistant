@@ -1,7 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { GuildMessage } from "../../../client/structures/Moderation";
-import { emojis } from "../../../client/constants";
 import Transcript from "../../../client/structures/Transcript";
 import { MessageAttachment, TextChannel } from "discord.js";
 import { join } from "path";
@@ -33,7 +32,9 @@ export default class CloseCommand extends Command {
 		await this.client.prisma.ticket.update({ where: { caseId: ticket.caseId }, data: ticket });
 
 		const user = await this.client.utils.fetchUser(ticket.id.split("-")[0]);
-		const msg = await channel.send(`>>> ${emojis.loading} | Closing the ticket...`);
+		const msg = await channel.send(
+			`>>> ${this.client.constants.emojis.loading} | Closing the ticket...`
+		);
 		if (user)
 			await user.send(
 				`>>> 👋 | Your ticket (${ticket.caseId}) has been closed by **${
@@ -69,10 +70,14 @@ export default class CloseCommand extends Command {
 			}
 		} catch (err) {
 			this.client.loggers.get("bot")?.fatal("Unable to create ticket transcript:", err);
-			await channel.send(`>>> ${emojis.error} | Unable to create a ticket transcript.`);
+			await channel.send(
+				`>>> ${this.client.constants.emojis.error} | Unable to create a ticket transcript.`
+			);
 		}
 
-		await msg.edit(`>>> ${emojis.loading} | Closing the ticket in **5 seconds**...`);
+		await msg.edit(
+			`>>> ${this.client.constants.emojis.loading} | Closing the ticket in **5 seconds**...`
+		);
 
 		setTimeout(async () => {
 			await channel.delete(`Ticket deleted by ${author.id}`).catch(() => void 0);

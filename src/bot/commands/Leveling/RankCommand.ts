@@ -1,9 +1,7 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { MessageAttachment } from "discord.js";
-
 import Rank from "../../../client/structures/Rank";
-import { emojis } from "../../../client/constants";
 import { GuildMessage } from "../../../client/structures/Moderation";
 
 @ApplyOptions<Command.Options>({
@@ -23,7 +21,7 @@ export default class RankCommand extends Command {
 		const stats = ranks.find((r) => r.level.id.startsWith(member?.id ?? ""));
 		if (!stats)
 			return message.reply(
-				`>>> ${emojis.redcross} | No leveling stats found for **${member.user.tag}**`
+				`>>> ${this.client.constants.emojis.redcross} | No leveling stats found for **${member.user.tag}**`
 			);
 
 		const file = await new Rank({

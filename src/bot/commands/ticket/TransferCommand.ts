@@ -1,7 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { GuildMessage } from "../../../client/structures/Moderation";
-import { emojis } from "../../../client/constants";
 
 @ApplyOptions<Command.Options>({
 	name: "transfer",
@@ -26,12 +25,14 @@ export default class TransferCommand extends Command {
 		const { value: member } = await args.pickResult("member");
 		if (!member)
 			return message.reply(
-				`>>> ${emojis.redcross} | Was not able to find the user in this server.`
+				`>>> ${this.client.constants.emojis.redcross} | Was not able to find the user in this server.`
 			);
 
 		if (!this.client.permissionHandler.hasMod(member) || member.user.bot)
 			return message.reply(
-				`>>> ${emojis.redcross} | ${member.toString()} is not a **moderator+**.`
+				`>>> ${
+					this.client.constants.emojis.redcross
+				} | ${member.toString()} is not a **moderator+**.`
 			);
 
 		ticket.claimer = member.id;
@@ -52,7 +53,7 @@ export default class TransferCommand extends Command {
 		if (user)
 			await user
 				.send(
-					`>>> ${emojis.transfer} | Your ticket has been transferred to **${
+					`>>> ${this.client.constants.emojis.transfer} | Your ticket has been transferred to **${
 						member.nickname || member.user.username
 					}** (${member.toString()})`
 				)

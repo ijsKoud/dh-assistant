@@ -1,8 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-
 import { GuildMessage } from "../../../client/structures/Moderation";
-import { emojis } from "../../../client/constants";
 
 @ApplyOptions<Command.Options>({
 	name: "remove",
@@ -21,12 +19,18 @@ export default class RemoveCommand extends Command {
 			channel.type === "GUILD_STAGE_VOICE" ||
 			channel.type === "GUILD_STORE"
 		)
-			return message.reply(`>>> ${emojis.redcross} | Incorrect channel provided.`);
+			return message.reply(
+				`>>> ${this.client.constants.emojis.redcross} | Incorrect channel provided.`
+			);
 
 		const { value: msg } = await args.pickResult("message", { channel });
 		const { value: reason } = await args.restResult("string");
-		if (!msg) return message.reply(`>>> ${emojis.redcross} | No message Id provided.`);
-		if (!reason) return message.reply(`>>> ${emojis.redcross} | No reason provided.`);
+		if (!msg)
+			return message.reply(
+				`>>> ${this.client.constants.emojis.redcross} | No message Id provided.`
+			);
+		if (!reason)
+			return message.reply(`>>> ${this.client.constants.emojis.redcross} | No reason provided.`);
 
 		await msg.delete();
 		await msg.author
@@ -38,7 +42,7 @@ export default class RemoveCommand extends Command {
 			.catch(() => void 0);
 		await message.reply(
 			`>>> ${
-				emojis.greentick
+				this.client.constants.emojis.greentick
 			} | Successfully deleted message in ${channel.toString()} with the Id **${msg.id}**.`
 		);
 	}

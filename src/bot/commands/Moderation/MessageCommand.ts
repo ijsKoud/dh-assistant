@@ -1,8 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-
 import { GuildMessage, ModerationMessage } from "../../../client/structures/Moderation";
-import { emojis } from "../../../client/constants";
 
 @ApplyOptions<Command.Options>({
 	name: "message",
@@ -17,9 +15,13 @@ export default class MessageCommand extends Command {
 		const { value: DmMessage } = await args.restResult("string");
 		const author = args.getOption("author") ?? message.author.tag;
 		if (!member)
-			return message.reply(`>>> ${emojis.redcross} | Couldn't find that user in this server.`);
+			return message.reply(
+				`>>> ${this.client.constants.emojis.redcross} | Couldn't find that user in this server.`
+			);
 
-		const msg = await message.reply(`>>> ${emojis.loading} | Messaging **${member.user.tag}**...`);
+		const msg = await message.reply(
+			`>>> ${this.client.constants.emojis.loading} | Messaging **${member.user.tag}**...`
+		);
 		const date = Date.now();
 
 		const log = ModerationMessage.logs(
@@ -37,7 +39,7 @@ export default class MessageCommand extends Command {
 			.catch(() => void 0);
 
 		await msg.edit(
-			`>>> ${emojis.greentick} | Successfully DMed **${member.user.tag}** as **${author}**.`
+			`>>> ${this.client.constants.emojis.greentick} | Successfully DMed **${member.user.tag}** as **${author}**.`
 		);
 	}
 }

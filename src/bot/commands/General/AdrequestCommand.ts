@@ -1,6 +1,5 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { channels, emojis } from "../../../client/constants";
 import { GuildMessage } from "../../../client/structures/Moderation";
 import { MessageActionRow, MessageButton, ReplyMessageOptions } from "discord.js";
 import moment from "moment";
@@ -16,7 +15,10 @@ import { nanoid } from "nanoid";
 export default class AvatarCommand extends Command {
 	public async messageRun(message: GuildMessage, args: Command.Args) {
 		const { value: ad } = await args.restResult("string");
-		if (!ad) return message.reply(`>>> ${emojis.redcross} | No ad message provided!`);
+		if (!ad)
+			return message.reply(
+				`>>> ${this.client.constants.emojis.redcross} | No ad message provided!`
+			);
 
 		const reply = async (options: ReplyMessageOptions | string) => {
 			await message.reply(options);
@@ -28,7 +30,7 @@ export default class AvatarCommand extends Command {
 		});
 		if (adrequest)
 			return reply(
-				`>>> ${emojis.redcross} | You already created an adrequest, please wait for this one to be accepted or declined.`
+				`>>> ${this.client.constants.emojis.redcross} | You already created an adrequest, please wait for this one to be accepted or declined.`
 			);
 
 		const currentTimeout = this.client.requests.find((_, key) => key === message.author.id);
@@ -40,14 +42,16 @@ export default class AvatarCommand extends Command {
 				)}!`
 			);
 
-		const channel = await this.client.utils.getChannel(channels.adrequest);
+		const channel = await this.client.utils.getChannel(this.client.constants.channels.adrequest);
 		if (!channel || !channel.isText() || channel.type !== "GUILD_TEXT") {
 			reply(
-				`>>> ${emojis.error} | Something went wrong while processing your request, please try again later.`
+				`>>> ${this.client.constants.emojis.error} | Something went wrong while processing your request, please try again later.`
 			);
 			return this.client.loggers
 				.get("bot")
-				?.fatal(`[AdrequestCommand]: ${channels.adrequest} is not a valid "GUILD_TEXT" channel.`);
+				?.fatal(
+					`[AdrequestCommand]: ${this.client.constants.channels.adrequest} is not a valid "GUILD_TEXT" channel.`
+				);
 		}
 
 		await message.delete().catch(() => void 0);
@@ -63,9 +67,12 @@ export default class AvatarCommand extends Command {
 		const components = new MessageActionRow().addComponents(
 			new MessageButton()
 				.setCustomId(`${id}-accept`)
-				.setEmoji(emojis.greentick)
+				.setEmoji(this.client.constants.emojis.greentick)
 				.setStyle("SUCCESS"),
-			new MessageButton().setCustomId(`${id}-decline`).setEmoji(emojis.redcross).setStyle("DANGER")
+			new MessageButton()
+				.setCustomId(`${id}-decline`)
+				.setEmoji(this.client.constants.emojis.redcross)
+				.setStyle("DANGER")
 		);
 		const msg = await channel.send({ embeds: [embed], components: [components] });
 		await this.client.prisma.adrequest.create({

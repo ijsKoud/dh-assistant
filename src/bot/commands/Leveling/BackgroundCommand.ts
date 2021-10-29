@@ -1,7 +1,5 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-
-import { emojis } from "../../../client/constants";
 import { GuildMessage } from "../../../client/structures/Moderation";
 import { readdir } from "fs/promises";
 import { join } from "path";
@@ -18,13 +16,13 @@ export default class BackgroundCommand extends Command {
 		const { value: backgroundId } = await args.pickResult("number");
 		if (!backgroundId)
 			return message.reply(
-				`>>> ${emojis.redcross} | No background Id provided. You can check the Dashboard all the available backgrounds: ${process.env.DASHBOARD}`
+				`>>> ${this.client.constants.emojis.redcross} | No background Id provided. You can check the Dashboard all the available backgrounds: ${process.env.DASHBOARD}`
 			);
 
 		const backgroundCheck = await this.checkBackground(backgroundId);
 		if (!backgroundCheck)
 			return message.reply(
-				`>>> ${emojis.redcross} | Invalid background Id provided. You can check the Dashboard all the available backgrounds: ${process.env.DASHBOARD}`
+				`>>> ${this.client.constants.emojis.redcross} | Invalid background Id provided. You can check the Dashboard all the available backgrounds: ${process.env.DASHBOARD}`
 			);
 
 		await this.client.prisma.level.update({
@@ -32,7 +30,7 @@ export default class BackgroundCommand extends Command {
 			data: { bg: backgroundId },
 		});
 		await message.reply(
-			`>>> ${emojis.greentick} | Successfully updated the background to \`${backgroundId}\`!`
+			`>>> ${this.client.constants.emojis.greentick} | Successfully updated the background to \`${backgroundId}\`!`
 		);
 	}
 

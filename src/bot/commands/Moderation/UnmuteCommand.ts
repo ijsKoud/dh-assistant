@@ -1,8 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-
 import { GuildMessage, ModerationMessage } from "../../../client/structures/Moderation";
-import { emojis } from "../../../client/constants";
 import { clearTimeout as clearLongTimeout } from "long-timeout";
 import { modlog } from ".prisma/client";
 
@@ -16,12 +14,17 @@ export default class UnmuteCommand extends Command {
 	public async messageRun(message: GuildMessage, args: Command.Args) {
 		const { value: member } = await args.pickResult("member");
 		const { value: reason } = await args.restResult("string");
-		if (!member) return message.reply(`>>> ${emojis.redcross} | No member provided`);
+		if (!member)
+			return message.reply(`>>> ${this.client.constants.emojis.redcross} | No member provided`);
 
-		const msg = await message.reply(`>>> ${emojis.loading} | Unmuting **${member.user.tag}**...`);
+		const msg = await message.reply(
+			`>>> ${this.client.constants.emojis.loading} | Unmuting **${member.user.tag}**...`
+		);
 		const { settings, modTimeouts } = this.client.automod;
 		if (!member.roles.cache.has(settings.mute.role))
-			return msg.edit(`>>> ${emojis.redcross} | This user is not muted in this server.`);
+			return msg.edit(
+				`>>> ${this.client.constants.emojis.redcross} | This user is not muted in this server.`
+			);
 
 		await member.roles.remove(settings.mute.role);
 		const id = `${member.id}-${message.guildId}-mute`;
@@ -50,6 +53,8 @@ export default class UnmuteCommand extends Command {
 
 		this.client.loggingHandler.sendLogs(finishLogs, "mod", settings.logging.mod);
 
-		await msg.edit(`>>> ${emojis.greentick} | Successfully unmuted **${member.user.tag}**.`);
+		await msg.edit(
+			`>>> ${this.client.constants.emojis.greentick} | Successfully unmuted **${member.user.tag}**.`
+		);
 	}
 }

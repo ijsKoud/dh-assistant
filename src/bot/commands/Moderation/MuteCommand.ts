@@ -1,11 +1,9 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-
 import { GuildMessage, ModerationMessage } from "../../../client/structures/Moderation";
 import ms from "ms";
 import { setTimeout as setLongTimeout } from "long-timeout";
 import moment from "moment";
-import { emojis } from "../../../client/constants";
 
 @ApplyOptions<Command.Options>({
 	name: "mute",
@@ -22,27 +20,38 @@ export default class MuteCommand extends Command {
 		const { value: reason } = await args.restResult("string");
 		const durationOption = args.getOption("duration");
 		if (!member)
-			return message.reply(`>>> ${emojis.redcross} | Couldn't find that member in this server.`);
+			return message.reply(
+				`>>> ${this.client.constants.emojis.redcross} | Couldn't find that member in this server.`
+			);
 
-		const msg = await message.reply(`>>> ${emojis.loading} | Muting **${member.user.tag}**...`);
+		const msg = await message.reply(
+			`>>> ${this.client.constants.emojis.loading} | Muting **${member.user.tag}**...`
+		);
 		switch (this.client.permissionHandler.isHigher(message.member, member)) {
 			case "mod-low":
-				return msg.edit(`>>> ${emojis.redcross} | You can't mute this user due to role hierarchy.`);
+				return msg.edit(
+					`>>> ${this.client.constants.emojis.redcross} | You can't mute this user due to role hierarchy.`
+				);
 			case "owner":
 				return msg.edit(
-					`>>> ${emojis.redcross} | You can't mute this user because they are the owner of this server.`
+					`>>> ${this.client.constants.emojis.redcross} | You can't mute this user because they are the owner of this server.`
 				);
 			case "bot":
 				return msg.edit(
-					`>>> ${emojis.redcross} | After all the hard work I have done for you, you want to mute me??`
+					`>>> ${this.client.constants.emojis.redcross} | After all the hard work I have done for you, you want to mute me??`
 				);
 			case "bot-low":
-				return msg.edit(`>>> ${emojis.redcross} | I can't mute this user due to role hierarchy.`);
+				return msg.edit(
+					`>>> ${this.client.constants.emojis.redcross} | I can't mute this user due to role hierarchy.`
+				);
 		}
 
 		const id = `${member.id}-${message.guildId}-mute`;
 		const mute = this.client.automod.modTimeouts.get(id);
-		if (mute) return msg.edit(`>>> ${emojis.redcross} | This user is already muted in the server.`);
+		if (mute)
+			return msg.edit(
+				`>>> ${this.client.constants.emojis.redcross} | This user is already muted in the server.`
+			);
 
 		const date = Date.now();
 		const duration = this.client.utils.parseTime(durationOption ?? "p") || undefined;

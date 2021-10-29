@@ -1,7 +1,5 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-
-import { emojis } from "../../../client/constants";
 import { GuildMessage } from "../../../client/structures/Moderation";
 
 @ApplyOptions<Command.Options>({
@@ -23,18 +21,18 @@ export default class XpboostCommand extends Command {
 				else this.client.multipliers.delete(user.id);
 
 				return message.reply(
-					`>>> ${emojis.greentick} | Successfully set the multiplier of **${user.user.tag}** to \`${
-						multiplier || "none"
-					}\`!`
+					`>>> ${this.client.constants.emojis.greentick} | Successfully set the multiplier of **${
+						user.user.tag
+					}** to \`${multiplier || "none"}\`!`
 				);
 			}
 		}
 
 		this.client.levelManager.boost = multiplier || 1;
 		await message.reply(
-			`>>> ${emojis.greentick} | Successfully set the global multiplier to \`${
-				multiplier || "none"
-			}\`!`
+			`>>> ${
+				this.client.constants.emojis.greentick
+			} | Successfully set the global multiplier to \`${multiplier || "none"}\`!`
 		);
 	}
 }
