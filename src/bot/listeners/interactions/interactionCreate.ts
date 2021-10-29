@@ -1,6 +1,6 @@
 import { Listener, ListenerOptions } from "@sapphire/framework";
 import { ApplyOptions } from "@sapphire/decorators";
-import { ButtonInteraction, GuildInteraction, Interaction } from "discord.js";
+import { ButtonInteraction, Interaction } from "discord.js";
 import { channels } from "../../../client/constants";
 
 @ApplyOptions<ListenerOptions>({ event: "interactionCreate" })
@@ -12,7 +12,7 @@ export default class InteractionCreateListener extends Listener {
 		}
 	}
 
-	private async handleAdrequest(interaction: GuildInteraction<"present"> & ButtonInteraction) {
+	private async handleAdrequest(interaction: ButtonInteraction) {
 		const { client } = this.container;
 		const [caseId, type] = interaction.customId.split(/-/g);
 		if (!caseId || !type) return;
