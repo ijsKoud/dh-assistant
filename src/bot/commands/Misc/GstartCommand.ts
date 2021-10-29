@@ -99,7 +99,12 @@ export default class GstartCommand extends Command {
 			duration,
 			winnerCount: winners,
 			hostedBy: message.author,
-			exemptMembers: (member) => member.roles.cache.has(requiredRole.id),
+			exemptMembers: (member) => !member.roles.cache.has(requiredRole.id),
+			allowedMentions: {},
+			messages: {
+				winMessage:
+					">>> 🥳 | Congratulations, {winners}! You won **{this.prize}**!\nPlease DM the giveaway **{this.hostedBy}** to claim your price!!\n\nReference: {this.messageURL}",
+			},
 		});
 
 		await message.reply(`${base}Setup completed, giveaway created!`);
