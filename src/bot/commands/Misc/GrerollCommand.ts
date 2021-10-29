@@ -7,6 +7,7 @@ import { emojis } from "../../../client/constants";
 	name: "greroll",
 	aliases: ["giveawayreroll"],
 	description: "Rerolls a giveaway",
+	usage: "<messageId>",
 	preconditions: ["GuildOnly", "ManagerOnly"],
 })
 export default class GrerollCommand extends Command {

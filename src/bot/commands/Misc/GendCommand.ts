@@ -7,6 +7,7 @@ import { emojis } from "../../../client/constants";
 	name: "gend",
 	aliases: ["giveawayend"],
 	description: "End a giveaway",
+	usage: "<messageId>",
 	preconditions: ["GuildOnly", "ManagerOnly"],
 })
 export default class GendCommand extends Command {
