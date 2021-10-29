@@ -11,6 +11,7 @@ new Client({
 		"GUILD_PRESENCES",
 		"GUILD_MEMBERS",
 		"GUILD_BANS",
+		"GUILD_MESSAGE_REACTIONS",
 	],
 	debug: !!process.env.DEBUG,
 	partials: ["CHANNEL", "GUILD_MEMBER", "MESSAGE", "USER"],

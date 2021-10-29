@@ -117,6 +117,8 @@ export default class Utils {
 			return cache.get(id) || cache.find((role) => role.name === id || role.toString() === id);
 		};
 
+		if (id.toLowerCase() === "everyone") id = guild.id;
+
 		return typeof id === "string" && guild instanceof Guild
 			? resolve() || (await guild.roles.fetch(id).catch(() => null))
 			: null;

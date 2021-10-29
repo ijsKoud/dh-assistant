@@ -9,7 +9,7 @@ import { PermissionHandler } from "./structures/handlers";
 import { Automod } from "./structures/Moderation";
 import LoggingHandler from "./structures/handlers/LoggingHandler";
 import { TicketHandler } from "./structures/handlers/TicketHandler";
-
+import { GiveawaysManager } from "discord-giveaways";
 export default class Client extends SapphireClient {
 	public owners: string[];
 
@@ -22,6 +22,13 @@ export default class Client extends SapphireClient {
 
 	public automod = new Automod(this);
 
+	public giveawaysManager = new GiveawaysManager(this, {
+		storage: join(process.cwd(), "data", "giveaways.json"),
+		default: {
+			botsCanWin: false,
+			embedColor: "#37625d",
+		},
+	});
 	public levelManager = new LevelManager(this);
 	public blacklistManager = new BlacklistManager(this);
 
