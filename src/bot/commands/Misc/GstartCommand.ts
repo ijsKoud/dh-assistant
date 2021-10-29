@@ -10,7 +10,7 @@ import ms from "ms";
 	description: "Start a giveaway",
 	preconditions: ["GuildOnly", "ManagerOnly"],
 })
-export default class BackgroundCommand extends Command {
+export default class GstartCommand extends Command {
 	public async messageRun(message: GuildMessage) {
 		const filter = (m: Message) => m.author.id === message.author.id;
 
