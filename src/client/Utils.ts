@@ -100,7 +100,7 @@ export default class Utils {
 				cache.get(id) ||
 				cache.find((channel) =>
 					"name" in channel
-						? (channel as Channel & { name: string }).name === id
+						? (channel as Channel & { name: string }).name === id || channel.toString() === id
 						: channel.toString() === id
 				)
 			);
