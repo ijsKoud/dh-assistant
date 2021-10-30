@@ -6,7 +6,13 @@ import { Message } from "discord.js";
 export default class MessageCreateListener extends Listener {
 	public async run(message: Message) {
 		const { client } = this.container;
-		if (message.author.bot || message.system || message.webhookId) return;
+		if (
+			message.author.bot ||
+			message.guildId !== client.constants.guild ||
+			message.system ||
+			message.webhookId
+		)
+			return;
 
 		client.automod.run(message);
 		this.handleLeveling(message);
