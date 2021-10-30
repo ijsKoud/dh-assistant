@@ -11,6 +11,7 @@ export interface Channels {
 	pingrequest: string;
 	cetChannel: string;
 	eventsChannel: string;
+	qotdChannel: string;
 }
 
 export interface Emojis {
