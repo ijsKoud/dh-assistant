@@ -47,7 +47,7 @@ export default class KickCommand extends Command {
 				reason: reason ?? "No reason provided",
 				id: `${member.id}-${message.guildId}`,
 				moderator: message.author.id,
-				startDate: BigInt(date),
+				startDate: new Date(date),
 				type: "kick",
 			},
 		});
