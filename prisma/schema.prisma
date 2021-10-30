@@ -15,13 +15,13 @@ model botBlacklist {
 }
 
 model modlog {
-  caseId          Int      @id @default(autoincrement())
+  caseId          Int       @id @default(autoincrement())
   id              String // userId-guildId
   moderator       String
   reason          String
   type            String
-  startDate       BigInt
-  endDate         BigInt?
+  startDate       DateTime
+  endDate         DateTime?
   timeoutFinished Boolean?
 }
 
