@@ -38,7 +38,11 @@ export class Automod {
 	}
 
 	protected bypass(message: Message, setting: ThresholdsSetting | BadWordsSettings): boolean {
-		if (!message.member || !message.guild || message.guild.id !== this.client.constants.guild)
+		if (
+			!message.member ||
+			message.member.permissions.has("MANAGE_GUILD") ||
+			message.guildId !== this.client.constants.guild
+		)
 			return true;
 
 		const roles = setting.whitelisted
