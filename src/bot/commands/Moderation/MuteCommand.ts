@@ -87,7 +87,7 @@ export default class MuteCommand extends Command {
 			duration
 		);
 
-		this.client.loggingHandler.sendLogs(log, "mod", this.client.automod.settings.logging.mod);
+		this.client.loggingHandler.sendLogs(log, "mod");
 		if (duration) {
 			const timeout = setLongTimeout(async () => {
 				const unmuteReason = `Automatic unmute from mute made by ${message.author.toString()} <t:${moment(
@@ -108,11 +108,7 @@ export default class MuteCommand extends Command {
 					where: { caseId: muteLog.caseId },
 					data: { timeoutFinished: true },
 				});
-				this.client.loggingHandler.sendLogs(
-					finishLogs,
-					"mod",
-					this.client.automod.settings.logging.mod
-				);
+				this.client.loggingHandler.sendLogs(finishLogs, "mod");
 			}, duration);
 			this.client.automod.modTimeouts.set(id, {
 				timeout,

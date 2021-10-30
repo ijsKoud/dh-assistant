@@ -51,7 +51,7 @@ export default class UnmuteCommand extends Command {
 			Number(log?.endDate ? Date.now() : 0) - Number(log?.startDate ?? 0)
 		);
 
-		this.client.loggingHandler.sendLogs(finishLogs, "mod", settings.logging.mod);
+		this.client.loggingHandler.sendLogs(finishLogs, "mod");
 
 		await msg.edit(
 			`>>> ${this.client.constants.emojis.greentick} | Successfully unmuted **${member.user.tag}**.`

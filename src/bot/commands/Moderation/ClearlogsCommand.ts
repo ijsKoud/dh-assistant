@@ -37,7 +37,7 @@ export default class ClearlogsCommand extends Command {
 				"Not logged in Database",
 				Date.now()
 			);
-			this.client.loggingHandler.sendLogs(log, "mod", this.client.automod.settings.logging.mod);
+			this.client.loggingHandler.sendLogs(log, "mod");
 
 			return msg.edit(
 				`>>> ${this.client.constants.emojis.greentick} | Successfully deleted all the modlogs of **${user.tag}**.`
@@ -65,7 +65,7 @@ export default class ClearlogsCommand extends Command {
 			`Deleted Id: ${modlog.caseId}`,
 			Date.now()
 		);
-		this.client.loggingHandler.sendLogs(log, "mod", this.client.automod.settings.logging.mod);
+		this.client.loggingHandler.sendLogs(log, "mod");
 
 		await msg.edit(
 			`>>> ${this.client.constants.emojis.greentick} | Successfully deleted modlog with the id **${modlog.caseId}**.`

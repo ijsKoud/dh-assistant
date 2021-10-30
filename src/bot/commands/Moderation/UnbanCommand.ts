@@ -51,11 +51,7 @@ export default class UnbanCommand extends Command {
 			Number(log?.endDate ? Date.now() : 0) - Number(log?.startDate ?? 0)
 		);
 
-		this.client.loggingHandler.sendLogs(
-			finishLogs,
-			"mod",
-			this.client.automod.settings.logging.mod
-		);
+		this.client.loggingHandler.sendLogs(finishLogs, "mod");
 
 		await msg.edit(
 			`>>> ${this.client.constants.emojis.greentick} | Successfully unbanned **${user.tag}**.`

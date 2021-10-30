@@ -2,6 +2,7 @@ export interface Constants {
 	channels: Channels;
 	emojis: Emojis;
 	roles: Roles;
+	guild: string;
 }
 
 export interface Channels {
@@ -12,6 +13,7 @@ export interface Channels {
 	cetChannel: string;
 	eventsChannel: string;
 	qotdChannel: string;
+	general: string;
 }
 
 export interface Emojis {
@@ -23,6 +25,7 @@ export interface Emojis {
 }
 
 export interface Roles {
+	default: string;
 	cet: string;
 	trial: string;
 	moderator: string;

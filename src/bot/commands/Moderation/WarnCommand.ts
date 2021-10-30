@@ -68,7 +68,7 @@ export default class WarnCommand extends Command {
 			date
 		);
 
-		this.client.loggingHandler.sendLogs(log, "mod", this.client.automod.settings.logging.mod);
+		this.client.loggingHandler.sendLogs(log, "mod");
 		await member.send({ embeds: [dm] }).catch(() => void 0);
 
 		await msg.edit(

@@ -44,7 +44,7 @@ export default class ReadyListener extends Listener {
 	private async loadTimeouts() {
 		const { client } = this.container;
 		const logs = await client.prisma.modlog.findMany({
-			where: { id: { endsWith: process.env.GUILD } },
+			where: { id: { endsWith: client.constants.guild } },
 		});
 		const filtered = logs.filter((log) => ["tempban", "mute"].includes(log.type));
 
@@ -90,7 +90,7 @@ export default class ReadyListener extends Listener {
 								where: { caseId: log.caseId },
 								data: { timeoutFinished: true },
 							});
-							client.loggingHandler.sendLogs(finishLogs, "mod", automod.settings.logging.mod);
+							client.loggingHandler.sendLogs(finishLogs, "mod");
 						}, finished - Date.now());
 
 						automod.modTimeouts.set(`${log.id}-ban`, {
@@ -141,7 +141,7 @@ export default class ReadyListener extends Listener {
 								where: { caseId: log.caseId },
 								data: { timeoutFinished: true },
 							});
-							client.loggingHandler.sendLogs(finishLogs, "mod", automod.settings.logging.mod);
+							client.loggingHandler.sendLogs(finishLogs, "mod");
 						}, finished - Date.now());
 
 						automod.modTimeouts.set(`${log.id}-mute`, {

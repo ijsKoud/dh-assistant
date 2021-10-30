@@ -33,7 +33,7 @@ export default class MessageCommand extends Command {
 			date
 		);
 
-		this.client.loggingHandler.sendLogs(log, "mod", this.client.automod.settings.logging.mod);
+		this.client.loggingHandler.sendLogs(log, "mod");
 		await member
 			.send(`>>> 📣 | You received a message from **${author}**:\n${DmMessage}`.slice(0, 2e3))
 			.catch(() => void 0);

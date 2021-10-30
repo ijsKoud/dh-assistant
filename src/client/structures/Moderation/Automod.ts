@@ -38,7 +38,8 @@ export class Automod {
 	}
 
 	protected bypass(message: Message, setting: ThresholdsSetting | BadWordsSettings): boolean {
-		if (!message.member || !message.guild || message.guild.id !== process.env.GUILD) return true;
+		if (!message.member || !message.guild || message.guild.id !== this.client.constants.guild)
+			return true;
 
 		const roles = setting.whitelisted
 			.filter((str) => str.toLowerCase().includes("role-"))
@@ -110,7 +111,7 @@ export class Automod {
 							result.date
 						);
 
-						this.client.loggingHandler.sendLogs(log, "mod", this.settings.logging.mod);
+						this.client.loggingHandler.sendLogs(log, "mod");
 
 						const embed = ModerationMessage.dm(
 							result.reason,
@@ -154,7 +155,7 @@ export class Automod {
 							this.settings.mute.duration
 						);
 
-						this.client.loggingHandler.sendLogs(log, "mod", this.settings.logging.mod);
+						this.client.loggingHandler.sendLogs(log, "mod");
 
 						const timeout = setLongTimeout(async () => {
 							const unmuteReason = `Automatic unmute from mute made by ${this.client.user?.toString()} <t:${moment(
@@ -176,7 +177,7 @@ export class Automod {
 								where: { caseId: mute.caseId },
 								data: { timeoutFinished: true },
 							});
-							this.client.loggingHandler.sendLogs(finishLogs, "mod", this.settings.logging.mod);
+							this.client.loggingHandler.sendLogs(finishLogs, "mod");
 						}, this.settings.mute.duration);
 
 						this.modTimeouts.set(`${id}-mute`, {

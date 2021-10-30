@@ -12,10 +12,10 @@ export default class LoggingHandler {
 
 	constructor(public client: Client) {}
 
-	public sendLogs(embed: MessageEmbed, type: string, wbUrl: string) {
+	public sendLogs(embed: MessageEmbed, type: string) {
 		const collection = this.messages.get(type) || { messages: [], webhookUrl: "" };
 		collection.messages.push(embed);
-		collection.webhookUrl = wbUrl;
+		collection.webhookUrl = (this.client.automod.settings.logging as Record<string, string>)[type];
 
 		this.messages.set(type, collection);
 		this.setTimeout(type);
