@@ -8,6 +8,9 @@ export interface Channels {
 	uwu: string[];
 	adrequest: string;
 	adchannel: string;
+	pingrequest: string;
+	cetChannel: string;
+	eventsChannel: string;
 }
 
 export interface Emojis {

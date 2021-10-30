@@ -1,6 +1,6 @@
 import { Listener, ListenerOptions } from "@sapphire/framework";
 import { ApplyOptions } from "@sapphire/decorators";
-import { ButtonInteraction, Interaction } from "discord.js";
+import { ButtonInteraction, Interaction, MessageActionRow, MessageButton } from "discord.js";
 
 @ApplyOptions<ListenerOptions>({ event: "interactionCreate" })
 export default class InteractionCreateListener extends Listener {
@@ -8,10 +8,40 @@ export default class InteractionCreateListener extends Listener {
 		if (interaction.inGuild() && interaction.isButton()) {
 			this.container.client.ticketHandler.handleInteraction(interaction);
 			this.handleAdrequest(interaction);
+			this.handlePingRequest(interaction);
 		}
 	}
 
-	private async handleAdrequest(interaction: ButtonInteraction) {
+	private async handlePingRequest(interaction: ButtonInteraction<"present">) {
+		const { client } = this.container;
+		const [confirm, type] = interaction.customId.split(/-/g);
+		if (!confirm || confirm !== "adrequest" || !type) return;
+
+		await interaction.deferReply();
+		const finish = async () => {
+			const components = new MessageActionRow().addComponents(
+				new MessageButton().setStyle("SUCCESS").setEmoji(client.constants.emojis.greentick),
+				new MessageButton().setStyle("DANGER").setEmoji(client.constants.emojis.redcross)
+			);
+
+			await interaction.update({ components: [components] });
+		};
+
+		const eventsChannel = await client.utils.getChannel(client.constants.channels.eventsChannel);
+		if (!eventsChannel || !eventsChannel.isText()) return finish();
+
+		switch (type) {
+			case "accept":
+				await eventsChannel.send("🔼 New event announcement/information! <@&702176526795276349>");
+				break;
+			default:
+				break;
+		}
+
+		await finish();
+	}
+
+	private async handleAdrequest(interaction: ButtonInteraction<"present">) {
 		const { client } = this.container;
 		const [caseId, type] = interaction.customId.split(/-/g);
 		if (!caseId || !type) return;
