@@ -36,3 +36,9 @@ export interface Roles {
 	contentCreator: string;
 	levels: { [key: string]: string };
 }
+
+export interface ApiSettings {
+	port: number;
+	secret: string;
+	channels: string[];
+}
