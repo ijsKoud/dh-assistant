@@ -6,6 +6,10 @@ prisma/migrations/
 yarn.lock
 yarn-error.log
 
-config/*.json
 transcripts/
 data/*.json
+
+config/automod.json
+config/api.json
+config/constants.json
+config/ticket.json

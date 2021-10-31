@@ -1,0 +1,39 @@
+{
+	"channels": {
+		"uwu": ["727992822036430859"],
+		"adrequest": "",
+		"adchannel": "",
+		"pingrequest": "",
+		"cetChannel": "",
+		"eventsChannel": "",
+		"qotdChannel": "",
+		"general": ""
+	},
+	"emojis": {
+		"error": "<:error:873630556905173033>",
+		"redcross": "<:redcross:740924694236102676>",
+		"greentick": "<:greentick:749587347372507228>",
+		"loading": "<a:loading:828410016229883955>",
+		"transfer": "<:transfer:831957489053859860>"
+	},
+	"roles": {
+		"default": "",
+		"cet": "",
+		"trial": "",
+		"moderator": "",
+		"manager": "",
+		"senior": "",
+		"boost": "",
+		"youtubeMember": "",
+		"contentCreator": "",
+		"levels": {
+			"5": "",
+			"10": "",
+			"20": "",
+			"30": "",
+			"40": "",
+			"50": "",
+			"60": ""
+		}
+	}
+}
