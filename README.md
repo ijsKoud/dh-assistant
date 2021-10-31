@@ -13,7 +13,7 @@ I made this bot as customisable as possible, every setting can be found in the c
 
 This bot is designed to work with Draavo's Hangout, even though this is a customisable bot, **some features may not work as expected on other servers**. [The dashboard](https://daangamesdg.wtf/github/dh-dashboard) is part of this bot, it is **optional** but will improve functionality and the overall experience.
 
-**DO NOT INSTALL OLDER VERSIONS**, please check [the security policy](/SECURITY.MD) for all the supported versions. If you still want to use an older version, use it at your own risk. **I am in no way responsible for any damage done to the bot, you or your pc/hardware used to run the bot**. I will also not provide any support for deprecated versions.
+**DO NOT INSTALL OLDER VERSIONS**, please check [the security policy](/SECURITY.md) for all the supported versions. If you still want to use an older version, use it at your own risk. **I am in no way responsible for any damage done to the bot, you or your pc/hardware used to run the bot**. I will also not provide any support for deprecated versions.
 
 ## Install
 
