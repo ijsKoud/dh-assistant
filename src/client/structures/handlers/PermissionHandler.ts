@@ -67,6 +67,17 @@ export class PermissionHandler {
 		return this._parse(roles, member);
 	}
 
+	public getRank(member: GuildMember) {
+		if (this.hasTrial(member)) return 1;
+		if (this.hasMod(member)) return 2;
+		if (this.hasCet(member)) return 3;
+		if (this.hasManager(member)) return 4;
+		if (this.hasSenior(member)) return 5;
+		if (member.guild.ownerId === member.id) return 6;
+
+		return 0;
+	}
+
 	protected _parse(roles: string[], member: GuildMember): boolean {
 		return (
 			member.roles.cache.some((r) => roles.includes(r.id)) || this.client.isOwner(member.id) || member.permissions.has("ADMINISTRATOR", true)

@@ -2,6 +2,7 @@ import axios from "axios";
 import { createCipheriv, createDecipheriv, randomBytes } from "crypto";
 import { stringify } from "querystring";
 import type Client from "../../Client";
+import type { User } from "../../types";
 
 export default class Utils {
 	public constructor(public client: Client) {}
@@ -63,15 +64,21 @@ export default class Utils {
 		}
 	}
 
-	public async getUser(token: string, userId: string): Promise<any> {
+	public async getUser(userId: string): Promise<User | null | { error: string }> {
 		try {
-			let data = this.client.ApiCache.get(`${userId}-user`);
+			let data: User | null = this.client.ApiCache.get(`${userId}-user`);
 			if (!data) {
-				data = (
-					await axios.get("https://discord.com/api/v9/users/@me", {
-						...this.getHeaders(token)
-					})
-				).data;
+				const raw = await this.client.utils.fetchUser(userId);
+				data = raw
+					? {
+							avatar: raw.displayAvatarURL({ dynamic: true, size: 4096 }),
+							discriminator: raw.discriminator,
+							username: raw.username,
+							tag: raw.tag,
+							id: raw.id,
+							rank: -1
+					  }
+					: null;
 
 				if (data) {
 					this.client.ApiCache.set(`${userId}-user`, data);

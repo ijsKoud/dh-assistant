@@ -42,3 +42,14 @@ export interface ApiSettings {
 	secret: string;
 	channels: string[];
 }
+
+export interface User {
+	id: string;
+	tag: string;
+	username: string;
+	discriminator: string;
+	avatar: string;
+	rank: -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6;
+}
+
+export type ApiResponse = { message: string; error: string } | null;

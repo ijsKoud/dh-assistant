@@ -10,7 +10,7 @@ import cors from "cors";
 import { json } from "body-parser";
 import cookieParser from "cookie-parser";
 import { AuthMiddleware } from "./middleware";
-import { OauthRoute } from "./routes/OauthRoute";
+import { ApiRoute, OauthRoute } from "./routes";
 import rateLimit from "express-rate-limit";
 
 export default class Api {
@@ -47,7 +47,7 @@ export default class Api {
 		);
 
 		this.server.use("/oauth", new OauthRoute(this.client, this.logger).router);
-		// this.server.use("/api", new ApiRoute(this.client, this.logger).router);
+		this.server.use("/api", new ApiRoute(this.client, this.logger).router);
 
 		void this.loadSettings();
 
