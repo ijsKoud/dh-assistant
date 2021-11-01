@@ -14,37 +14,37 @@ export class ApiRoute {
 		this.router.get("/user", this.user.bind(this)); // get user
 	}
 
-	private async modCheck(req: Request, res: Response, next: NextFunction) {
-		if (!req.auth) return res.send(null);
+	// private async modCheck(req: Request, res: Response, next: NextFunction) {
+	// 	if (!req.auth) return res.send(null);
 
-		try {
-			const guild = this.client.guilds.cache.get(this.client.constants.guild);
-			if (!guild) throw new Error("Unable to get the correct guild");
+	// 	try {
+	// 		const guild = this.client.guilds.cache.get(this.client.constants.guild);
+	// 		if (!guild) throw new Error("Unable to get the correct guild");
 
-			const member = await this.client.utils.fetchMember(req.auth.userId, guild);
-			if (!member || (!this.client.permissionHandler.hasMod(member) && !this.client.isOwner(member.id))) return res.send(null);
+	// 		const member = await this.client.utils.fetchMember(req.auth.userId, guild);
+	// 		if (!member || (!this.client.permissionHandler.hasMod(member) && !this.client.isOwner(member.id))) return res.send(null);
 
-			next();
-		} catch (e) {
-			res.status(500).json({ message: "internal server error", error: (e as any).message });
-		}
-	}
+	// 		next();
+	// 	} catch (e) {
+	// 		res.status(500).json({ message: "internal server error", error: (e as any).message });
+	// 	}
+	// }
 
-	private async adminCheck(req: Request, res: Response, next: NextFunction) {
-		if (!req.auth) return res.send(null);
+	// private async adminCheck(req: Request, res: Response, next: NextFunction) {
+	// 	if (!req.auth) return res.send(null);
 
-		try {
-			const guild = this.client.guilds.cache.get(this.client.constants.guild);
-			if (!guild) throw new Error("Unable to get the correct guild");
+	// 	try {
+	// 		const guild = this.client.guilds.cache.get(this.client.constants.guild);
+	// 		if (!guild) throw new Error("Unable to get the correct guild");
 
-			const member = await this.client.utils.fetchMember(req.auth.userId, guild);
-			if (!member || (!this.client.permissionHandler.hasSenior(member) && !this.client.isOwner(member.id))) return res.send(null);
+	// 		const member = await this.client.utils.fetchMember(req.auth.userId, guild);
+	// 		if (!member || (!this.client.permissionHandler.hasSenior(member) && !this.client.isOwner(member.id))) return res.send(null);
 
-			next();
-		} catch (e) {
-			res.status(500).json({ message: "internal server error", error: (e as any).message });
-		}
-	}
+	// 		next();
+	// 	} catch (e) {
+	// 		res.status(500).json({ message: "internal server error", error: (e as any).message });
+	// 	}
+	// }
 
 	private async user(req: Request, res: Response<User | ApiResponse>) {
 		if (!req.auth) {

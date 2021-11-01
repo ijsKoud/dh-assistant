@@ -24,7 +24,7 @@ export class OauthRoute {
 			const data = await this.utils.getToken(code);
 			if (data.error) throw new Error(data.error);
 
-			const user = await this.utils.getUser(data.access_token, "");
+			const user = await this.utils.getTokenUser(data.access_token, "");
 			if (!user) throw new Error("unable to get user");
 
 			const cookie = this.utils.encrypt({

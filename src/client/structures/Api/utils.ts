@@ -92,6 +92,28 @@ export default class Utils {
 		}
 	}
 
+	public async getTokenUser(token: string, userId: string): Promise<any> {
+		try {
+			let data = this.client.ApiCache.get(`${userId}-user`);
+			if (!data) {
+				data = (
+					await axios.get("https://discord.com/api/v9/users/@me", {
+						...this.getHeaders(token)
+					})
+				).data;
+
+				if (data) {
+					this.client.ApiCache.set(`${userId}-user`, data);
+					setTimeout(() => this.client.ApiCache.delete(`${userId}-user`), 5e3);
+				}
+			}
+
+			return data;
+		} catch (e) {
+			return { error: (e as any).message };
+		}
+	}
+
 	public async getGuilds(token: string, userId: string) {
 		try {
 			let data = this.client.ApiCache.get(`${userId}-guilds`);
