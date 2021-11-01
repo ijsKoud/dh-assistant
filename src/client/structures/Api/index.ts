@@ -6,10 +6,23 @@ import { join } from "path";
 import type Client from "../../Client";
 import type { ApiSettings } from "../../types";
 import { Logger } from "../extensions";
+import cors from "cors";
+import { json } from "body-parser";
+import cookieParser from "cookie-parser";
+import { AuthMiddleware } from "./middleware";
+import { OauthRoute } from "./routes/OauthRoute";
+import rateLimit from "express-rate-limit";
 
 export default class Api {
 	public logger = new Logger({ name: "Api" });
+
+	public apiLimiter = rateLimit({
+		windowMs: 1e3,
+		max: 10
+	});
+
 	public settings!: ApiSettings;
+
 	public server: Express;
 	public notifier = new Notifier({
 		hubCallback: `${process.env.API}/notifications`,
@@ -22,6 +35,19 @@ export default class Api {
 	public constructor(public client: Client) {
 		this.server = express();
 		this.server.use("/notifications", this.notifier.listener());
+		this.server.use(
+			cors({
+				credentials: true,
+				origin: ["http://localhost:3000", process.env.DASHBOARD as string]
+			}),
+			json(),
+			cookieParser(),
+			new AuthMiddleware(client).middleware,
+			this.apiLimiter
+		);
+
+		this.server.use("/oauth", new OauthRoute(this.client, this.logger).router);
+		// this.server.use("/api", new ApiRoute(this.client, this.logger).router);
 
 		void this.loadSettings();
 
