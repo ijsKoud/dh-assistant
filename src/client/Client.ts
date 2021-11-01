@@ -13,6 +13,7 @@ import { TicketHandler } from "./structures/handlers/TicketHandler";
 import { GiveawaysManager } from "discord-giveaways";
 import { Constants } from "./types";
 import { readFileSync } from "fs";
+import { AuthCookie } from "./structures/Api";
 
 export default class Client extends SapphireClient {
 	public owners: string[];
@@ -142,5 +143,14 @@ declare module "@sapphire/framework" {
 		ModeratorOnly: never;
 		ManagerOnly: never;
 		SeniorOnly: never;
+	}
+}
+
+declare global {
+	// eslint-disable-next-line @typescript-eslint/no-namespace
+	namespace Express {
+		export interface Request {
+			auth: AuthCookie | null;
+		}
 	}
 }

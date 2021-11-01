@@ -1,10 +1,10 @@
 import Notifier, { Notification } from "@daangamesdg/youtube-notifications";
-import { NewsChannel, TextChannel } from "discord.js";
+import type { NewsChannel, TextChannel } from "discord.js";
 import express, { Express } from "express";
 import { readFile } from "fs/promises";
 import { join } from "path";
-import Client from "../../Client";
-import { ApiSettings } from "../../types";
+import type Client from "../../Client";
+import type { ApiSettings } from "../../types";
 import { Logger } from "../extensions";
 
 export default class Api {
@@ -70,3 +70,5 @@ export default class Api {
 		else this.notifySenior(data);
 	}
 }
+
+export * from "./utils";
