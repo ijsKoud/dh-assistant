@@ -8,72 +8,53 @@ import ms from "ms";
 	name: "gstart",
 	aliases: ["giveawaystart"],
 	description: "Start a giveaway",
-	preconditions: ["GuildOnly", "ManagerOnly"],
+	preconditions: ["GuildOnly", "ManagerOnly"]
 })
 export default class GstartCommand extends Command {
 	public async messageRun(message: GuildMessage) {
 		const filter = (m: Message) => m.author.id === message.author.id;
 
 		const base = ">>> 🎉 | **Giveaway Setup**:\n";
-		let msg: Message = await message.channel.send(
-			base + "Please specify a giveaway channel (mention/id)"
-		);
+		let msg: Message = await message.channel.send(`${base}Please specify a giveaway channel (mention/id)`);
 		let collector = (await this.client.utils.awaitMessages(msg, { filter }))?.first();
 
 		// channel
-		if (!collector) return msg.edit(base + "Prompt closed - no response");
+		if (!collector) return msg.edit(`${base}Prompt closed - no response`);
 		const channel = await this.client.utils.getChannel(this.getArg(collector?.content));
-		if (!channel || !channel.isText() || channel.type !== "GUILD_TEXT")
-			return msg.edit(base + "Prompt closed - invalid channel provided.");
-		if (collector.content.match(/cancel/g))
-			return msg.edit(base + "Prompt closed - cancellation request.");
+		if (!channel || !channel.isText() || channel.type !== "GUILD_TEXT") return msg.edit(`${base}Prompt closed - invalid channel provided.`);
+		if (collector.content.match(/cancel/g)) return msg.edit(`${base}Prompt closed - cancellation request.`);
 
 		// prize
-		msg = await message.channel.send(
-			base + "What is the prize for this giveaway? (ex: nitro classic 1 month)"
-		);
+		msg = await message.channel.send(`${base}What is the prize for this giveaway? (ex: nitro classic 1 month)`);
 		collector = (await this.client.utils.awaitMessages(msg, { filter }))?.first();
-		if (!collector) return msg.edit(base + "Prompt closed - no response");
+		if (!collector) return msg.edit(`${base}Prompt closed - no response`);
 		const prize = collector?.content;
-		if (!prize) return msg.edit(base + "Prompt closed - invalid prize provided.");
-		if (collector.content.match(/cancel/g))
-			return msg.edit(base + "Prompt closed - cancellation request.");
+		if (!prize) return msg.edit(`${base}Prompt closed - invalid prize provided.`);
+		if (collector.content.match(/cancel/g)) return msg.edit(`${base}Prompt closed - cancellation request.`);
 
 		// duration
-		msg = await message.channel.send(
-			base + "How long is this giveaway going to take (ex: 1d 2h 3m 4s)"
-		);
+		msg = await message.channel.send(`${base}How long is this giveaway going to take (ex: 1d 2h 3m 4s)`);
 		collector = (await this.client.utils.awaitMessages(msg, { filter }))?.first();
-		if (!collector) return msg.edit(base + "Prompt closed - no response");
+		if (!collector) return msg.edit(`${base}Prompt closed - no response`);
 		const duration = ms(collector?.content ?? "");
-		if (!duration || isNaN(duration))
-			return msg.edit(base + "Prompt closed - invalid duration provided.");
-		if (collector.content.match(/cancel/g))
-			return msg.edit(base + "Prompt closed - cancellation request.");
+		if (!duration || isNaN(duration)) return msg.edit(`${base}Prompt closed - invalid duration provided.`);
+		if (collector.content.match(/cancel/g)) return msg.edit(`${base}Prompt closed - cancellation request.`);
 
 		// winners
-		msg = await message.channel.send(base + "How many winners are there? (minimum is 1 winner)");
+		msg = await message.channel.send(`${base}How many winners are there? (minimum is 1 winner)`);
 		collector = (await this.client.utils.awaitMessages(msg, { filter }))?.first();
-		if (!collector) return msg.edit(base + "Prompt closed - no response");
-		const winners =
-			parseInt(this.getArg(collector?.content)) < 1 ? 1 : parseInt(this.getArg(collector?.content));
-		if (!winners) return msg.edit(base + "Prompt closed - invalid amount of winners provided.");
-		if (collector.content.match(/cancel/g))
-			return msg.edit(base + "Prompt closed - cancellation request.");
+		if (!collector) return msg.edit(`${base}Prompt closed - no response`);
+		const winners = Number(this.getArg(collector?.content)) < 1 ? 1 : Number(this.getArg(collector?.content));
+		if (!winners) return msg.edit(`${base}Prompt closed - invalid amount of winners provided.`);
+		if (collector.content.match(/cancel/g)) return msg.edit(`${base}Prompt closed - cancellation request.`);
 
 		// required role
-		msg = await message.channel.send(
-			base + "What is the required role? You can mention it or provide the id/name (ex: everyone)"
-		);
+		msg = await message.channel.send(`${base}What is the required role? You can mention it or provide the id/name (ex: everyone)`);
 		collector = (await this.client.utils.awaitMessages(msg, { filter }))?.first();
-		if (!collector || !collector?.content) return msg.edit(base + "Prompt closed - no response");
-		const requiredRole = await this.client.utils.getRole(
-			this.getArg(collector.content),
-			message.guild
-		);
-		if (!requiredRole) return msg.edit(base + "Prompt closed - invalid role provided.");
-		if (collector.content.match(/cancel/g))
-			return msg.edit(base + "Prompt closed - cancellation request.");
+		if (!collector || !collector?.content) return msg.edit(`${base}Prompt closed - no response`);
+		const requiredRole = await this.client.utils.getRole(this.getArg(collector.content), message.guild);
+		if (!requiredRole) return msg.edit(`${base}Prompt closed - invalid role provided.`);
+		if (collector.content.match(/cancel/g)) return msg.edit(`${base}Prompt closed - cancellation request.`);
 
 		// confirmation
 		msg = await message.channel.send({
@@ -85,16 +66,15 @@ export default class GstartCommand extends Command {
 					`**Duration**: \`${ms(duration)}\``,
 					`**Winners**: ${winners}`,
 					`**Required Role**: ${requiredRole.toString()}\n`,
-					"Say **yes** to confirm that this is correct, say **no** to cancel.",
+					"Say **yes** to confirm that this is correct, say **no** to cancel."
 				].join("\n"),
-			allowedMentions: { roles: [], users: [] },
+			allowedMentions: { roles: [], users: [] }
 		});
 		collector = (await this.client.utils.awaitMessages(msg, { filter }))?.first();
-		if (!collector || !collector?.content) return msg.edit(base + "Prompt closed - no response");
-		if (!collector.content.match(/yes/g))
-			return msg.edit(base + "Prompt closed - cancellation request.");
+		if (!collector || !collector?.content) return msg.edit(`${base}Prompt closed - no response`);
+		if (!collector.content.match(/yes/g)) return msg.edit(`${base}Prompt closed - cancellation request.`);
 
-		// @ts-ignore
+		// @ts-ignore channel types not compatible because of different Djs version
 		await this.client.giveawaysManager.start(channel as TextChannel, {
 			prize,
 			duration,
@@ -104,14 +84,14 @@ export default class GstartCommand extends Command {
 			allowedMentions: {},
 			messages: {
 				winMessage:
-					">>> 🥳 | Congratulations, {winners}! You won **{this.prize}**!\nPlease DM the giveaway **{this.hostedBy}** to claim your price!!\n\nReference: {this.messageURL}",
-			},
+					">>> 🥳 | Congratulations, {winners}! You won **{this.prize}**!\nPlease DM the giveaway **{this.hostedBy}** to claim your price!!\n\nReference: {this.messageURL}"
+			}
 		});
 
 		await message.reply(`${base}Setup completed, giveaway created!`);
 	}
 
-	getArg(str: string): string {
+	private getArg(str: string): string {
 		return str?.split(" ")[0];
 	}
 }

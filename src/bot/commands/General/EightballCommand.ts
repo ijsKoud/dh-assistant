@@ -21,7 +21,7 @@ const ball: string[] = [
 	"🎱 | Without a doubt,",
 	"🎱 | You may rely on it,",
 	"🎱 | Yes,",
-	"🎱 | Yes – definitely,",
+	"🎱 | Yes – definitely,"
 ];
 
 @ApplyOptions<Command.Options>({
@@ -29,18 +29,14 @@ const ball: string[] = [
 	aliases: ["8ball"],
 	description: "8ball will answer all your questions.",
 	usage: "<question>",
-	requiredClientPermissions: ["EMBED_LINKS"],
+	requiredClientPermissions: ["EMBED_LINKS"]
 })
 export default class PingCommand extends Command {
 	public async messageRun(message: Message, args: Command.Args) {
 		const { value: question } = await args.restResult("string");
 		if (!question || !question.trim().endsWith("?"))
-			return message.reply(
-				`>>> ${this.client.constants.emojis.redcross} | A question with a **?** is required!`
-			);
+			return message.reply(`>>> ${this.client.constants.emojis.redcross} | A question with a **?** is required!`);
 
-		await message.reply(
-			`>>> ${ball[Math.floor(Math.random() * ball.length)]} **${message.author.username}**.`
-		);
+		await message.reply(`>>> ${ball[Math.floor(Math.random() * ball.length)]} **${message.author.username}**.`);
 	}
 }

@@ -9,7 +9,7 @@ import { join } from "path";
 	description: "Changes the background of your XP card",
 	usage: "<background id>",
 	preconditions: ["GuildOnly", "PremiumOnly"],
-	options: ["user"],
+	options: ["user"]
 })
 export default class BackgroundCommand extends Command {
 	public async messageRun(message: GuildMessage, args: Command.Args) {
@@ -27,11 +27,9 @@ export default class BackgroundCommand extends Command {
 
 		await this.client.prisma.level.update({
 			where: { id: `${message.author.id}-${message.guildId}` },
-			data: { bg: backgroundId },
+			data: { bg: backgroundId }
 		});
-		await message.reply(
-			`>>> ${this.client.constants.emojis.greentick} | Successfully updated the background to \`${backgroundId}\`!`
-		);
+		await message.reply(`>>> ${this.client.constants.emojis.greentick} | Successfully updated the background to \`${backgroundId}\`!`);
 	}
 
 	protected async checkBackground(id: number): Promise<boolean> {

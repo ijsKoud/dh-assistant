@@ -4,19 +4,13 @@ import { Message } from "discord.js";
 
 @ApplyOptions<ListenerOptions>({ event: "messageCreate" })
 export default class MessageCreateListener extends Listener {
-	public async run(message: Message) {
+	public run(message: Message) {
 		const { client } = this.container;
-		if (
-			message.author.bot ||
-			message.guildId !== client.constants.guild ||
-			message.system ||
-			message.webhookId
-		)
-			return;
+		if (message.author.bot || message.guildId !== client.constants.guild || message.system || message.webhookId) return;
 
-		client.automod.run(message);
-		this.handleLeveling(message);
-		this.handleTickets(message);
+		void client.automod.run(message);
+		void this.handleLeveling(message);
+		void this.handleTickets(message);
 	}
 
 	private async handleTickets(message: Message) {
@@ -30,8 +24,7 @@ export default class MessageCreateListener extends Listener {
 		)
 			return client.ticketHandler.handleMention(message);
 
-		if (message.channel.type === "DM" || message.channel.name.startsWith("ticket-"))
-			await client.ticketHandler.handleMessage(message);
+		if (message.channel.type === "DM" || message.channel.name.startsWith("ticket-")) await client.ticketHandler.handleMessage(message);
 	}
 
 	private async handleLeveling(message: Message) {
@@ -48,7 +41,7 @@ export default class MessageCreateListener extends Listener {
 				(await client.levelManager.createUser(message.author.id, message.guild.id));
 			const lvl = await client.levelManager.updateUser(message.author.id, message.guild.id, {
 				...data,
-				xp: client.levelManager.generateXP(data.xp, client.multipliers.get(message.author.id) ?? 1),
+				xp: client.levelManager.generateXP(data.xp, client.multipliers.get(message.author.id) ?? 1)
 			});
 
 			if (lvl?.lvlUp && message.member) {
@@ -57,7 +50,7 @@ export default class MessageCreateListener extends Listener {
 				await message
 					.reply({
 						allowedMentions: { repliedUser: true },
-						content: `Congratulations **${message.author.tag}**, you have got level **${lvl.lvl.level}**!`,
+						content: `Congratulations **${message.author.tag}**, you have got level **${lvl.lvl.level}**!`
 					})
 					.catch(() => void 0);
 			}

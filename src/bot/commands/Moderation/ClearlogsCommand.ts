@@ -8,7 +8,7 @@ import { GuildMessage, ModerationMessage } from "../../../client/structures/Mode
 	description: "Deletes modlog(s) of a user",
 	usage: "<modlog id or user id> [--user -> is required when using userId]",
 	preconditions: ["GuildOnly", "ModeratorOnly"],
-	flags: ["user"],
+	flags: ["user"]
 })
 export default class ClearlogsCommand extends Command {
 	public async messageRun(message: GuildMessage, args: Command.Args) {
@@ -16,17 +16,12 @@ export default class ClearlogsCommand extends Command {
 		const userFlag = args.getFlags("user");
 		if (userFlag) {
 			const user = await this.client.utils.fetchUser(id ?? "");
-			if (!user)
-				return message.reply(
-					`>>> ${this.client.constants.emojis.redcross} | I could not find that user on Discord at all.`
-				);
+			if (!user) return message.reply(`>>> ${this.client.constants.emojis.redcross} | I could not find that user on Discord at all.`);
 
-			const msg = await message.reply(
-				`>>> ${this.client.constants.emojis.loading} | Deleting the modlogs of **${user.tag}**...`
-			);
+			const msg = await message.reply(`>>> ${this.client.constants.emojis.loading} | Deleting the modlogs of **${user.tag}**...`);
 
 			await this.client.prisma.modlog.deleteMany({
-				where: { id: `${user.id}-${message.guild.id}` },
+				where: { id: `${user.id}-${message.guild.id}` }
 			});
 
 			const log = ModerationMessage.logs(
@@ -39,14 +34,10 @@ export default class ClearlogsCommand extends Command {
 			);
 			this.client.loggingHandler.sendLogs(log, "mod");
 
-			return msg.edit(
-				`>>> ${this.client.constants.emojis.greentick} | Successfully deleted all the modlogs of **${user.tag}**.`
-			);
+			return msg.edit(`>>> ${this.client.constants.emojis.greentick} | Successfully deleted all the modlogs of **${user.tag}**.`);
 		}
 
-		const msg = await message.reply(
-			`>>> ${this.client.constants.emojis.loading} | Deleting the modlog **${id}**...`
-		);
+		const msg = await message.reply(`>>> ${this.client.constants.emojis.loading} | Deleting the modlog **${id}**...`);
 		const modlog = await this.client.prisma.modlog.findFirst({ where: { caseId: Number(id) } });
 		if (!modlog) return;
 
@@ -55,7 +46,7 @@ export default class ClearlogsCommand extends Command {
 		const user = (await this.client.utils.fetchUser(modlog.id.split("-")[0])) || {
 			displayAvatarURL: () => "https://static.daangamesdg.xyz/discord/wumpus.png",
 			id: "unknown",
-			tag: "User#0000",
+			tag: "User#0000"
 		};
 		const log = ModerationMessage.logs(
 			`Modlog deleted by ${message.author.toString()}`,
@@ -67,8 +58,6 @@ export default class ClearlogsCommand extends Command {
 		);
 		this.client.loggingHandler.sendLogs(log, "mod");
 
-		await msg.edit(
-			`>>> ${this.client.constants.emojis.greentick} | Successfully deleted modlog with the id **${modlog.caseId}**.`
-		);
+		await msg.edit(`>>> ${this.client.constants.emojis.greentick} | Successfully deleted modlog with the id **${modlog.caseId}**.`);
 	}
 }

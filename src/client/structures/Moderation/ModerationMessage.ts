@@ -2,25 +2,19 @@ import { HexColorString, ImageURLOptions, MessageEmbed, User } from "discord.js"
 import moment from "moment";
 import ms from "ms";
 
-export class ModerationMessage {
-	static logs(
+export const ModerationMessage = {
+	logs(
 		reason: string,
 		action: string,
-		user:
-			| User
-			| { displayAvatarURL: (options?: ImageURLOptions) => string; id: string; tag: string },
-		moderator:
-			| User
-			| { displayAvatarURL: (options?: ImageURLOptions) => string; id: string; tag: string },
+		user: User | { displayAvatarURL: (options?: ImageURLOptions) => string; id: string; tag: string },
+		moderator: User | { displayAvatarURL: (options?: ImageURLOptions) => string; id: string; tag: string },
 		caseId: string,
 		date: number,
 		duration?: number
 	): MessageEmbed {
 		const description = (
 			duration
-				? `**Member**: \`${user.tag}\` (${
-						user.id
-				  })\n**Action**: \`${action}\`\n**End of Punishment**: <t:${moment(
+				? `**Member**: \`${user.tag}\` (${user.id})\n**Action**: \`${action}\`\n**End of Punishment**: <t:${moment(
 						Date.now() + duration
 				  ).unix()}:R> (duration: ${ms(duration)})\n**Reason**: ${reason}`
 				: `**Member**: \`${user.tag}\` (${user.id})\n**Action**: \`${action}\`\n**Reason**: ${reason}`
@@ -28,32 +22,19 @@ export class ModerationMessage {
 
 		const embed = new MessageEmbed()
 			.setColor(this.getColour(action))
-			.setAuthor(
-				`${moderator.tag} (${moderator.id})`,
-				moderator.displayAvatarURL({ dynamic: true, size: 4096 })
-			)
+			.setAuthor(`${moderator.tag} (${moderator.id})`, moderator.displayAvatarURL({ dynamic: true, size: 4096 }))
 			.setFooter(caseId)
 			.setTimestamp(date)
 			.setDescription(description);
 
 		return embed;
-	}
-
-	static dm(
-		reason: string,
-		action: string,
-		user: User,
-		caseId: string,
-		date: number,
-		duration?: number
-	): MessageEmbed {
+	},
+	dm(reason: string, action: string, user: User, caseId: string, date: number, duration?: number): MessageEmbed {
 		const description = (
 			duration
-				? `**Member**: \`${user.tag}\` (${
-						user.id
-				  })\n**Action**: \`${action}\`\n**End**: <t:${moment(
-						Date.now() + duration
-				  ).unix()}:R> (${ms(duration)})\n**Reason**: ${reason}`
+				? `**Member**: \`${user.tag}\` (${user.id})\n**Action**: \`${action}\`\n**End**: <t:${moment(Date.now() + duration).unix()}:R> (${ms(
+						duration
+				  )})\n**Reason**: ${reason}`
 				: `**Member**: \`${user.tag}\` (${user.id})\n**Action**: \`${action}\`\n**Reason**: ${reason}`
 		).substr(0, 4096);
 
@@ -65,9 +46,8 @@ export class ModerationMessage {
 			.setDescription(description);
 
 		return embed;
-	}
-
-	static getColour(type: string): HexColorString {
+	},
+	getColour(type: string): HexColorString {
 		switch (type) {
 			case "ban":
 				return "#FD5B5E";
@@ -84,4 +64,4 @@ export class ModerationMessage {
 				return "#2F3136";
 		}
 	}
-}
+};

@@ -10,26 +10,19 @@ import moment from "moment";
 	aliases: ["userinfo", "uinfo"],
 	description: "Shows you the information about a user",
 	usage: "[user]",
-	requiredClientPermissions: ["EMBED_LINKS"],
+	requiredClientPermissions: ["EMBED_LINKS"]
 })
 export default class ServerinfoCommand extends Command {
 	public async messageRun(message: Message, args: Command.Args): Promise<void> {
-		const msg = await message.reply(
-			`>>> ${this.client.constants.emojis.loading} | Getting user information...`
-		);
+		const msg = await message.reply(`>>> ${this.client.constants.emojis.loading} | Getting user information...`);
 
 		let { value: user } = await args.pickResult("user");
 		if (!user) user = message.author;
 
-		const embed = this.client.utils
-			.embed()
-			.setAuthor(`${user.tag} - user info`, user.displayAvatarURL({ dynamic: true, size: 4096 }));
+		const embed = this.client.utils.embed().setAuthor(`${user.tag} - user info`, user.displayAvatarURL({ dynamic: true, size: 4096 }));
 
 		const { data: rep } = await axios
-			.get<Reputation>(
-				`https://discordrep.com/api/v3/rep/${user.id}`,
-				this.getHeaders(true, "DREP_TOKEN")
-			)
+			.get<Reputation>(`https://discordrep.com/api/v3/rep/${user.id}`, this.getHeaders(true, "DREP_TOKEN"))
 			.catch(() => ({
 				data: {
 					upvotes: 0,
@@ -37,15 +30,12 @@ export default class ServerinfoCommand extends Command {
 					reputation: 0,
 					rank: 0,
 					xp: 0,
-					staff: false,
-				},
+					staff: false
+				}
 			}));
 
 		const { data: banned } = await axios
-			.get<KsoftBan>(
-				`https://api.ksoft.si/bans/check?user=${user.id}`,
-				this.getHeaders(true, "KSOFT_TOKEN")
-			)
+			.get<KsoftBan>(`https://api.ksoft.si/bans/check?user=${user.id}`, this.getHeaders(true, "KSOFT_TOKEN"))
 			.catch(() => ({
 				data: {
 					upvotes: 0,
@@ -53,8 +43,8 @@ export default class ServerinfoCommand extends Command {
 					reputation: 0,
 					rank: 0,
 					xp: 0,
-					staff: false,
-				},
+					staff: false
+				}
 			}));
 
 		const roblox = await this.client.utils.robloxUser(user.id);
@@ -66,9 +56,7 @@ export default class ServerinfoCommand extends Command {
 				[
 					`> 🤔 | **Reputation**: ${rep.upvotes - rep.downvotes < 0 ? "bad" : "good"}`,
 					`> 🔨 | **Globally banned**: ${banned ? "🔨" : this.client.constants.emojis.redcross}`,
-					`> ⚖ | **Conclusion**: ${
-						rep.upvotes - rep.downvotes < 0 || banned ? "untrustable" : "trustable"
-					}`,
+					`> ⚖ | **Conclusion**: ${rep.upvotes - rep.downvotes < 0 || banned ? "untrustable" : "trustable"}`
 				].join("\n")
 			)
 			.addField(
@@ -79,15 +67,12 @@ export default class ServerinfoCommand extends Command {
 					`> 📆 | **Created at**: ${this.client.utils.formatTime(
 						moment(user.createdTimestamp).unix(),
 						"f"
-					)} | ${this.client.utils.formatTime(moment(user.createdTimestamp).unix(), "R")}`,
+					)} | ${this.client.utils.formatTime(moment(user.createdTimestamp).unix(), "R")}`
 				].join("\n")
 			)
 			.addField(
 				"• Roblox Information",
-				[
-					`>>> 🎮 | **Rover**: ${roblox.rover || "-"}`,
-					`🕹 | **Bloxlink**: ${roblox.bloxlink || "-"}`,
-				].join("\n")
+				[`>>> 🎮 | **Rover**: ${roblox.rover || "-"}`, `🕹 | **Bloxlink**: ${roblox.bloxlink || "-"}`].join("\n")
 			)
 			.setFooter("The global stats are fetched from an api - discordrep & KSoft Ban");
 
@@ -100,11 +85,7 @@ export default class ServerinfoCommand extends Command {
 					.slice(0, -1);
 
 				const roles =
-					r.length < 10
-						? r.map((role) => role.toString()).join(", ")
-						: r.length > 10
-						? this.client.utils.trimArray(r).join(", ")
-						: "none";
+					r.length < 10 ? r.map((role) => role.toString()).join(", ") : r.length > 10 ? this.client.utils.trimArray(r).join(", ") : "none";
 
 				embed.setColor(member.displayHexColor || process.env.COLOUR);
 				embed.addField(
@@ -114,7 +95,7 @@ export default class ServerinfoCommand extends Command {
 							moment(member.joinedTimestamp ?? 0).unix(),
 							"f"
 						)} | ${this.client.utils.formatTime(moment(member.joinedTimestamp ?? 0).unix(), "R")}`,
-						`> 📂 | **Roles**: ${roles}`,
+						`> 📂 | **Roles**: ${roles}`
 					].join("\n")
 				);
 			}
@@ -122,15 +103,15 @@ export default class ServerinfoCommand extends Command {
 
 		await msg.edit({
 			embeds: [embed],
-			content: null,
+			content: null
 		});
 	}
 
 	private getHeaders(bearer: boolean, key: string) {
 		return {
 			headers: {
-				Authorization: `${bearer ? "Bearer " : ""}${process.env[key]}`,
-			},
+				Authorization: `${bearer ? "Bearer " : ""}${process.env[key]}`
+			}
 		};
 	}
 }

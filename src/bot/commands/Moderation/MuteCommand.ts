@@ -12,46 +12,30 @@ import moment from "moment";
 	usage: "<user> <reason> [--duration=<duration>]",
 	requiredClientPermissions: ["MANAGE_ROLES"],
 	preconditions: ["GuildOnly", "ModeratorOnly"],
-	options: ["duration"],
+	options: ["duration"]
 })
 export default class MuteCommand extends Command {
 	public async messageRun(message: GuildMessage, args: Command.Args) {
 		const { value: member } = await args.pickResult("member");
 		const { value: reason } = await args.restResult("string");
 		const durationOption = args.getOption("duration");
-		if (!member)
-			return message.reply(
-				`>>> ${this.client.constants.emojis.redcross} | Couldn't find that member in this server.`
-			);
+		if (!member) return message.reply(`>>> ${this.client.constants.emojis.redcross} | Couldn't find that member in this server.`);
 
-		const msg = await message.reply(
-			`>>> ${this.client.constants.emojis.loading} | Muting **${member.user.tag}**...`
-		);
+		const msg = await message.reply(`>>> ${this.client.constants.emojis.loading} | Muting **${member.user.tag}**...`);
 		switch (this.client.permissionHandler.isHigher(message.member, member)) {
 			case "mod-low":
-				return msg.edit(
-					`>>> ${this.client.constants.emojis.redcross} | You can't mute this user due to role hierarchy.`
-				);
+				return msg.edit(`>>> ${this.client.constants.emojis.redcross} | You can't mute this user due to role hierarchy.`);
 			case "owner":
-				return msg.edit(
-					`>>> ${this.client.constants.emojis.redcross} | You can't mute this user because they are the owner of this server.`
-				);
+				return msg.edit(`>>> ${this.client.constants.emojis.redcross} | You can't mute this user because they are the owner of this server.`);
 			case "bot":
-				return msg.edit(
-					`>>> ${this.client.constants.emojis.redcross} | After all the hard work I have done for you, you want to mute me??`
-				);
+				return msg.edit(`>>> ${this.client.constants.emojis.redcross} | After all the hard work I have done for you, you want to mute me??`);
 			case "bot-low":
-				return msg.edit(
-					`>>> ${this.client.constants.emojis.redcross} | I can't mute this user due to role hierarchy.`
-				);
+				return msg.edit(`>>> ${this.client.constants.emojis.redcross} | I can't mute this user due to role hierarchy.`);
 		}
 
 		const id = `${member.id}-${message.guildId}-mute`;
 		const mute = this.client.automod.modTimeouts.get(id);
-		if (mute)
-			return msg.edit(
-				`>>> ${this.client.constants.emojis.redcross} | This user is already muted in the server.`
-			);
+		if (mute) return msg.edit(`>>> ${this.client.constants.emojis.redcross} | This user is already muted in the server.`);
 
 		const date = Date.now();
 		const duration = this.client.utils.parseTime(durationOption ?? "p") || undefined;
@@ -64,8 +48,8 @@ export default class MuteCommand extends Command {
 				startDate: new Date(date),
 				endDate: new Date(date + (duration ?? 0)),
 				type: duration ? "mute" : "permmute",
-				timeoutFinished: false,
-			},
+				timeoutFinished: false
+			}
 		});
 
 		const dm = ModerationMessage.dm(
@@ -90,9 +74,7 @@ export default class MuteCommand extends Command {
 		this.client.loggingHandler.sendLogs(log, "mod");
 		if (duration) {
 			const timeout = setLongTimeout(async () => {
-				const unmuteReason = `Automatic unmute from mute made by ${message.author.toString()} <t:${moment(
-					date
-				).unix()}:R>`;
+				const unmuteReason = `Automatic unmute from mute made by ${message.author.toString()} <t:${moment(date).unix()}:R>`;
 				const finishLogs = ModerationMessage.logs(
 					unmuteReason,
 					"unmute",
@@ -106,13 +88,13 @@ export default class MuteCommand extends Command {
 				if (member) member.roles.remove(this.client.automod.settings.mute.role).catch(() => void 0);
 				await this.client.prisma.modlog.update({
 					where: { caseId: muteLog.caseId },
-					data: { timeoutFinished: true },
+					data: { timeoutFinished: true }
 				});
 				this.client.loggingHandler.sendLogs(finishLogs, "mod");
 			}, duration);
 			this.client.automod.modTimeouts.set(id, {
 				timeout,
-				caseId: muteLog.caseId,
+				caseId: muteLog.caseId
 			});
 		}
 
@@ -120,9 +102,7 @@ export default class MuteCommand extends Command {
 		await member.roles.add(this.client.automod.settings.mute.role);
 
 		await msg.edit(
-			`>>> 🔇 | Successfully muted **${member.user.tag}** ${
-				duration ? `for **${ms(duration, { long: true })}**` : ""
-			}`.trim() + "."
+			`${`>>> 🔇 | Successfully muted **${member.user.tag}** ${duration ? `for **${ms(duration, { long: true })}**` : ""}`.trim()}.`
 		);
 	}
 }

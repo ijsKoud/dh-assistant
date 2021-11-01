@@ -8,7 +8,7 @@ export class ModeratorOnlyPrecondition extends Precondition {
 		return this.container.client.permissionHandler.hasMod(message.member)
 			? this.ok()
 			: this.error({
-					message: "Only **Moderators+** are allowed to use this command",
+					message: "Only **Moderators+** are allowed to use this command"
 			  });
 	}
 }

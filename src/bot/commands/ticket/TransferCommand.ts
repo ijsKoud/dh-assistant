@@ -6,7 +6,7 @@ import { GuildMessage } from "../../../client/structures/Moderation";
 	name: "transfer",
 	description: "transfer a ticket",
 	usage: "<user>",
-	preconditions: ["ModeratorOnly", "GuildOnly"],
+	preconditions: ["ModeratorOnly", "GuildOnly"]
 })
 export default class TransferCommand extends Command {
 	public async messageRun(message: GuildMessage, args: Command.Args) {
@@ -14,39 +14,26 @@ export default class TransferCommand extends Command {
 
 		const [, id] = message.channel.name.split(/-/g);
 		const ticket = await this.client.prisma.ticket.findFirst({ where: { caseId: Number(id) } });
-		if (
-			!ticket ||
-			ticket.closed ||
-			(message.author.id !== ticket.claimer &&
-				!this.client.permissionHandler.hasSenior(message.member))
-		)
-			return;
+		if (!ticket || ticket.closed || (message.author.id !== ticket.claimer && !this.client.permissionHandler.hasSenior(message.member))) return;
 
 		const { value: member } = await args.pickResult("member");
-		if (!member)
-			return message.reply(
-				`>>> ${this.client.constants.emojis.redcross} | Was not able to find the user in this server.`
-			);
+		if (!member) return message.reply(`>>> ${this.client.constants.emojis.redcross} | Was not able to find the user in this server.`);
 
 		if (!this.client.permissionHandler.hasMod(member) || member.user.bot)
-			return message.reply(
-				`>>> ${
-					this.client.constants.emojis.redcross
-				} | ${member.toString()} is not a **moderator+**.`
-			);
+			return message.reply(`>>> ${this.client.constants.emojis.redcross} | ${member.toString()} is not a **moderator+**.`);
 
 		ticket.claimer = member.id;
 		await this.client.prisma.ticket.update({ where: { caseId: ticket.caseId }, data: ticket });
 
 		if (!this.client.permissionHandler.hasSenior(message.member))
 			await message.channel.permissionOverwrites.create(message.author, {
-				VIEW_CHANNEL: false,
+				VIEW_CHANNEL: false
 			});
 
 		await message.channel.permissionOverwrites.create(member, {
 			VIEW_CHANNEL: true,
 			SEND_MESSAGES: true,
-			ATTACH_FILES: true,
+			ATTACH_FILES: true
 		});
 
 		const user = await this.client.utils.fetchUser(ticket.id.split(/-/g)[0]);
@@ -61,7 +48,7 @@ export default class TransferCommand extends Command {
 
 		await message.channel.send({
 			content: `>>> 👋 | Hey ${member.toString()}, check the pins for more information about this ticket!`,
-			allowedMentions: { users: [member.id] },
+			allowedMentions: { users: [member.id] }
 		});
 	}
 }

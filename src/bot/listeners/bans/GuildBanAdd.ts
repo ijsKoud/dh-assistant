@@ -10,14 +10,14 @@ export default class GuildBanAddListener extends Listener {
 		if (ban.partial) await ban.fetch();
 
 		const modlog = await client.prisma.modlog.findFirst({
-			where: { id: { startsWith: ban.user.id }, type: { contains: "ban" } },
+			where: { id: { startsWith: ban.user.id }, type: { contains: "ban" } }
 		});
 		if (modlog) return;
 
 		const infractions = await ban.guild
 			.fetchAuditLogs({
 				limit: 10,
-				type: "MEMBER_BAN_ADD",
+				type: "MEMBER_BAN_ADD"
 			})
 			.catch(() => null);
 		if (!infractions) return;
@@ -35,7 +35,7 @@ export default class GuildBanAddListener extends Listener {
 			infraction.executor || {
 				displayAvatarURL: () => "https://static.daangamesdg.xyz/discord/wumpus.png",
 				id: "",
-				tag: "User#0000",
+				tag: "User#0000"
 			},
 			"Case Id: none",
 			Date.now()

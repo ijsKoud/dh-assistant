@@ -1,5 +1,4 @@
-import type { ListenerOptions } from "@sapphire/framework";
-import { Listener } from "@sapphire/framework";
+import { ListenerOptions, Listener } from "@sapphire/framework";
 import { ApplyOptions } from "@sapphire/decorators";
 import { GuildMember } from "discord.js";
 import moment from "moment";
@@ -17,32 +16,24 @@ export class GuildMemberAddListener extends Listener {
 			.setDescription(
 				[
 					`>>> 👤 | **User**: ${member.user.tag} (${member.toString()})`,
-					`🗓 | **Created at**: ${client.utils.formatTime(
+					`🗓 | **Created at**: ${client.utils.formatTime(moment(member.user.createdTimestamp).unix(), "F")} | ${client.utils.formatTime(
 						moment(member.user.createdTimestamp).unix(),
-						"F"
-					)} | ${client.utils.formatTime(moment(member.user.createdTimestamp).unix(), "R")}`,
+						"R"
+					)}`
 				].join("\n")
 			);
 		client.loggingHandler.sendLogs(embed, "member");
 		if (!member.pending) await member.roles.add(client.constants.roles.default).catch(() => void 0);
 
 		const general = await client.utils.getChannel(client.constants.channels.general);
-		if (general && general.isText())
-			await general
-				.send(`**${member.user.tag}** just joined! Make sure to welcome them!`)
-				.catch(() => void 0);
+		if (general && general.isText()) await general.send(`**${member.user.tag}** just joined! Make sure to welcome them!`).catch(() => void 0);
 
 		const embed2 = client.utils
 			.embed()
 			.setColor("#58DCAE")
 			.setTitle(`Welcome to Draavo's Hangout, ${member.user.tag}`)
-			.setDescription(
-				`There are now **${member.guild.memberCount}** members in this server. Don't forget to say hi!`
-			)
-			.setFooter(
-				"Daan has left a message for you: say Hi!",
-				"https://static.daangamesdg.xyz/discord/pfp.gif"
-			);
+			.setDescription(`There are now **${member.guild.memberCount}** members in this server. Don't forget to say hi!`)
+			.setFooter("Daan has left a message for you: say Hi!", "https://static.daangamesdg.xyz/discord/pfp.gif");
 		client.loggingHandler.sendLogs(embed2, "join");
 	}
 }

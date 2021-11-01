@@ -13,14 +13,14 @@ import { GuildMessage } from "../../../client/structures/Moderation";
 	description: "Shows the modlogs of a user",
 	usage: "[user]",
 	requiredClientPermissions: ["EMBED_LINKS"],
-	preconditions: ["GuildOnly", "TrialModeratorOnly"],
+	preconditions: ["GuildOnly", "TrialModeratorOnly"]
 })
 export default class ModlogsCommand extends Command {
 	public async messageRun(message: GuildMessage, args: Command.Args) {
 		const { value: user } = await args.pickResult("user");
 		if (!user) {
 			const logs = await this.client.prisma.modlog.findMany({
-				where: { id: { endsWith: message.guild.id } },
+				where: { id: { endsWith: message.guild.id } }
 			});
 			if (!logs.length) return message.reply(">>> 🎉 | No modlogs found for this server.");
 
@@ -44,7 +44,7 @@ export default class ModlogsCommand extends Command {
 		}
 
 		const logs = await this.client.prisma.modlog.findMany({
-			where: { id: `${user.id}-${message.guild.id}` },
+			where: { id: `${user.id}-${message.guild.id}` }
 		});
 		if (!logs.length) return message.reply(">>> 🎉 | No modlogs found for this user.");
 
@@ -68,7 +68,7 @@ export default class ModlogsCommand extends Command {
 			new MessageButton()
 				.setEmoji("▶")
 				.setStyle("SECONDARY")
-				.setCustomId(`${uuid().slice(0, 20)}-${message.guildId}-next`),
+				.setCustomId(`${uuid().slice(0, 20)}-${message.guildId}-next`)
 		];
 		const msg = await message.reply({ embeds: [embeds[0]] });
 		this.client.utils.pagination(msg, embeds, buttons);
@@ -84,11 +84,10 @@ export default class ModlogsCommand extends Command {
 			const map: EmbedField[] = current.map((data) => {
 				return {
 					name: `${data.caseId} | ${this.client.utils.capitalize(data.type)}`,
-					value: `Date: ${this.container.client.utils.formatTime(
-						moment(Number(data.startDate)).unix(),
-						"R"
-					)}\nModerator: <@${data.moderator}>\nReason: ${data.reason.substr(0, 200)}`,
-					inline: true,
+					value: `Date: ${this.container.client.utils.formatTime(moment(Number(data.startDate)).unix(), "R")}\nModerator: <@${
+						data.moderator
+					}>\nReason: ${data.reason.substr(0, 200)}`,
+					inline: true
 				};
 			});
 			count += 25;

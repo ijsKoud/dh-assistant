@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SapphireClient } from "@sapphire/framework";
 import { BitFieldResolvable, Collection, IntentsString, PartialTypes } from "discord.js";
 import { join } from "path";
@@ -16,28 +17,26 @@ import { readFileSync } from "fs";
 export default class Client extends SapphireClient {
 	public owners: string[];
 
-	public isOwner(id: string): boolean {
-		return this.owners.includes(id);
-	}
-
 	public constants: Constants = JSON.parse(
 		readFileSync(join(process.cwd(), "config", "constants.json"), {
-			encoding: "utf-8",
+			encoding: "utf-8"
 		})
 	);
+
 	public prisma = new PrismaClient();
 	public utils = new Utils(this);
 
 	public automod = new Automod(this);
 
-	// @ts-ignore
+	// @ts-ignore currently not compatible with Djs v13.3.0+
 	public giveawaysManager = new GiveawaysManager(this, {
 		storage: join(process.cwd(), "data", "giveaways.json"),
 		default: {
 			botsCanWin: false,
-			embedColor: "#37625d",
-		},
+			embedColor: "#37625d"
+		}
 	});
+
 	public levelManager = new LevelManager(this);
 	public blacklistManager = new BlacklistManager(this);
 
@@ -48,15 +47,16 @@ export default class Client extends SapphireClient {
 	public requests = new Collection<string, number>();
 	public loggers = new Collection<string, Logger>();
 	public multipliers = new Collection<string, number>();
+	public ApiCache = new Collection<string, any>();
 
-	constructor(options: ClientOptions) {
+	public constructor(options: ClientOptions) {
 		super({
 			intents: options.intents,
 			allowedMentions: { users: [], repliedUser: false, roles: [] },
 			baseUserDirectory: join(__dirname, "..", "bot"),
 			defaultPrefix: process.env.PREFIX,
 			partials: options.partials,
-			loadDefaultErrorListeners: false,
+			loadDefaultErrorListeners: false
 		});
 
 		this.owners = options.owners;
@@ -78,8 +78,8 @@ export default class Client extends SapphireClient {
 		process.on("unhandledRejection", this.handleRejection.bind(this));
 	}
 
-	private handleRejection(reason: unknown) {
-		this.loggers.get("bot")?.error("Unhandled rejection: ", reason);
+	public isOwner(id: string): boolean {
+		return this.owners.includes(id);
 	}
 
 	public async start(): Promise<void> {
@@ -90,6 +90,10 @@ export default class Client extends SapphireClient {
 		this.blacklistManager.setBlacklisted(blacklisted.map((b) => b.id));
 
 		await this.login(process.env.TOKEN);
+	}
+
+	private handleRejection(reason: unknown) {
+		this.loggers.get("bot")?.error("Unhandled rejection: ", reason);
 	}
 }
 
@@ -103,26 +107,28 @@ interface ClientOptions {
 declare module "@sapphire/framework" {
 	// eslint-disable-next-line @typescript-eslint/no-shadow
 	class SapphireClient {
-		owners: string[];
-		isOwner(id: string): boolean;
+		public owners: string[];
 
-		constants: Constants;
-		prisma: PrismaClient;
-		utils: Utils;
+		public constants: Constants;
+		public prisma: PrismaClient;
+		public utils: Utils;
 
-		automod: Automod;
+		public automod: Automod;
 
-		levelManager: LevelManager;
-		blacklistManager: BlacklistManager;
+		public levelManager: LevelManager;
+		public blacklistManager: BlacklistManager;
 
-		ticketHandler: TicketHandler;
-		permissionHandler: PermissionHandler;
-		loggingHandler: LoggingHandler;
-		giveawaysManager: GiveawaysManager;
+		public ticketHandler: TicketHandler;
+		public permissionHandler: PermissionHandler;
+		public loggingHandler: LoggingHandler;
+		public giveawaysManager: GiveawaysManager;
 
-		requests: Collection<string, number>;
-		loggers: Collection<string, Logger>;
-		multipliers: Collection<string, number>;
+		public requests: Collection<string, number>;
+		public loggers: Collection<string, Logger>;
+		public multipliers: Collection<string, number>;
+		public ApiCache: Collection<string, any>;
+
+		public isOwner(id: string): boolean;
 	}
 
 	interface Preconditions {

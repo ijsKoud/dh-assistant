@@ -4,19 +4,11 @@ import { Collection, Message } from "discord.js";
 
 @ApplyOptions<ListenerOptions>({ event: "messageDeleteBulk" })
 export default class MessageDeleteBulkListener extends Listener {
-	public async run(messages: Collection<string, Message>) {
+	public run(messages: Collection<string, Message>) {
 		const { client } = this.container;
 		const { size } = messages;
 		messages = messages
-			.filter(
-				(m) =>
-					!m.partial &&
-					m.content.length > 0 &&
-					!m.author.bot &&
-					!m.system &&
-					!m.webhookId &&
-					m.guildId === client.constants.guild
-			)
+			.filter((m) => !m.partial && m.content.length > 0 && !m.author.bot && !m.system && !m.webhookId && m.guildId === client.constants.guild)
 			.sort((a, b) => a.createdTimestamp - b.createdTimestamp);
 		if (messages.size <= 0) return;
 

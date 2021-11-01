@@ -8,26 +8,17 @@ import ms from "ms";
 	aliases: ["commands"],
 	description: "A list of all the commands",
 	usage: "[command]",
-	requiredClientPermissions: ["EMBED_LINKS"],
+	requiredClientPermissions: ["EMBED_LINKS"]
 })
 export default class PingCommand extends Command {
-	public async messageRun(
-		message: Message,
-		args: Command.Args,
-		context: Command.Context
-	): Promise<void> {
+	public async messageRun(message: Message, args: Command.Args, context: Command.Context): Promise<void> {
 		const embed: MessageEmbed = this.container.client.utils
 			.embed()
 			.setTitle(`Help Command - ${message.author.tag}`)
-			.setFooter(
-				"DH Assistant created by DaanGamesDG#7621",
-				"https://static.daangamesdg.xyz/discord/pfp.gif"
-			);
+			.setFooter("DH Assistant created by DaanGamesDG#7621", "https://static.daangamesdg.xyz/discord/pfp.gif");
 
 		const cmd = await args.pickResult("string");
-		const command = this.container.stores.get("commands").get(cmd.value ?? "") as
-			| Command
-			| undefined;
+		const command = this.container.stores.get("commands").get(cmd.value ?? "") as Command | undefined;
 
 		if (command) {
 			const userPermissions = this.container.client.utils.formatPerms(command.permissions);
@@ -43,7 +34,7 @@ export default class PingCommand extends Command {
 					`👮‍♂️ | **User Permissions**: ${userPermissions ?? "-"}`,
 					`🤖 | **Client Permissions**: ${clientPermissions ?? "-"}`,
 					`⌚ | **Cooldown**: \`${ms(command.cooldown, { long: false })}\``,
-					`🔢 | **Cooldown Limit**: \`${command.cooldownLimit}\``,
+					`🔢 | **Cooldown Limit**: \`${command.cooldownLimit}\``
 				].join("\n")
 			);
 		} else {
@@ -59,15 +50,14 @@ export default class PingCommand extends Command {
 
 				return {
 					name: `• ${category}`,
-					value: filtered.map((c) => `\`${c.name ?? c.aliases[0] ?? "unkown"}\``).join(" "),
+					value: filtered.map((c) => `\`${c.name ?? c.aliases[0] ?? "unkown"}\``).join(" ")
 				};
 			});
 
 			embed.setFields(fields);
 		}
 
-		const createButton = (url: string, label: string): MessageButton =>
-			new MessageButton().setURL(url).setStyle("LINK").setLabel(label);
+		const createButton = (url: string, label: string): MessageButton => new MessageButton().setURL(url).setStyle("LINK").setLabel(label);
 		const component = new MessageActionRow().addComponents(
 			createButton("https://daangamesdg.wtf/github/dh-assistant", "GitHub"),
 			createButton(process.env.DASHBOARD ?? "https://daangamesdg.wtf/notfound", "Dashboard")

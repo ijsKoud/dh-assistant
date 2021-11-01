@@ -8,11 +8,11 @@ export class LevelManager {
 	public img: Map<string, Buffer> = new Map();
 	public cache: Map<string, boolean> = new Map();
 
-	constructor(public client: Client) {}
+	public constructor(public client: Client) {}
 
 	public async createUser(user: string, guild: string): Promise<Level> {
 		return this.client.prisma.level.create({
-			data: { id: `${user}-${guild}`, level: 1, xp: 0 },
+			data: { id: `${user}-${guild}`, level: 1, xp: 0 }
 		});
 	}
 
@@ -20,11 +20,7 @@ export class LevelManager {
 		return xp + (Math.floor(Math.random() * 16) + 4) * this.boost * multiplier;
 	}
 
-	public async updateUser(
-		user: string,
-		guild: string,
-		data: Level
-	): Promise<{ lvl: Level; lvlUp: boolean } | null> {
+	public async updateUser(user: string, guild: string, data: Level): Promise<{ lvl: Level; lvlUp: boolean } | null> {
 		const id = `${user}-${guild}`;
 		let lvlUp = false;
 
@@ -33,13 +29,13 @@ export class LevelManager {
 		this.cache.set(id, true);
 		setTimeout(() => this.cache.delete(id), 6e4);
 
-		let lvl = await this.client.prisma.level.findFirst({ where: { id: id } });
-		if (!lvl) lvl = { xp: 0, level: 1, bg: 0, id: id };
+		let lvl = await this.client.prisma.level.findFirst({ where: { id } });
+		if (!lvl) lvl = { xp: 0, level: 1, bg: 0, id };
 
 		const required = lvl.level * 75;
 		if (required - data.xp <= 0) {
 			data.level = lvl.level + 1;
-			data.xp = data.xp - required;
+			data.xp -= required;
 			lvlUp = true;
 		}
 
@@ -86,18 +82,16 @@ export class LevelManager {
 	}
 
 	public async getLevels(id: string): Promise<{ level: Level; i: number }[]> {
-		return await Promise.all(
-			(
-				await this.client.prisma.level.findMany({ where: { id: { endsWith: id } } })
-			)
+		return Promise.all(
+			(await this.client.prisma.level.findMany({ where: { id: { endsWith: id } } }))
 				.map((level) => ({ level, total: this.getTotal(level.level, level.xp) }))
 				.sort((a, b) => b.total - a.total)
 				.map(async (l, i) => ({
 					level: {
 						...l.level,
-						tag: (await this.client.utils.fetchUser(l.level.id.split("-")[0]))?.tag,
+						tag: (await this.client.utils.fetchUser(l.level.id.split("-")[0]))?.tag
 					},
-					i,
+					i
 				}))
 		);
 	}

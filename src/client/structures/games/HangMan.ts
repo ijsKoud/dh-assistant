@@ -35,20 +35,18 @@ export class hangMan {
 		"w",
 		"x",
 		"y",
-		"z",
+		"z"
 	];
 
 	private wrong = 0;
-	private filter = (m: Message) => {
-		return !!m.content && m.author.id === this.message.author.id;
-	};
 
 	public constructor(message: Message) {
 		this.message = message;
 	}
 
 	public async start(): Promise<void> {
-		this.word = ranWords(1)[0];
+		const [word] = ranWords(1);
+		this.word = word;
 
 		this.embed = new MessageEmbed()
 			.setDescription(this.description)
@@ -66,11 +64,15 @@ export class hangMan {
 		this.awaitResponse();
 	}
 
+	private filter = (m: Message) => {
+		return Boolean(m.content) && m.author.id === this.message.author.id;
+	};
+
 	private Guessed(letter: string): void {
 		if (!this.guessed.includes(letter)) {
 			this.guessed.push(letter);
 
-			if (this.word.indexOf(letter) == -1) {
+			if (!this.word.includes(letter)) {
 				this.wrong++;
 				this.letters = this.letters.filter((l) => l !== letter);
 
@@ -86,21 +88,21 @@ export class hangMan {
 		}
 
 		this.embed.setDescription(this.description);
-		this.embedMsg.edit({ embeds: [this.embed] });
+		void this.embedMsg.edit({ embeds: [this.embed] });
 	}
 
 	private gameOver(won: boolean): void {
 		this.collector.stop("gameOver");
 		this.embed = new MessageEmbed()
 			.setDescription(
-				`Game Over! You ${won ? "**won**" : "**lost**"} this round, ${
-					won ? "congrats! 🥳" : "better luck next time!"
-				}\n The word was: ${this.word}`
+				`Game Over! You ${won ? "**won**" : "**lost**"} this round, ${won ? "congrats! 🥳" : "better luck next time!"}\n The word was: ${
+					this.word
+				}`
 			)
 			.setColor(won ? "#4AF3AB" : "#DC5E55")
 			.spliceFields(0, this.embed.fields.length);
 
-		this.embedMsg.edit({ embeds: [this.embed] });
+		void this.embedMsg.edit({ embeds: [this.embed] });
 	}
 
 	private get description(): string {
@@ -118,19 +120,19 @@ export class hangMan {
 			`Word: ${this.word
 				.split("")
 				.map((l) => (this.guessed.includes(l) ? l : "**_**"))
-				.join(" ")}`,
+				.join(" ")}`
 		].join("\n");
 	}
 
 	private awaitResponse(): void {
 		this.collector = this.embedMsg.channel.createMessageCollector({
 			filter: this.filter,
-			time: 6e4 * 3,
+			time: 6e4 * 3
 		});
 
 		this.collector.on("collect", (m: Message) => {
 			const split = m.content.split("")[0].toLowerCase();
-			m.delete();
+			void m.delete();
 			this.Guessed(split);
 		});
 

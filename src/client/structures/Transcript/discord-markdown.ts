@@ -27,9 +27,7 @@ class DiscordMD {
 	public rules = {
 		blockQuote: Object.assign({}, markdown.defaultRules.blockQuote, {
 			match: (source: string, state: State, prevSource: string) =>
-				!/^$|\n *$/.test(prevSource) || state.inQuote
-					? null
-					: /^( *>>> ([\s\S]*))|^( *> [^\n]*(\n *> [^\n]*)*\n?)/.exec(source),
+				!/^$|\n *$/.test(prevSource) || state.inQuote ? null : /^( *>>> ([\s\S]*))|^( *> [^\n]*(\n *> [^\n]*)*\n?)/.exec(source),
 			parse: (capture: string[], parse: Function, state: State) => {
 				const all = capture[0];
 				const isBlock = Boolean(/^ *>>> ?/.exec(all));
@@ -38,9 +36,9 @@ class DiscordMD {
 
 				return {
 					content: parse(content, { ...state, inQuote: true }),
-					type: "blockQuote",
+					type: "blockQuote"
 				};
-			},
+			}
 		}),
 		codeBlock: Object.assign({}, markdown.defaultRules.codeBlock, {
 			match: markdown.inlineRegex(/^```(([a-z0-9-]+?)\n+)?\n*([^]+?)\n*```/i),
@@ -48,7 +46,7 @@ class DiscordMD {
 				return {
 					lang: (capture[2] ?? "").trim(),
 					content: capture[3] ?? "",
-					inQuote: state.inQuote ?? false,
+					inQuote: state.inQuote ?? false
 				};
 			},
 			html: (node: any) => {
@@ -57,9 +55,9 @@ class DiscordMD {
 					code = highlight.highlight(node.content, { language: node.lang, ignoreIllegals: true });
 
 				return this.htmlTag("div", code ? code.value : markdown.sanitizeText(node.content), {
-					class: `pre pre--multiline ${code ? "language-" + code.language : "nohighlight"}`,
+					class: `pre pre--multiline ${code ? `language-${code.language}` : "nohighlight"}`
 				});
-			},
+			}
 		}),
 		newline: markdown.defaultRules.newline,
 		escape: markdown.defaultRules.escape,
@@ -69,17 +67,17 @@ class DiscordMD {
 					content: [
 						{
 							type: "text",
-							content: capture[1],
-						},
+							content: capture[1]
+						}
 					],
-					target: capture[1],
+					target: capture[1]
 				};
 			},
 			html: (node: any, output: Function, state: State) =>
 				this.htmlTag("a", output(node.content, state), {
 					href: markdown.sanitizeUrl(node.target) ?? "",
-					class: "transcript-link",
-				}),
+					class: "transcript-link"
+				})
 		}),
 		url: Object.assign({}, markdown.defaultRules.url, {
 			parse: (capture: string[]) => {
@@ -87,45 +85,39 @@ class DiscordMD {
 					content: [
 						{
 							type: "text",
-							content: capture[1],
-						},
+							content: capture[1]
+						}
 					],
-					target: capture[1],
+					target: capture[1]
 				};
 			},
 			html: (node: any, output: Function, state: State) =>
 				this.htmlTag("a", output(node.content, state), {
 					href: markdown.sanitizeUrl(node.target) ?? "",
-					class: "transcript-link",
-				}),
+					class: "transcript-link"
+				})
 		}),
 		em: Object.assign({}, markdown.defaultRules.em, {
 			parse: (capture: string[], parse: Parser, state: State) => {
-				const parsed = markdown.defaultRules.em.parse(
-					capture,
-					parse,
-					Object.assign({}, state, { inEmphasis: true })
-				);
+				const parsed = markdown.defaultRules.em.parse(capture, parse, Object.assign({}, state, { inEmphasis: true }));
 				return state.inEmphasis ? parsed.content : parsed;
-			},
+			}
 		}),
 		strong: markdown.defaultRules.strong,
 		u: markdown.defaultRules.u,
 		strike: Object.assign({}, markdown.defaultRules.del, {
-			match: markdown.inlineRegex(/^~~([\s\S]+?)~~(?!_)/),
+			match: markdown.inlineRegex(/^~~([\s\S]+?)~~(?!_)/)
 		}),
 		inlineCode: Object.assign({}, markdown.defaultRules.inlineCode, {
 			match: (source: string) => markdown.defaultRules.inlineCode.match.regex?.exec(source),
 			html: (node: any) =>
 				this.htmlTag("span", markdown.sanitizeText(node.content.trim()), {
-					class: "pre pre--inline",
-				}),
+					class: "pre pre--inline"
+				})
 		}),
 		text: Object.assign({}, markdown.defaultRules.text, {
-			match: (source: string) =>
-				/^[\s\S]+?(?=[^0-9A-Za-z\s\u00c0-\uffff-]|\n\n|\n|\w+:\S|$)/.exec(source),
-			html: (node: any, output: Function, state: State) =>
-				state.escapeHTML ? markdown.sanitizeText(node.content) : node.content,
+			match: (source: string) => /^[\s\S]+?(?=[^0-9A-Za-z\s\u00c0-\uffff-]|\n\n|\n|\w+:\S|$)/.exec(source),
+			html: (node: any, output: Function, state: State) => (state.escapeHTML ? markdown.sanitizeText(node.content) : node.content)
 		}),
 		emoticon: {
 			order: markdown.defaultRules.text.order,
@@ -133,39 +125,39 @@ class DiscordMD {
 			parse: (capture: string[]) => {
 				return {
 					type: "text",
-					content: capture[1],
+					content: capture[1]
 				};
 			},
-			html: (node: any, output: Function, state: State) => output(node.content, state),
+			html: (node: any, output: Function, state: State) => output(node.content, state)
 		},
 		br: Object.assign({}, markdown.defaultRules.br, {
-			match: markdown.anyScopeRegex(/^\n/),
+			match: markdown.anyScopeRegex(/^\n/)
 		}),
 		spoiler: {
 			order: 0,
 			match: (source: string) => /^\|\|([\s\S]+?)\|\|/.exec(source),
 			parse: (capture: string[], parse: Function, state: State) => {
 				return {
-					content: parse(capture[1], state),
+					content: parse(capture[1], state)
 				};
 			},
 			html: (node: any, output: Function, state: State) =>
 				this.htmlTag(
 					"span",
 					this.htmlTag("span", output(node.content, state), {
-						class: "spoiler-text",
+						class: "spoiler-text"
 					}),
 					{ class: "spoiler spoiler--hidden", onClick: "showSpoiler(event, this)" }
-				),
-		},
+				)
+		}
 	};
 
 	public discordCallbackDefaults = {
-		user: ({ id }: { id: string }) => "@" + markdown.sanitizeText(id),
-		channel: ({ id }: { id: string }) => "#" + markdown.sanitizeText(id),
-		role: ({ id }: { id: string }) => "&" + markdown.sanitizeText(id),
+		user: ({ id }: { id: string }) => `@${markdown.sanitizeText(id)}`,
+		channel: ({ id }: { id: string }) => `#${markdown.sanitizeText(id)}`,
+		role: ({ id }: { id: string }) => `&${markdown.sanitizeText(id)}`,
 		everyone: () => "@everyone",
-		here: () => "@here",
+		here: () => "@here"
 	};
 
 	public rulesDiscord = {
@@ -174,51 +166,48 @@ class DiscordMD {
 			match: (source: string) => /^<@!?([0-9]*)>/.exec(source),
 			parse: (capture: string[]) => {
 				return {
-					id: capture[1],
+					id: capture[1]
 				};
 			},
 			html: (node: any, output: Function, state: State) =>
 				this.htmlTag("a", state.discordCallback.user(node), {
 					class: "d-mention d-user",
-					href: `https://discord.com/users/${node.id}`,
-				}),
+					href: `https://discord.com/users/${node.id}`
+				})
 		},
 		discordChannel: {
 			order: markdown.defaultRules.strong.order,
 			match: (source: string) => /^<#?([0-9]*)>/.exec(source),
 			parse: (capture: string[]) => {
 				return {
-					id: capture[1],
+					id: capture[1]
 				};
 			},
 			html: (node: any, output: Function, state: State) =>
 				this.htmlTag("a", state.discordCallback.channel(node), {
 					class: "d-mention d-channel",
-					href: `https://discord.com/channels${
-						state.discordCallback.guildId ? `/${state.discordCallback.guildId}` : ""
-					}/${node.id}`,
-				}),
+					href: `https://discord.com/channels${state.discordCallback.guildId ? `/${state.discordCallback.guildId}` : ""}/${node.id}`
+				})
 		},
 		discordRole: {
 			order: markdown.defaultRules.strong.order,
 			match: (source: string) => /^<@&([0-9]*)>/.exec(source),
 			parse: (capture: string[]) => {
 				return {
-					id: capture[1],
+					id: capture[1]
 				};
 			},
-			html: (node: any, output: Function, state: State) =>
-				this.htmlTag("span", state.discordCallback.role(node), { class: "d-mention d-role" }),
+			html: (node: any, output: Function, state: State) => this.htmlTag("span", state.discordCallback.role(node), { class: "d-mention d-role" })
 		},
 		defaultEmoji: {
 			order: markdown.defaultRules.strong.order,
 			match: (source: string) => /^:(\w+):/.exec(source),
 			parse: (capture: string[]) => {
 				return {
-					name: capture[1],
+					name: capture[1]
 				};
 			},
-			html: (node: any) => emojis[node.name as keyof typeof emojis] || `:${node.name}:`,
+			html: (node: any) => emojis[node.name as keyof typeof emojis] || `:${node.name}:`
 		},
 		discordEmoji: {
 			order: markdown.defaultRules.strong.order,
@@ -227,7 +216,7 @@ class DiscordMD {
 				return {
 					animated: capture[1] === "a",
 					name: capture[2],
-					id: capture[3],
+					id: capture[3]
 				};
 			},
 			html: (node: any) =>
@@ -237,10 +226,10 @@ class DiscordMD {
 					{
 						class: `emoji${node.animated ? " emoji-animated" : ""}`,
 						src: `https://cdn.discordapp.com/emojis/${node.id}.${node.animated ? "gif" : "png"}`,
-						alt: `:${node.name}:`,
+						alt: `:${node.name}:`
 					},
 					false
-				),
+				)
 		},
 		discordEveryone: {
 			order: markdown.defaultRules.strong.order,
@@ -250,7 +239,7 @@ class DiscordMD {
 			},
 			html: (node: any, output: Function, state: State) => {
 				this.htmlTag("span", state.discordCallback.everyone(node), { class: "d-mention d-user" });
-			},
+			}
 		},
 		discordHere: {
 			order: markdown.defaultRules.strong.order,
@@ -258,21 +247,18 @@ class DiscordMD {
 			parse: () => {
 				return {};
 			},
-			html: (node: any, output: Function, state: State) =>
-				this.htmlTag("span", state.discordCallback.here(node), { class: "d-mention d-user" }),
-		},
+			html: (node: any, output: Function, state: State) => this.htmlTag("span", state.discordCallback.here(node), { class: "d-mention d-user" })
+		}
 	};
 
 	public rulesDiscordOnly = Object.assign({}, this.rulesDiscord, {
 		text: Object.assign({}, markdown.defaultRules.text, {
-			match: (source: string) =>
-				/^[\s\S]+?(?=[^0-9A-Za-z\s\u00c0-\uffff-]|\n\n|\n|\w+:\S|$)/.exec(source),
-			html: (node: any, output: Function, state: State) =>
-				state.escapeHTML ? markdown.sanitizeText(node.content) : node.content,
-		}),
+			match: (source: string) => /^[\s\S]+?(?=[^0-9A-Za-z\s\u00c0-\uffff-]|\n\n|\n|\w+:\S|$)/.exec(source),
+			html: (node: any, output: Function, state: State) => (state.escapeHTML ? markdown.sanitizeText(node.content) : node.content)
+		})
 	});
 
-	// @ts-ignore
+	// @ts-ignore rules aren't compatible with parserFor types
 	public parser = markdown.parserFor(this.rules);
 	public htmlOutput = markdown.outputFor(this.rules, "html");
 	public parserDiscord = markdown.parserFor(this.rulesDiscordOnly);
@@ -281,42 +267,35 @@ class DiscordMD {
 	public htmlOutputEmbed: any;
 
 	public rulesEmbed = Object.assign({}, this.rules, {
-		link: markdown.defaultRules.link,
+		link: markdown.defaultRules.link
 	});
 
-	constructor() {
+	public constructor() {
 		this.rules = Object.assign(this.rules, this.rulesDiscord);
 		this.rulesEmbed = Object.assign({}, this.rules, {
-			link: markdown.defaultRules.link,
+			link: markdown.defaultRules.link
 		});
 
-		// @ts-ignore
+		// @ts-ignore rules aren't compatible with parserFor types
 		this.parser = markdown.parserFor(this.rules);
 		this.htmlOutput = markdown.outputFor(this.rules, "html");
 
-		// @ts-ignore
+		// @ts-ignore rules aren't compatible with parserFor types
 		this.parserEmbed = markdown.parserFor(this.rulesEmbed);
 		this.htmlOutputEmbed = markdown.outputFor(this.rulesEmbed, "html");
 	}
 
-	public htmlTag(
-		tagName: string,
-		content?: string,
-		attributes: { [x: string]: string } = {},
-		isClosed = true
-	) {
+	public htmlTag = (tagName: string, content?: string, attributes: { [x: string]: string } = {}, isClosed = true) => {
 		let attributeString = "";
 		for (const attr in attributes)
 			if (Object.prototype.hasOwnProperty.call(attributes, attr) && attributes[attr])
-				attributeString += ` ${markdown.sanitizeText(attr)}="${markdown.sanitizeText(
-					attributes[attr]
-				)}"`;
+				attributeString += ` ${markdown.sanitizeText(attr)}="${markdown.sanitizeText(attributes[attr])}"`;
 
 		const unclosedTag = `<${tagName}${attributeString}>`;
-		if (isClosed) return unclosedTag + content + `</${tagName}>`;
+		if (isClosed) return `${unclosedTag + content}</${tagName}>`;
 
 		return unclosedTag;
-	}
+	};
 
 	public toHTML(source: string, options?: any) {
 		options = Object.assign(
@@ -325,7 +304,7 @@ class DiscordMD {
 				guildId: "",
 				escapeHTML: true,
 				discordOnly: false,
-				discordCallback: {},
+				discordCallback: {}
 			},
 			options ?? {}
 		);
@@ -346,7 +325,7 @@ class DiscordMD {
 			inQuote: false,
 			inEmphasis: false,
 			escapeHTML: options.escapeHTML,
-			discordCallback: Object.assign({}, this.discordCallbackDefaults, options.discordCallback),
+			discordCallback: Object.assign({}, this.discordCallbackDefaults, options.discordCallback)
 		};
 
 		return _htmlOutput(_parser(source, state), state);
@@ -356,5 +335,5 @@ class DiscordMD {
 const MDClass = new DiscordMD();
 export default MDClass;
 
-// @ts-ignore
+// @ts-ignore rules aren't compatible with parserFor types
 markdown.htmlTag = MDClass.htmlTag;

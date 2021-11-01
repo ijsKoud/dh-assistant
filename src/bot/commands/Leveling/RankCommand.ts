@@ -10,7 +10,7 @@ import { GuildMessage } from "../../../client/structures/Moderation";
 	description: "Shows the rankcard of someone",
 	usage: "[user]",
 	requiredClientPermissions: ["ATTACH_FILES"],
-	preconditions: ["GuildOnly"],
+	preconditions: ["GuildOnly"]
 })
 export default class RankCommand extends Command {
 	public async messageRun(message: GuildMessage, args: Command.Args) {
@@ -19,10 +19,7 @@ export default class RankCommand extends Command {
 
 		const ranks = await this.client.levelManager.getLevels(message.guild.id);
 		const stats = ranks.find((r) => r.level.id.startsWith(member?.id ?? ""));
-		if (!stats)
-			return message.reply(
-				`>>> ${this.client.constants.emojis.redcross} | No leveling stats found for **${member.user.tag}**`
-			);
+		if (!stats) return message.reply(`>>> ${this.client.constants.emojis.redcross} | No leveling stats found for **${member.user.tag}**`);
 
 		const file = await new Rank({
 			username: member.user.username,
@@ -32,7 +29,7 @@ export default class RankCommand extends Command {
 			rank: stats.i + 1,
 			required: stats.level.level * 75,
 			xp: stats.level.xp,
-			base: `base-${stats.level.bg}`,
+			base: `base-${stats.level.bg}`
 		}).build();
 
 		return message.reply({ files: [new MessageAttachment(file, "rankcard.png")] });

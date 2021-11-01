@@ -7,7 +7,7 @@ import ms from "ms";
 	name: "ping",
 	aliases: ["pong"],
 	description: "Ping! Pong! 🏓",
-	requiredClientPermissions: ["EMBED_LINKS"],
+	requiredClientPermissions: ["EMBED_LINKS"]
 })
 export default class PingCommand extends Command {
 	public async messageRun(message: Message): Promise<void> {
@@ -24,11 +24,11 @@ export default class PingCommand extends Command {
 							`API Latency: \`${this.container.client.ws.ping}\` ms`,
 							`Edit Latency: \`${msg.createdTimestamp - message.createdTimestamp}\` ms`,
 							`Uptime: \`${ms(this.container.client.uptime ?? 0, {
-								long: true,
-							})}\``,
+								long: true
+							})}\``
 						].join("\n")
-					),
-			],
+					)
+			]
 		});
 	}
 }

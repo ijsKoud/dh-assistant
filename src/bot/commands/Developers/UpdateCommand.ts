@@ -1,6 +1,5 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-
 import { Message } from "discord.js";
 import { exec } from "child_process";
 
@@ -9,13 +8,11 @@ import { exec } from "child_process";
 	description: "Fetches and compiles the code from GitHub, restarts to finish the update",
 	usage: "[--no-restart|--update-deps|--no-fetch]",
 	flags: ["no-restart", "update-deps", "no-fetch"],
-	preconditions: ["OwnerOnly"],
+	preconditions: ["OwnerOnly"]
 })
 export default class UpdateCommand extends Command {
 	public async messageRun(message: Message, args: Command.Args): Promise<void> {
-		this.container.client.loggers
-			.get("bot")
-			?.info(`Executing update - requested by ${message.author.tag}`);
+		this.container.client.loggers.get("bot")?.info(`Executing update - requested by ${message.author.tag}`);
 
 		const fetch = !args.getFlags("no-fetch");
 		const restart = !args.getFlags("no-restart");
@@ -42,9 +39,7 @@ export default class UpdateCommand extends Command {
 		await msg.edit(">>> 🤖 | **Update Command**:\nUpdate completed, no restart executed!");
 	}
 
-	async Exec(command: string) {
-		return new Promise((res, rej) =>
-			exec(command, { cwd: process.cwd() }, (e, str) => (e ? rej(e) : res(str)))
-		);
+	private async Exec(command: string) {
+		return new Promise((res, rej) => exec(command, { cwd: process.cwd() }, (e, str) => (e ? rej(e) : res(str))));
 	}
 }

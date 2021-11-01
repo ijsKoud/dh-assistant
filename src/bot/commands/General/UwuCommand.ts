@@ -20,25 +20,20 @@ const files: string[] = [
 	"https://media.discordapp.net/attachments/710223624442871970/823296420324704276/unknown.png",
 	"https://media.discordapp.net/attachments/710223624442871970/823296417036238888/unknown.png",
 	"https://cdn.discordapp.com/attachments/710223624442871970/846049276613099560/unknown.png",
-	"uwu rawr xD nuzzles",
+	"uwu rawr xD nuzzles"
 ];
 
 @ApplyOptions<Command.Options>({
 	name: "uwu",
 	aliases: ["owo"],
 	description: "UwU",
-	requiredClientPermissions: ["EMBED_LINKS"],
+	requiredClientPermissions: ["EMBED_LINKS"]
 })
 export default class PingCommand extends Command {
 	public async messageRun(message: Message) {
-		if (
-			!this.client.constants.channels.uwu.includes(message.channelId) &&
-			message.channel.type !== "DM"
-		)
+		if (!this.client.constants.channels.uwu.includes(message.channelId) && message.channel.type !== "DM")
 			return message.reply(
-				`>>> ${
-					this.client.constants.emojis.redcross
-				} | You can only use this command in ${this.client.constants.channels.uwu
+				`>>> ${this.client.constants.emojis.redcross} | You can only use this command in ${this.client.constants.channels.uwu
 					.map((str) => `<#${str}>`)
 					.join(" ")}.`
 			);

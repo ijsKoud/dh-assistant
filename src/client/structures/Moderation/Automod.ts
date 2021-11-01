@@ -28,71 +28,25 @@ export class Automod {
 
 	public modTimeouts: Map<string, ModTimeout> = new Map();
 
-	constructor(public client: Client) {
-		this.loadSettings();
-	}
-
-	public async loadSettings(): Promise<void> {
-		const data = await readFile(join(process.cwd(), "config", "automod.json"), "utf-8");
-		this.settings = JSON.parse(data);
-	}
-
-	protected bypass(message: Message, setting: ThresholdsSetting | BadWordsSettings): boolean {
-		if (
-			!message.member ||
-			message.member.permissions.has("MANAGE_GUILD") ||
-			message.guildId !== this.client.constants.guild
-		)
-			return true;
-
-		const roles = setting.whitelisted
-			.filter((str) => str.toLowerCase().includes("role-"))
-			.map((str) => str.slice(5));
-		if (message.member.roles.cache.some((r) => roles.includes(r.id))) return true;
-
-		if (
-			!setting.enabled ||
-			setting.whitelisted.includes(`CHANNEL-${message.channel.id}`) ||
-			setting.whitelisted.includes(`USER-${message.author.id}`)
-		)
-			return true;
-
-		return false;
-	}
-
-	protected replace(str: string, vars: Record<string, string>): string {
-		for (const key of Object.keys(vars)) str = str.replace(new RegExp(`{${key}}`, "g"), vars[key]);
-
-		return str;
+	public constructor(public client: Client) {
+		void this.loadSettings();
 	}
 
 	public async run(message: Message): Promise<void> {
 		const msg = message as GuildMessage;
-		const results = await Promise.all([
-			this.caps(msg),
-			this.inviteLinks(msg),
-			this.spam(msg),
-			this.mention(msg),
-			this.badWords(msg),
-		]);
-		const filtered = results.filter((result) => !!result) as CheckResults[];
+		const results = await Promise.all([this.caps(msg), this.inviteLinks(msg), this.spam(msg), this.mention(msg), this.badWords(msg)]);
+		const filtered = results.filter((result) => Boolean(result)) as CheckResults[];
 
 		filtered.forEach(async (result) => {
-			const setting = (
-				this.settings.thresholds as Record<string, ThresholdsSetting | BadWordsSettings>
-			)[result.type];
+			const setting = (this.settings.thresholds as Record<string, ThresholdsSetting | BadWordsSettings>)[result.type];
 			switch (setting?.type) {
 				case "verbal":
-					await message
-						.reply({ content: result.message, allowedMentions: { repliedUser: true } })
-						.catch(() => void 0);
+					await message.reply({ content: result.message, allowedMentions: { repliedUser: true } }).catch(() => void 0);
 					break;
 				case "warn":
 					{
 						await message.delete().catch(() => void 0);
-						await message.channel
-							.send({ content: result.message, allowedMentions: { users: [result.user] } })
-							.catch(() => void 0);
+						await message.channel.send({ content: result.message, allowedMentions: { users: [result.user] } }).catch(() => void 0);
 
 						const warn = await this.client.prisma.modlog.create({
 							data: {
@@ -100,39 +54,24 @@ export class Automod {
 								id: `${result.user}-${result.guild}`,
 								moderator: this.client.user?.id ?? "",
 								startDate: new Date(result.date),
-								type: "warn",
-							},
+								type: "warn"
+							}
 						});
 
 						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 						const user = this.client.user!;
-						const log = ModerationMessage.logs(
-							result.reason,
-							"warn",
-							message.author,
-							user,
-							`CaseId: ${warn.caseId}`,
-							result.date
-						);
+						const log = ModerationMessage.logs(result.reason, "warn", message.author, user, `CaseId: ${warn.caseId}`, result.date);
 
 						this.client.loggingHandler.sendLogs(log, "mod");
 
-						const embed = ModerationMessage.dm(
-							result.reason,
-							"warn",
-							message.author,
-							`CaseId: ${warn.caseId}`,
-							result.date
-						);
+						const embed = ModerationMessage.dm(result.reason, "warn", message.author, `CaseId: ${warn.caseId}`, result.date);
 						await message.author.send({ embeds: [embed] }).catch(() => void 0);
 					}
 					break;
 				case "mute":
 					{
 						await message.delete().catch(() => void 0);
-						await message.channel
-							.send({ content: result.message, allowedMentions: { users: [result.user] } })
-							.catch(() => void 0);
+						await message.channel.send({ content: result.message, allowedMentions: { users: [result.user] } }).catch(() => void 0);
 
 						const id = `${result.user}-${result.guild}`;
 						const mute = await this.client.prisma.modlog.create({
@@ -143,8 +82,8 @@ export class Automod {
 								startDate: new Date(result.date),
 								endDate: new Date(result.date + this.settings.mute.duration),
 								type: "mute",
-								timeoutFinished: false,
-							},
+								timeoutFinished: false
+							}
 						});
 
 						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -179,14 +118,14 @@ export class Automod {
 							await message.member?.roles.remove(this.settings.mute.role).catch(() => void 0);
 							await this.client.prisma.modlog.update({
 								where: { caseId: mute.caseId },
-								data: { timeoutFinished: true },
+								data: { timeoutFinished: true }
 							});
 							this.client.loggingHandler.sendLogs(finishLogs, "mod");
 						}, this.settings.mute.duration);
 
 						this.modTimeouts.set(`${id}-mute`, {
 							timeout,
-							caseId: mute.caseId,
+							caseId: mute.caseId
 						});
 
 						const embed = ModerationMessage.dm(
@@ -202,6 +141,33 @@ export class Automod {
 					break;
 			}
 		});
+	}
+
+	public async loadSettings(): Promise<void> {
+		const data = await readFile(join(process.cwd(), "config", "automod.json"), "utf-8");
+		this.settings = JSON.parse(data);
+	}
+
+	protected bypass(message: Message, setting: ThresholdsSetting | BadWordsSettings): boolean {
+		if (!message.member || message.member.permissions.has("MANAGE_GUILD") || message.guildId !== this.client.constants.guild) return true;
+
+		const roles = setting.whitelisted.filter((str) => str.toLowerCase().includes("role-")).map((str) => str.slice(5));
+		if (message.member.roles.cache.some((r) => roles.includes(r.id))) return true;
+
+		if (
+			!setting.enabled ||
+			setting.whitelisted.includes(`CHANNEL-${message.channel.id}`) ||
+			setting.whitelisted.includes(`USER-${message.author.id}`)
+		)
+			return true;
+
+		return false;
+	}
+
+	protected replace(str: string, vars: Record<string, string>): string {
+		for (const key of Object.keys(vars)) str = str.replace(new RegExp(`{${key}}`, "g"), vars[key]);
+
+		return str;
 	}
 
 	protected caps(message: GuildMessage): CheckResults | null {
@@ -222,12 +188,10 @@ export class Automod {
 				message: caps.message,
 				user: message.author.id,
 				date: Date.now(),
-				type: "caps",
+				type: "caps"
 			};
 
-		const res = arr
-			.map((str): number => (str === str.toUpperCase() ? 1 : 0))
-			.reduce((a, b) => a + b);
+		const res = arr.map((str): number => (str === str.toUpperCase() ? 1 : 0)).reduce((a, b) => a + b);
 
 		if (arr.length * caps.threshold.value <= res)
 			return {
@@ -236,7 +200,7 @@ export class Automod {
 				message: caps.message,
 				user: message.author.id,
 				date: Date.now(),
-				type: "caps",
+				type: "caps"
 			};
 
 		return null;
@@ -247,9 +211,7 @@ export class Automod {
 		if (this.bypass(message, spam)) return null;
 
 		if (this.spamfilter.has(`${message.author.id}-${message.guild.id}`)) {
-			const { lastMessage, timer, count } = this.spamfilter.get(
-				`${message.author.id}-${message.guild.id}`
-			) as Filter;
+			const { lastMessage, timer, count } = this.spamfilter.get(`${message.author.id}-${message.guild.id}`) as Filter;
 			const difference = message.createdTimestamp - lastMessage.createdTimestamp;
 			let messageCount: number = count;
 
@@ -258,10 +220,7 @@ export class Automod {
 				this.spamfilter.set(`${message.author.id}-${message.guild.id}`, {
 					count: 1,
 					lastMessage: message,
-					timer: setTimeout(
-						() => this.spamfilter.delete(`${message.author.id}-${message.guild.id}`),
-						spam.threshold.duration
-					),
+					timer: setTimeout(() => this.spamfilter.delete(`${message.author.id}-${message.guild.id}`), spam.threshold.duration)
 				});
 			} else {
 				++messageCount;
@@ -269,37 +228,33 @@ export class Automod {
 					this.spamfilter.set(`${message.author.id}-${message.guild.id}`, {
 						lastMessage: message,
 						count: 1,
-						timer,
+						timer
 					});
 					return {
 						guild: message.guildId,
 						reason: this.replace(spam.reason, {
 							messages: spam.threshold.value.toString(),
-							duration: ms(spam.threshold.duration),
+							duration: ms(spam.threshold.duration)
 						}),
 						message: this.replace(spam.message, { user: message.member.toString() }),
 						user: message.author.id,
 						date: Date.now(),
-						type: "spam",
+						type: "spam"
 					};
-				} else {
-					this.spamfilter.set(`${message.author.id}-${message.guild.id}`, {
-						lastMessage: message,
-						count: messageCount,
-						timer,
-					});
 				}
+				this.spamfilter.set(`${message.author.id}-${message.guild.id}`, {
+					lastMessage: message,
+					count: messageCount,
+					timer
+				});
 			}
 		} else {
-			const fn = setTimeout(
-				() => this.spamfilter.delete(`${message.author.id}-${message.guild.id}`),
-				spam.threshold.duration
-			);
+			const fn = setTimeout(() => this.spamfilter.delete(`${message.author.id}-${message.guild.id}`), spam.threshold.duration);
 
 			this.spamfilter.set(`${message.author.id}-${message.guild.id}`, {
 				count: 1,
 				lastMessage: message,
-				timer: fn,
+				timer: fn
 			});
 		}
 
@@ -311,9 +266,7 @@ export class Automod {
 		if (this.bypass(message, mention)) return null;
 
 		if (this.mentionfilter.has(`${message.author.id}-${message.guild.id}`)) {
-			const { lastMessage, timer, count } = this.mentionfilter.get(
-				`${message.author.id}-${message.guild.id}`
-			) as Filter;
+			const { lastMessage, timer, count } = this.mentionfilter.get(`${message.author.id}-${message.guild.id}`) as Filter;
 			const difference = message.createdTimestamp - lastMessage.createdTimestamp;
 			let mentionCount: number = count;
 
@@ -322,54 +275,43 @@ export class Automod {
 				this.mentionfilter.set(`${message.author.id}-${message.guild.id}`, {
 					count: 1,
 					lastMessage: message,
-					timer: setTimeout(
-						() => this.mentionfilter.delete(`${message.author.id}-${message.guild.id}`),
-						mention.threshold.duration
-					),
+					timer: setTimeout(() => this.mentionfilter.delete(`${message.author.id}-${message.guild.id}`), mention.threshold.duration)
 				});
 			} else {
-				mentionCount +=
-					message.mentions.members?.filter((m) => !m.user.bot && m.id !== message.author.id).size ??
-					0;
+				mentionCount += message.mentions.members?.filter((m) => !m.user.bot && m.id !== message.author.id).size ?? 0;
 
 				if (mentionCount >= mention.threshold.value) {
 					this.mentionfilter.set(`${message.author.id}-${message.guild.id}`, {
 						lastMessage: message,
 						count: 1,
-						timer,
+						timer
 					});
 					return {
 						guild: message.guildId,
 						reason: this.replace(mention.reason, {
 							count: mentionCount.toString(),
 							limit: mention.threshold.value.toString(),
-							duration: ms(mention.threshold.duration),
+							duration: ms(mention.threshold.duration)
 						}),
 						message: this.replace(mention.message, { user: message.member.toString() }),
 						user: message.author.id,
 						date: Date.now(),
-						type: "mention",
+						type: "mention"
 					};
-				} else {
-					this.mentionfilter.set(`${message.author.id}-${message.guild.id}`, {
-						lastMessage: message,
-						count: mentionCount,
-						timer,
-					});
 				}
+				this.mentionfilter.set(`${message.author.id}-${message.guild.id}`, {
+					lastMessage: message,
+					count: mentionCount,
+					timer
+				});
 			}
 		} else {
-			const fn = setTimeout(
-				() => this.mentionfilter.delete(`${message.author.id}-${message.guild.id}`),
-				mention.threshold.duration
-			);
+			const fn = setTimeout(() => this.mentionfilter.delete(`${message.author.id}-${message.guild.id}`), mention.threshold.duration);
 
 			this.mentionfilter.set(`${message.author.id}-${message.guild.id}`, {
-				count:
-					message.mentions.members?.filter((m) => !m.user.bot && m.id !== message.author.id).size ??
-					0,
+				count: message.mentions.members?.filter((m) => !m.user.bot && m.id !== message.author.id).size ?? 0,
 				lastMessage: message,
-				timer: fn,
+				timer: fn
 			});
 		}
 
@@ -396,12 +338,12 @@ export class Automod {
 			reason: this.replace(InviteSettings.reason, {
 				channel: message.channel.toString(),
 				name: (invite.guild?.name || invite.channel.name) ?? "unknown name",
-				code: invite.code,
+				code: invite.code
 			}),
 			message: this.replace(InviteSettings.message, { user: message.member.toString() }),
 			user: message.author.id,
 			date: Date.now(),
-			type: "invite",
+			type: "invite"
 		};
 	}
 
@@ -427,12 +369,12 @@ export class Automod {
 		return {
 			guild: message.guildId,
 			reason: this.replace(badWords.reason, {
-				words,
+				words
 			}),
 			message: this.replace(badWords.message, { user: message.member.toString() }),
 			user: message.author.id,
 			date: Date.now(),
-			type: "badWords",
+			type: "badWords"
 		};
 	}
 }

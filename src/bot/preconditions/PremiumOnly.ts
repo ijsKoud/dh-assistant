@@ -7,19 +7,13 @@ export class PremiumOnlyPrecondition extends Precondition {
 
 		return this.container.client.permissionHandler.hasPremium(message.member, {
 			staff: true,
-			contentCreator: true,
+			contentCreator: true
 		})
 			? this.ok()
 			: this.error({
-					message: `Only ${[
-						"Staff members",
-						"Content Creators",
-						"Boosters",
-						"Channel members",
-						"Level 5+",
-					]
+					message: `Only ${["Staff members", "Content Creators", "Boosters", "Channel members", "Level 5+"]
 						.map((str) => `**${str}**`)
-						.join(", ")} are allowed to use this command`,
+						.join(", ")} are allowed to use this command`
 			  });
 	}
 }

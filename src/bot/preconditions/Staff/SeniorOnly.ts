@@ -8,7 +8,7 @@ export class SeniorOnlyPrecondition extends Precondition {
 		return this.container.client.permissionHandler.hasSenior(message.member)
 			? this.ok()
 			: this.error({
-					message: "Only **Senior Team+** are allowed to use this command",
+					message: "Only **Senior Team+** are allowed to use this command"
 			  });
 	}
 }

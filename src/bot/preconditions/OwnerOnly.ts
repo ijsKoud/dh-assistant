@@ -6,7 +6,7 @@ export class OwnerOnlyPrecondition extends Precondition {
 		return this.container.client.owners.includes(message.author.id)
 			? this.ok()
 			: this.error({
-					message: `Only bot developers of **${this.container.client.user?.tag}** are able to use this command.`,
+					message: `Only bot developers of **${this.container.client.user?.tag}** are able to use this command.`
 			  });
 	}
 }

@@ -7,7 +7,7 @@ import {
 	ButtonInteraction,
 	OverwriteResolvable,
 	TextChannel,
-	MessageOptions,
+	MessageOptions
 } from "discord.js";
 import { readFile } from "fs/promises";
 import { join } from "path";
@@ -15,12 +15,13 @@ import Client from "../../Client";
 import { GuildMessage } from "../Moderation";
 
 export class TicketHandler {
-	private ticketOpening = new Collection<string, boolean>();
-	private tickets = new Collection<number, Ticket>();
 	public settings!: TicketSettings;
 
-	constructor(public client: Client) {
-		this.loadSettings();
+	private ticketOpening = new Collection<string, boolean>();
+	private tickets = new Collection<number, Ticket>();
+
+	public constructor(public client: Client) {
+		void this.loadSettings();
 	}
 
 	public async loadSettings(): Promise<void> {
@@ -41,7 +42,7 @@ export class TicketHandler {
 
 		if (
 			await this.client.prisma.ticket.findFirst({
-				where: { id },
+				where: { id }
 			})
 		)
 			return close();
@@ -63,15 +64,13 @@ export class TicketHandler {
 			);
 
 			const collected = await this.client.utils.awaitMessages(msg, {
-				filter: (m) => m.author.id === message.author.id,
+				filter: (m) => m.author.id === message.author.id
 			});
 			const firstMessage = collected.first();
 			if (!firstMessage) return close();
 
 			if (!firstMessage.content) {
-				await dm.send(
-					`>>> ${this.client.constants.emojis.redcross} | No reason provided, we do not accept no reason for tickets.`
-				);
+				await dm.send(`>>> ${this.client.constants.emojis.redcross} | No reason provided, we do not accept no reason for tickets.`);
 				return close();
 			}
 
@@ -79,31 +78,22 @@ export class TicketHandler {
 			if (!claimChannel || !claimChannel.isText()) {
 				this.client.loggers
 					.get("bot")
-					?.warn(
-						"[TicketHandler]: Incorrect channel received for tickets, channel must be a text channel in this guild."
-					);
-				await dm.send(
-					`>>> ${this.client.constants.emojis.redcross} | Sorry, something went wrong. Please try again later!`
-				);
+					?.warn("[TicketHandler]: Incorrect channel received for tickets, channel must be a text channel in this guild.");
+				await dm.send(`>>> ${this.client.constants.emojis.redcross} | Sorry, something went wrong. Please try again later!`);
 
 				return close();
 			}
 
-			const createdMsg = await dm.send(
-				`>>> ${this.client.constants.emojis.loading} | Creating a ticket, please wait...`
-			);
+			const createdMsg = await dm.send(`>>> ${this.client.constants.emojis.loading} | Creating a ticket, please wait...`);
 			const ticket = await this.client.prisma.ticket.create({
-				data: { closed: false, id },
+				data: { closed: false, id }
 			});
 
 			const embed = this.client.utils
 				.embed()
 				.setTitle(`New Ticket - ${ticket.caseId}`)
 				.setDescription(firstMessage.content)
-				.setFooter(
-					message.author.tag,
-					message.author.displayAvatarURL({ dynamic: true, size: 512 })
-				);
+				.setFooter(message.author.tag, message.author.displayAvatarURL({ dynamic: true, size: 512 }));
 			const component = new MessageActionRow().addComponents(
 				new MessageButton()
 					.setCustomId(`${message.author.id}-${message.guild.id}-${ticket.caseId}`)
@@ -128,9 +118,7 @@ export class TicketHandler {
 		if (!interaction.inCachedGuild()) {
 			this.client.loggers
 				.get("bot")
-				?.error(
-					`[TicketHandler#handleInteraction]: Received interaction from uncached guild (${interaction.guildId})`
-				);
+				?.error(`[TicketHandler#handleInteraction]: Received interaction from uncached guild (${interaction.guildId})`);
 			return;
 		}
 		if (interaction.channelId !== this.settings.channel) return;
@@ -139,15 +127,13 @@ export class TicketHandler {
 		const id = `${userId}-${guildId}`;
 
 		const ticket = await this.client.prisma.ticket.findFirst({
-			where: { caseId: Number(caseId), id },
+			where: { caseId: Number(caseId), id }
 		});
 		if (!ticket || ticket.claimer || ticket.channel || ticket.closed) return;
 
 		const deleteTicket = async () => {
 			await this.client.prisma.ticket.delete({ where: { caseId: Number(caseId) } });
 			await interaction.channel?.messages.delete(interaction.message.id).catch(() => void 0);
-
-			return;
 		};
 
 		const user = await this.client.utils.fetchUser(userId);
@@ -156,9 +142,7 @@ export class TicketHandler {
 		await interaction.channel?.messages.delete(interaction.message.id).catch(() => void 0);
 		ticket.claimer = interaction.user.id;
 
-		const overwrites = [
-			...new Set([interaction.user.id, this.client.user?.id ?? "", ...this.settings.allowedRoles]),
-		];
+		const overwrites = [...new Set([interaction.user.id, this.client.user?.id ?? "", ...this.settings.allowedRoles])];
 
 		try {
 			const channel = await interaction.guild.channels.create(`ticket-${caseId}`, {
@@ -167,44 +151,33 @@ export class TicketHandler {
 					...overwrites.map(
 						(_id): OverwriteResolvable => ({
 							id: _id,
-							allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ATTACH_FILES"],
+							allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ATTACH_FILES"]
 						})
 					),
 					{
 						id: interaction.guildId,
-						deny: ["VIEW_CHANNEL"],
-					},
-				],
+						deny: ["VIEW_CHANNEL"]
+					}
+				]
 			});
 
-			if (this.settings.category)
-				await channel.setParent(this.settings.category, { lockPermissions: false });
+			if (this.settings.category) await channel.setParent(this.settings.category, { lockPermissions: false });
 
 			const embed = this.client.utils
 				.embed()
 				.setTitle(`Ticket - ${ticket.caseId}`)
 				.setDescription(interaction.message.embeds[0].description ?? "Unknown reason")
-				.setFooter(
-					`claimed by ${interaction.user.tag}`,
-					interaction.user.displayAvatarURL({ dynamic: true, size: 512 })
-				);
-			await channel.send({ embeds: [embed] }).then(async (m) => await m.pin().catch(() => void 0));
+				.setFooter(`claimed by ${interaction.user.tag}`, interaction.user.displayAvatarURL({ dynamic: true, size: 512 }));
+			await channel.send({ embeds: [embed] }).then((m) => m.pin().catch(() => void 0));
 
 			ticket.channel = channel.id;
 			await this.client.prisma.ticket.update({ where: { caseId: Number(caseId) }, data: ticket });
 
 			await user.send(
-				`>>> 🎫 | Your ticket has been claimed by **${
-					interaction.member.nickname ?? interaction.user.id
-				}** (${interaction.user.toString()}).`
+				`>>> 🎫 | Your ticket has been claimed by **${interaction.member.nickname ?? interaction.user.id}** (${interaction.user.toString()}).`
 			);
 		} catch (err) {
-			this.client.loggers
-				.get("bot")
-				?.fatal(
-					`[TicketHandler#handleInteraction]: unable to complete ticket claiming ${caseId}`,
-					err
-				);
+			this.client.loggers.get("bot")?.fatal(`[TicketHandler#handleInteraction]: unable to complete ticket claiming ${caseId}`, err);
 		}
 	}
 
@@ -224,10 +197,8 @@ export class TicketHandler {
 						await channel.send(this.getMessage(message, true));
 						await message.react(this.client.constants.emojis.greentick).catch(() => void 0);
 					} catch (err) {
-						this.client.loggers
-							.get("bot")
-							?.error("Error while delivering a message from a ticket to the ticket channel", err);
-						message.reply(
+						this.client.loggers.get("bot")?.error("Error while delivering a message from a ticket to the ticket channel", err);
+						await message.reply(
 							`>>> ${this.client.constants.emojis.error} | Unable to deliver the message to the correct channel, please try again or ask a moderator to close the ticket!`
 						);
 					}
@@ -246,10 +217,8 @@ export class TicketHandler {
 						await user.send(this.getMessage(message, false));
 						await message.react(this.client.constants.emojis.greentick).catch(() => void 0);
 					} catch (err) {
-						this.client.loggers
-							.get("bot")
-							?.error("Error while delivering a message from a ticket channel to the user", err);
-						message.reply(
+						this.client.loggers.get("bot")?.error("Error while delivering a message from a ticket channel to the user", err);
+						await message.reply(
 							`>>> ${this.client.constants.emojis.error} | Unable to DM the user, please try again or close the ticket!`
 						);
 					}
@@ -263,23 +232,22 @@ export class TicketHandler {
 	protected getMessage(message: Message, warning: boolean): MessageOptions {
 		return {
 			files: this.client.utils.getAttachments(message.attachments),
-			content: `>>> 💬 | Reply from **${
-				message.member?.nickname || message.author.tag
-			}** (${message.author.toString()}): \`\`\`${message.content || "no message content"}\`\`\`${
+			content: `>>> 💬 | Reply from **${message.member?.nickname || message.author.tag}** (${message.author.toString()}): \`\`\`${
+				message.content || "no message content"
+			}\`\`\`${
 				warning
 					? `\nMessages from the ticket claimer sent to this channel will automatically be sent to the ticket creator. Use \`${this.client.options.defaultPrefix}\` at the beginning of your message to stop this.`
 					: ""
-			}`,
+			}`
 		};
 	}
 
 	protected async getTicket(type: "DM" | "TEXT", message: Message): Promise<Ticket | null> {
 		if (type === "DM") {
-			let ticket: Ticket | null =
-				this.tickets.find((t) => t.id.includes(message.author.id)) ?? null;
+			let ticket: Ticket | null = this.tickets.find((t) => t.id.includes(message.author.id)) ?? null;
 			if (!ticket) {
 				ticket = await this.client.prisma.ticket.findFirst({
-					where: { id: { contains: message.author.id } },
+					where: { id: { contains: message.author.id } }
 				});
 				if (ticket) {
 					const id = ticket.caseId;
@@ -296,7 +264,7 @@ export class TicketHandler {
 		let ticket: Ticket | null = this.tickets.get(id) ?? null;
 		if (!ticket) {
 			ticket = await this.client.prisma.ticket.findFirst({
-				where: { caseId: id },
+				where: { caseId: id }
 			});
 			if (ticket) {
 				id = ticket.caseId;

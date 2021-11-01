@@ -2,7 +2,6 @@ import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { exec, ExecException } from "child_process";
 import { codeBlock } from "@sapphire/utilities";
-
 import type { Message } from "discord.js";
 
 @ApplyOptions<Command.Options>({
@@ -10,7 +9,7 @@ import type { Message } from "discord.js";
 	aliases: ["execute", "terminal"],
 	description: "Execute any command using exec",
 	preconditions: ["OwnerOnly"],
-	usage: "<...command>",
+	usage: "<...command>"
 })
 export default class ExecCommand extends Command {
 	public async messageRun(message: Message, args: Command.Args) {
@@ -22,7 +21,7 @@ export default class ExecCommand extends Command {
 		if (output.length > 2000)
 			return message.reply({
 				files: [{ attachment: Buffer.from(output), name: "output.txt" }],
-				content: "Output was too long... sent the result as a file.",
+				content: "Output was too long... sent the result as a file."
 			});
 
 		return message.reply(`${output}`);

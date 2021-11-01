@@ -1,12 +1,4 @@
-import {
-	Args,
-	ArgumentError,
-	CommandErrorPayload,
-	Events,
-	Listener,
-	ListenerOptions,
-	UserError,
-} from "@sapphire/framework";
+import { Args, ArgumentError, CommandErrorPayload, Events, Listener, ListenerOptions, UserError } from "@sapphire/framework";
 import { DiscordAPIError, HTTPError, Message } from "discord.js";
 import { Command } from "../../../client/structures/extensions";
 import { RESTJSONErrorCodes } from "discord-api-types/v9";
@@ -22,19 +14,14 @@ export class UserListener extends Listener {
 
 		// If string || UserError, send to user
 		if (typeof error === "string") return message.reply(`>>> ${errorEmoji} | ${error}`);
-		if (error instanceof ArgumentError)
-			return message.reply(`>>> ${errorEmoji} | ${error.message}`);
+		if (error instanceof ArgumentError) return message.reply(`>>> ${errorEmoji} | ${error.message}`);
 		if (error instanceof UserError) return message.reply(`>>> ${errorEmoji} | ${error.message}`);
 
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		const logger = this.container.client.loggers.get("bot")!;
 
 		if (error.name === "AbortError" || error.message === "Internal Server Error") {
-			logger.warn(
-				`${this.getWarnError(message)} (${message.author.id}) | ${error.constructor.name} | ${
-					error.message
-				}`
-			);
+			logger.warn(`${this.getWarnError(message)} (${message.author.id}) | ${error.constructor.name} | ${error.message}`);
 
 			return message.reply(
 				`>>> ${errorEmoji} | Oh no, this doesn't look very good. Something caused the request to abort their mission, please try again.`
@@ -46,11 +33,7 @@ export class UserListener extends Listener {
 			if (this.isSilencedError(args, error)) return;
 			this.container.client.emit("error", error);
 		} else {
-			logger.warn(
-				`${this.getWarnError(message)} (${message.author.id}) | ${error.constructor.name} | ${
-					error.message
-				}`
-			);
+			logger.warn(`${this.getWarnError(message)} (${message.author.id}) | ${error.constructor.name} | ${error.message}`);
 		}
 
 		const command = piece as Command;
@@ -76,15 +59,12 @@ export class UserListener extends Listener {
 	}
 
 	private generateUnexpectedErrorMessage(args: Args, error: Error) {
-		if (this.container.client.owners.includes(args.message.author.id))
-			return codeBlock("js", error.stack ?? error.message);
+		if (this.container.client.owners.includes(args.message.author.id)) return codeBlock("js", error.stack ?? error.message);
 
 		return `>>> ${this.container.client.constants.emojis.error} | Oh no, this doesn't look very good.\n**Error**: \`${error.message}\`\nIf this keeps happening, please DM the developer of this bot.`;
 	}
 
 	private getWarnError(message: Message) {
-		return `ERROR: /${
-			message.guild ? `${message.guild.id}/${message.channel.id}` : `DM/${message.author.id}`
-		}/${message.id}`;
+		return `ERROR: /${message.guild ? `${message.guild.id}/${message.channel.id}` : `DM/${message.author.id}`}/${message.id}`;
 	}
 }

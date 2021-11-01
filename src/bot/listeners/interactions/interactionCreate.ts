@@ -4,11 +4,11 @@ import { ButtonInteraction, Interaction, MessageActionRow, MessageButton } from 
 
 @ApplyOptions<ListenerOptions>({ event: "interactionCreate" })
 export default class InteractionCreateListener extends Listener {
-	public async run(interaction: Interaction) {
+	public run(interaction: Interaction) {
 		if (interaction.inGuild() && interaction.isButton()) {
-			this.container.client.ticketHandler.handleInteraction(interaction);
-			this.handleAdrequest(interaction);
-			this.handlePingRequest(interaction);
+			void this.container.client.ticketHandler.handleInteraction(interaction);
+			void this.handleAdrequest(interaction);
+			void this.handlePingRequest(interaction);
 		}
 	}
 
@@ -85,21 +85,17 @@ export default class InteractionCreateListener extends Listener {
 							await user.send(`>>> ❗ | Adrequest declined: ${reason}`);
 							client.requests.delete(user.id);
 						}
-
-						return;
 					};
 					await interaction.update({ components: [] });
 
 					const msg = await interaction.channel?.messages.fetch(interaction.message.id);
 					if (!msg) {
 						await deleteMsg("Something went wrong while processing your request.");
-						return client.loggers
-							.get("bot")
-							?.fatal(`[AdrequestHandler]: unable to fetch message ${interaction.message.id}`);
+						return client.loggers.get("bot")?.fatal(`[AdrequestHandler]: unable to fetch message ${interaction.message.id}`);
 					}
 
 					const collector = await client.utils.awaitMessages(msg, {
-						filter: (m) => m.author.id === interaction.user.id,
+						filter: (m) => m.author.id === interaction.user.id
 					});
 					const first = collector.first();
 					if (!first || !first.content) return deleteMsg();

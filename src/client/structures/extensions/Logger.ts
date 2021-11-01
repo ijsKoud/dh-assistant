@@ -11,16 +11,13 @@ Structure.extend(
 				let str = "";
 
 				if (config.timestamp) {
-					const date =
-						typeof config.timestamp === "number" ? new Date(config.timestamp) : config.timestamp;
+					const date = typeof config.timestamp === "number" ? new Date(config.timestamp) : config.timestamp;
 					const dateString = moment(date).format("HH:mm:ss DD-MM-YYYY");
 
 					str += `\`${dateString}\``;
 				}
 
-				str += ` **${`[${config.level}]`.padEnd(7, " ")} » [${
-					config.name
-				}]:** ${input.toString()}`.slice(0, 2000);
+				str += ` **${`[${config.level}]`.padEnd(7, " ")} » [${config.name}]:** ${input.toString()}`.slice(0, 2000);
 
 				return str;
 			}
@@ -38,7 +35,7 @@ Structure.extend(
 						str += inspect(data, {
 							depth: 0,
 							showHidden: true,
-							colors: true,
+							colors: true
 						});
 						continue;
 					}
@@ -58,14 +55,14 @@ Structure.extend(
 
 declare module "@daangamesdg/logger" {
 	class Formatter {
-		webhook(input: unknown[], config: LogData & { name: string }): string;
+		public webhook(input: unknown[], config: LogData & { name: string }): string;
 	}
 }
 
 export class Logger extends defaultLogger {
 	public webhook: WebhookClient | null = null;
 
-	constructor(options: LoggerOptions & { webhook?: string }) {
+	public constructor(options: LoggerOptions & { webhook?: string }) {
 		super(options);
 		if (options.webhook) this.webhook = new WebhookClient({ url: options.webhook });
 	}

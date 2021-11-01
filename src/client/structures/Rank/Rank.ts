@@ -1,11 +1,4 @@
-import {
-	createCanvas,
-	registerFont,
-	Canvas,
-	CanvasRenderingContext2D,
-	loadImage,
-	Image,
-} from "canvas";
+import { createCanvas, registerFont, Canvas, CanvasRenderingContext2D, loadImage, Image } from "canvas";
 import { join } from "path";
 import { fillTextWithTwemoji, measureText } from "node-canvas-with-twemoji-and-discord-emoji";
 
@@ -13,7 +6,7 @@ export class Rank {
 	protected canvas: Canvas;
 	protected ctx: CanvasRenderingContext2D;
 
-	constructor(public data: RankOptions) {
+	public constructor(public data: RankOptions) {
 		this.registerFonts();
 
 		this.canvas = createCanvas(800, 230);
@@ -56,9 +49,7 @@ export class Rank {
 		this.ctx.font = "bold 25px Poppins";
 		this.ctx.fillText(
 			`LEVEL ${this.data.level} / RANK ${this.data.rank}`,
-			this.canvas.width -
-				35 -
-				this.ctx.measureText(`LEVEL ${this.data.level} / RANK ${this.data.rank}`).width,
+			this.canvas.width - 35 - this.ctx.measureText(`LEVEL ${this.data.level} / RANK ${this.data.rank}`).width,
 			41
 		);
 
@@ -97,14 +88,7 @@ export class Rank {
 		this.ctx.fill();
 	}
 
-	protected drawImage(
-		width: number,
-		height: number,
-		radius: number,
-		x: number,
-		y: number,
-		img: Image
-	) {
+	protected drawImage(width: number, height: number, radius: number, x: number, y: number, img: Image) {
 		this.ctx.save();
 
 		this.ctx.beginPath();
@@ -134,7 +118,7 @@ export class Rank {
 
 		if (this.data.username.length > max) {
 			this.ctx.font = "regular 25px Poppins";
-			this.data.username = this.data.username.slice(0, 19) + "...";
+			this.data.username = `${this.data.username.slice(0, 19)}...`;
 		}
 
 		await fillTextWithTwemoji(this.ctx, this.data.username, 247, 120);

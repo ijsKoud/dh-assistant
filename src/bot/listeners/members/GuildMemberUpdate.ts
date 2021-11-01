@@ -1,5 +1,4 @@
-import type { ListenerOptions } from "@sapphire/framework";
-import { Listener } from "@sapphire/framework";
+import { ListenerOptions, Listener } from "@sapphire/framework";
 import { ApplyOptions } from "@sapphire/decorators";
 import { GuildMember } from "discord.js";
 
@@ -10,7 +9,6 @@ export class GuildMemberUpdateListener extends Listener {
 		if (oldMember.guild.id !== client.constants.guild) return;
 
 		if (newMember.partial) newMember = await newMember.fetch();
-		if (oldMember.pending && !newMember.pending)
-			await newMember.roles.add(client.constants.roles.default).catch(() => void 0);
+		if (oldMember.pending && !newMember.pending) await newMember.roles.add(client.constants.roles.default).catch(() => void 0);
 	}
 }

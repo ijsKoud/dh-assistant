@@ -8,7 +8,7 @@ export class ManagerOnlyPrecondition extends Precondition {
 		return this.container.client.permissionHandler.hasManager(message.member)
 			? this.ok()
 			: this.error({
-					message: "Only **Managers+** are allowed to use this command",
+					message: "Only **Managers+** are allowed to use this command"
 			  });
 	}
 }

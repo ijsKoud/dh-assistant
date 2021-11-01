@@ -8,24 +8,18 @@ import { modlog } from "@prisma/client";
 	name: "unban",
 	description: "Unbans a user",
 	usage: "<user> [reason]",
-	preconditions: ["GuildOnly", "ModeratorOnly"],
+	preconditions: ["GuildOnly", "ModeratorOnly"]
 })
 export default class UnbanCommand extends Command {
 	public async messageRun(message: GuildMessage, args: Command.Args) {
 		const { value: user } = await args.pickResult("user");
 		const { value: reason } = await args.restResult("string");
-		if (!user)
-			return message.reply(`>>> ${this.client.constants.emojis.redcross} | No user provided`);
+		if (!user) return message.reply(`>>> ${this.client.constants.emojis.redcross} | No user provided`);
 
-		const msg = await message.reply(
-			`>>> ${this.client.constants.emojis.loading} | Unbanning **${user.tag}**...`
-		);
+		const msg = await message.reply(`>>> ${this.client.constants.emojis.loading} | Unbanning **${user.tag}**...`);
 
 		const ban = await message.guild.bans.fetch(user).catch(() => void 0);
-		if (!ban)
-			return msg.edit(
-				`>>> ${this.client.constants.emojis.redcross} | This user is not banned in this server.`
-			);
+		if (!ban) return msg.edit(`>>> ${this.client.constants.emojis.redcross} | This user is not banned in this server.`);
 
 		await message.guild.bans.remove(ban.user, reason ?? `Unbanned by ${message.author.id}`);
 		const timeout = this.client.automod.modTimeouts.get(`${user.id}-${message.guildId}-ban`);
@@ -37,7 +31,7 @@ export default class UnbanCommand extends Command {
 
 			log = await this.client.prisma.modlog.update({
 				where: { caseId: timeout?.caseId },
-				data: { timeoutFinished: true },
+				data: { timeoutFinished: true }
 			});
 		}
 
@@ -53,8 +47,6 @@ export default class UnbanCommand extends Command {
 
 		this.client.loggingHandler.sendLogs(finishLogs, "mod");
 
-		await msg.edit(
-			`>>> ${this.client.constants.emojis.greentick} | Successfully unbanned **${user.tag}**.`
-		);
+		await msg.edit(`>>> ${this.client.constants.emojis.greentick} | Successfully unbanned **${user.tag}**.`);
 	}
 }

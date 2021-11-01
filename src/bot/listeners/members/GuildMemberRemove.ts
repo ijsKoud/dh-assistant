@@ -1,5 +1,4 @@
-import type { ListenerOptions } from "@sapphire/framework";
-import { Listener } from "@sapphire/framework";
+import { ListenerOptions, Listener } from "@sapphire/framework";
 import { ApplyOptions } from "@sapphire/decorators";
 import { GuildMember } from "discord.js";
 import moment from "moment";
@@ -26,7 +25,7 @@ export class GuildMemberRemoveListener extends Listener {
 								.map((role) => role.toString())
 								.slice(0, -1)
 						)
-						.join(", ")}`,
+						.join(", ")}`
 				].join("\n")
 			);
 		client.loggingHandler.sendLogs(embed, "member");

@@ -8,9 +8,7 @@ export class CetOnlyPrecondition extends Precondition {
 		return this.container.client.permissionHandler.hasCet(message.member)
 			? this.ok()
 			: this.error({
-					message: `Only ${["Cet", "Manager", "Senior Team"]
-						.map((str) => `**${str}**`)
-						.join(", ")} are allowed to use this command`,
+					message: `Only ${["Cet", "Manager", "Senior Team"].map((str) => `**${str}**`).join(", ")} are allowed to use this command`
 			  });
 	}
 }

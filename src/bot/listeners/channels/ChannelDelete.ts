@@ -1,5 +1,4 @@
-import type { ListenerOptions } from "@sapphire/framework";
-import { Listener } from "@sapphire/framework";
+import { ListenerOptions, Listener } from "@sapphire/framework";
 import { ApplyOptions } from "@sapphire/decorators";
 import { DMChannel, GuildChannel } from "discord.js";
 
@@ -11,6 +10,6 @@ export class ChannelDeleteListener extends Listener {
 		if (channel.type !== "DM" && channel.guildId !== client.constants.guild) return;
 		if (!channel.isText()) return;
 		const ticket = await client.prisma.ticket.findFirst({ where: { channel: channel.id } });
-		if (ticket) return await client.prisma.ticket.delete({ where: { caseId: ticket.caseId } });
+		if (ticket) return client.prisma.ticket.delete({ where: { caseId: ticket.caseId } });
 	}
 }

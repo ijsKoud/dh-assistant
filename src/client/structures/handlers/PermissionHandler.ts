@@ -4,32 +4,22 @@ import { Roles } from "../../types";
 
 export class PermissionHandler {
 	private roles: Roles;
-	constructor(public client: Client) {
+
+	public constructor(public client: Client) {
 		this.roles = client.constants.roles;
 	}
 
 	public isHigher(mod: GuildMember, offender: GuildMember): string {
-		if (
-			offender.roles.highest.position >= mod.roles.highest.position &&
-			!this.client.isOwner(mod.id)
-		)
-			return "mod-low";
+		if (offender.roles.highest.position >= mod.roles.highest.position && !this.client.isOwner(mod.id)) return "mod-low";
 		if (offender.guild.ownerId === offender.id) return "owner";
 		if (offender.id === this.client.user?.id) return "bot";
-		if (offender.roles.highest.position >= (offender.guild.me?.roles.highest.position ?? 0))
-			return "bot-low";
+		if (offender.roles.highest.position >= (offender.guild.me?.roles.highest.position ?? 0)) return "bot-low";
 
 		return "";
 	}
 
 	public hasStaff(member: GuildMember): boolean {
-		const roles = [
-			this.roles.cet,
-			this.roles.trial,
-			this.roles.moderator,
-			this.roles.manager,
-			this.roles.senior,
-		];
+		const roles = [this.roles.cet, this.roles.trial, this.roles.moderator, this.roles.manager, this.roles.senior];
 
 		return this._parse(roles, member);
 	}
@@ -64,16 +54,11 @@ export class PermissionHandler {
 		return this._parse(roles, member);
 	}
 
-	public hasPremium(
-		member: GuildMember,
-		options?: { staff?: boolean; contentCreator?: boolean }
-	): boolean {
+	public hasPremium(member: GuildMember, options?: { staff?: boolean; contentCreator?: boolean }): boolean {
 		const roles = [
 			this.roles.boost,
 			this.roles.youtubeMember,
-			...Object.keys(this.roles.levels).map(
-				(k) => (this.roles.levels as Record<string, string>)[k]
-			),
+			...Object.keys(this.roles.levels).map((k) => (this.roles.levels as Record<string, string>)[k])
 		];
 
 		if (options?.contentCreator) roles.push(...this.roles.contentCreator);
@@ -84,9 +69,7 @@ export class PermissionHandler {
 
 	protected _parse(roles: string[], member: GuildMember): boolean {
 		return (
-			member.roles.cache.some((r) => roles.includes(r.id)) ||
-			this.client.isOwner(member.id) ||
-			member.permissions.has("ADMINISTRATOR", true)
+			member.roles.cache.some((r) => roles.includes(r.id)) || this.client.isOwner(member.id) || member.permissions.has("ADMINISTRATOR", true)
 		);
 	}
 }

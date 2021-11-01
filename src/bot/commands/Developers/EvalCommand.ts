@@ -1,7 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { codeBlock } from "@sapphire/utilities";
-
 import type { Message } from "discord.js";
 import { Type } from "@sapphire/type";
 import { inspect } from "util";
@@ -13,7 +12,7 @@ import { inspect } from "util";
 	flags: ["async", "hidden", "showHidden", "silent", "s"],
 	options: ["depth"],
 	preconditions: ["OwnerOnly"],
-	usage: "<code>",
+	usage: "<code>"
 })
 export default class EvalCommand extends Command {
 	public async messageRun(message: Message, args: Command.Args) {
@@ -22,7 +21,7 @@ export default class EvalCommand extends Command {
 		const { result, success, type } = await this.eval(message, code, {
 			async: args.getFlags("async"),
 			depth: Number(args.getOption("depth")) ?? 0,
-			showHidden: args.getFlags("hidden", "showHidden"),
+			showHidden: args.getFlags("hidden", "showHidden")
 		});
 
 		const output = success ? codeBlock("js", result) : `**Error**: ${codeBlock("bash", result)}`;
@@ -33,17 +32,13 @@ export default class EvalCommand extends Command {
 		if (output.length > 2000)
 			return message.reply({
 				files: [{ attachment: Buffer.from(output), name: "output.txt" }],
-				content: `Output was too long... sent the result as a file.\n\n${typeFooter}`,
+				content: `Output was too long... sent the result as a file.\n\n${typeFooter}`
 			});
 
 		return message.reply(`${output}\n${typeFooter}`);
 	}
 
-	private async eval(
-		msg: Message,
-		code: string,
-		flags: { async: boolean; depth: number; showHidden: boolean }
-	) {
+	private async eval(msg: Message, code: string, flags: { async: boolean; depth: number; showHidden: boolean }) {
 		if (flags.async) code = `(async () => {\n${code}\n})();`;
 
 		// otherwise "message is not defined"
@@ -53,6 +48,7 @@ export default class EvalCommand extends Command {
 		let result = null;
 
 		try {
+			// eslint-disable-next-line no-eval
 			result = await eval(code);
 		} catch (error) {
 			result = error;
@@ -64,7 +60,7 @@ export default class EvalCommand extends Command {
 		if (typeof result !== "string")
 			result = inspect(result, {
 				depth: flags.depth,
-				showHidden: flags.showHidden,
+				showHidden: flags.showHidden
 			});
 
 		return { result, success, type };

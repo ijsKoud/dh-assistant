@@ -17,13 +17,13 @@ import {
 	MessageEmbed,
 	MessageEmbedOptions,
 	PermissionResolvable,
-	PermissionString,
+	PermissionString
 } from "discord.js";
 import ms from "ms";
 import Client from "./Client";
 
 export default class Utils {
-	constructor(public client: Client) {}
+	public constructor(public client: Client) {}
 
 	public formatTime(time: number | string, type: "t" | "T" | "d" | "D" | "f" | "F" | "R"): string {
 		return `<t:${time}:${type}>`;
@@ -44,23 +44,21 @@ export default class Utils {
 		return ms(time);
 	}
 
-	public async robloxUser(
-		user: string
-	): Promise<{ rover: string | null; bloxlink: string | null }> {
+	public async robloxUser(user: string): Promise<{ rover: string | null; bloxlink: string | null }> {
 		try {
 			const { data: rover } = await axios
-				.get<{ robloxUsername: string }>("https://verify.eryn.io/api/user/" + user)
+				.get<{ robloxUsername: string }>(`https://verify.eryn.io/api/user/${user}`)
 				.catch(() => ({ data: null }));
 			const { data: bloxlink } = await axios
-				.get<{ primaryAccount: string }>("https://api.blox.link/v1/user/" + user)
+				.get<{ primaryAccount: string }>(`https://api.blox.link/v1/user/${user}`)
 				.catch(() => ({ data: null }));
 			const { data: acc } = await axios
-				.get<{ Username: string }>("https://api.roblox.com/users/" + bloxlink?.primaryAccount)
+				.get<{ Username: string }>(`https://api.roblox.com/users/${bloxlink?.primaryAccount}`)
 				.catch(() => ({ data: null }));
 
 			return {
 				rover: rover?.robloxUsername ?? null,
-				bloxlink: acc?.Username ?? null,
+				bloxlink: acc?.Username ?? null
 			};
 		} catch (e) {
 			this.client.loggers.get("bot")?.error(e);
@@ -99,16 +97,12 @@ export default class Utils {
 			return (
 				cache.get(id) ||
 				cache.find((channel) =>
-					"name" in channel
-						? (channel as Channel & { name: string }).name === id || channel.toString() === id
-						: channel.toString() === id
+					"name" in channel ? (channel as Channel & { name: string }).name === id || channel.toString() === id : channel.toString() === id
 				)
 			);
 		};
 
-		return typeof id === "string"
-			? resolve() || (await this.client.channels.fetch(id).catch(() => null))
-			: null;
+		return typeof id === "string" ? resolve() || this.client.channels.fetch(id).catch(() => null) : null;
 	}
 
 	public async getRole(id: string, guild: Guild) {
@@ -119,9 +113,7 @@ export default class Utils {
 
 		if (id.toLowerCase() === "everyone") id = guild.id;
 
-		return typeof id === "string" && guild instanceof Guild
-			? resolve() || (await guild.roles.fetch(id).catch(() => null))
-			: null;
+		return typeof id === "string" && guild instanceof Guild ? resolve() || guild.roles.fetch(id).catch(() => null) : null;
 	}
 
 	public async fetchMember(id: string, guild: Guild | null | undefined) {
@@ -142,44 +134,30 @@ export default class Utils {
 			);
 		};
 
-		return typeof id === "string" && guild instanceof Guild
-			? resolve() || (await guild.members.fetch(id).catch(() => null))
-			: null;
+		return typeof id === "string" && guild instanceof Guild ? resolve() || guild.members.fetch(id).catch(() => null) : null;
 	}
 
 	public async fetchUser(id: string) {
 		const resolve = () => {
 			const { cache } = this.client.users;
-			return (
-				cache.get(id) ||
-				cache.find((user) => user.tag === id || user.username === id || user.toString() === id)
-			);
+			return cache.get(id) || cache.find((user) => user.tag === id || user.username === id || user.toString() === id);
 		};
 
-		return typeof id === "string"
-			? resolve() || (await this.client.users.fetch(id).catch(() => null))
-			: null;
+		return typeof id === "string" ? resolve() || this.client.users.fetch(id).catch(() => null) : null;
 	}
 
 	public isDM(channel: Channel): channel is DMChannel {
 		return ["DM", "GROUP_DM"].includes(channel.type);
 	}
 
-	public pagination(
-		message: Message,
-		pages: MessageEmbed[],
-		buttons: MessageButton[],
-		timeout = 12e4,
-		pageNumber = 1
-	) {
+	public pagination(message: Message, pages: MessageEmbed[], buttons: MessageButton[], timeout = 12e4, pageNumber = 1) {
 		let page = pageNumber;
 		const ids = buttons.map((c) => c.customId);
 
-		const filter = (i: Interaction) =>
-			i.isButton() && i.inGuild() && i.guildId === message.guildId && ids.includes(i.customId);
+		const filter = (i: Interaction) => i.isButton() && i.inGuild() && i.guildId === message.guildId && ids.includes(i.customId);
 		const collector = message.channel.createMessageComponentCollector({
 			time: timeout,
-			filter,
+			filter
 		});
 
 		collector.on("collect", async (buttonInteraction: ButtonInteraction) => {
@@ -201,7 +179,7 @@ export default class Utils {
 			await buttonInteraction.deferUpdate().catch(() => void 0);
 			await message
 				.edit({
-					embeds: [pages[page - 1].setFooter(`Page ${page} / ${pages.length}`)],
+					embeds: [pages[page - 1].setFooter(`Page ${page} / ${pages.length}`)]
 				})
 				.catch(() => void 0);
 		});
@@ -218,7 +196,7 @@ export default class Utils {
 			message
 				.edit({
 					embeds: [pages[page - 1].setFooter(`Page ${page} / ${pages.length}`)],
-					components: [disabledRow],
+					components: [disabledRow]
 				})
 				.catch(() => void 0);
 		});
@@ -239,9 +217,7 @@ export default class Utils {
 		options: AwaitMessagesOptions = { time: 6e4, errors: ["time"], max: 1 }
 	): Promise<Collection<string, Message>> {
 		options = { time: 6e4, errors: ["time"], max: 1, ...options };
-		const coll = await message.channel
-			.awaitMessages(options)
-			.catch(() => new Collection<string, Message>());
+		const coll = await message.channel.awaitMessages(options).catch(() => new Collection<string, Message>());
 
 		return coll;
 	}
@@ -265,8 +241,6 @@ export default class Utils {
 	public getAttachments(attachments: Collection<string, MessageAttachment>): string[] {
 		const valid = /^.*(gif|png|jpg|jpeg|mp4|mp3|pdf|psd)$/g;
 
-		return attachments
-			.filter((attachment) => valid.test(attachment.url))
-			.map((attachment) => attachment.url);
+		return attachments.filter((attachment) => valid.test(attachment.url)).map((attachment) => attachment.url);
 	}
 }

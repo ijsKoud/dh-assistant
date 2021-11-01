@@ -7,7 +7,7 @@ import { GuildMessage } from "../../../client/structures/Moderation";
 	description: "Enable the XP boost",
 	usage: "<multiplier> [--user=<user>]",
 	preconditions: ["GuildOnly", "ManagerOnly"],
-	options: ["user"],
+	options: ["user"]
 })
 export default class XpboostCommand extends Command {
 	public async messageRun(message: GuildMessage, args: Command.Args) {
@@ -21,18 +21,14 @@ export default class XpboostCommand extends Command {
 				else this.client.multipliers.delete(user.id);
 
 				return message.reply(
-					`>>> ${this.client.constants.emojis.greentick} | Successfully set the multiplier of **${
-						user.user.tag
-					}** to \`${multiplier || "none"}\`!`
+					`>>> ${this.client.constants.emojis.greentick} | Successfully set the multiplier of **${user.user.tag}** to \`${
+						multiplier || "none"
+					}\`!`
 				);
 			}
 		}
 
 		this.client.levelManager.boost = multiplier || 1;
-		await message.reply(
-			`>>> ${
-				this.client.constants.emojis.greentick
-			} | Successfully set the global multiplier to \`${multiplier || "none"}\`!`
-		);
+		await message.reply(`>>> ${this.client.constants.emojis.greentick} | Successfully set the global multiplier to \`${multiplier || "none"}\`!`);
 	}
 }

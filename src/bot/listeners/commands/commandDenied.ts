@@ -1,5 +1,4 @@
-import type { CommandDeniedPayload, ListenerOptions } from "@sapphire/framework";
-import { Listener, UserError } from "@sapphire/framework";
+import { CommandDeniedPayload, ListenerOptions, Listener, UserError } from "@sapphire/framework";
 import { ApplyOptions } from "@sapphire/decorators";
 
 @ApplyOptions<ListenerOptions>({ once: false, event: "commandDenied" })
@@ -9,7 +8,7 @@ export class CommandDeniedListener extends Listener {
 
 		return message.reply({
 			content,
-			allowedMentions: { users: [message.author.id], roles: [] },
+			allowedMentions: { users: [message.author.id], roles: [] }
 		});
 	}
 }

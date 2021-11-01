@@ -10,15 +10,12 @@ import { nanoid } from "nanoid";
 	description: "Post an ad in <#720986432176652369>",
 	usage: "<ad>",
 	requiredClientPermissions: ["EMBED_LINKS"],
-	preconditions: ["PremiumOnly", "GuildOnly"],
+	preconditions: ["PremiumOnly", "GuildOnly"]
 })
 export default class AvatarCommand extends Command {
 	public async messageRun(message: GuildMessage, args: Command.Args) {
 		const { value: ad } = await args.restResult("string");
-		if (!ad)
-			return message.reply(
-				`>>> ${this.client.constants.emojis.redcross} | No ad message provided!`
-			);
+		if (!ad) return message.reply(`>>> ${this.client.constants.emojis.redcross} | No ad message provided!`);
 
 		const reply = async (options: ReplyMessageOptions | string) => {
 			await message.reply(options);
@@ -26,7 +23,7 @@ export default class AvatarCommand extends Command {
 		};
 
 		const adrequest = await this.client.prisma.adrequest.findFirst({
-			where: { id: { startsWith: message.author.id } },
+			where: { id: { startsWith: message.author.id } }
 		});
 		if (adrequest)
 			return reply(
@@ -35,48 +32,30 @@ export default class AvatarCommand extends Command {
 
 		const currentTimeout = this.client.requests.find((_, key) => key === message.author.id);
 		if (currentTimeout)
-			return reply(
-				`>>> ⌚ | You can submit another request ${this.client.utils.formatTime(
-					moment(currentTimeout - Date.now()).unix(),
-					"R"
-				)}!`
-			);
+			return reply(`>>> ⌚ | You can submit another request ${this.client.utils.formatTime(moment(currentTimeout - Date.now()).unix(), "R")}!`);
 
 		const channel = await this.client.utils.getChannel(this.client.constants.channels.adrequest);
 		if (!channel || !channel.isText() || channel.type !== "GUILD_TEXT") {
-			reply(
-				`>>> ${this.client.constants.emojis.error} | Something went wrong while processing your request, please try again later.`
-			);
+			await reply(`>>> ${this.client.constants.emojis.error} | Something went wrong while processing your request, please try again later.`);
 			return this.client.loggers
 				.get("bot")
-				?.fatal(
-					`[AdrequestCommand]: ${this.client.constants.channels.adrequest} is not a valid "GUILD_TEXT" channel.`
-				);
+				?.fatal(`[AdrequestCommand]: ${this.client.constants.channels.adrequest} is not a valid "GUILD_TEXT" channel.`);
 		}
 
 		await message.delete().catch(() => void 0);
 		const embed = this.client.utils
 			.embed()
-			.setAuthor(
-				`Adrequest - ${message.author.tag}`,
-				message.member.displayAvatarURL({ dynamic: true, size: 512 })
-			)
+			.setAuthor(`Adrequest - ${message.author.tag}`, message.member.displayAvatarURL({ dynamic: true, size: 512 }))
 			.setDescription(ad);
 
 		const id = nanoid(12);
 		const components = new MessageActionRow().addComponents(
-			new MessageButton()
-				.setCustomId(`${id}-accept`)
-				.setEmoji(this.client.constants.emojis.greentick)
-				.setStyle("SUCCESS"),
-			new MessageButton()
-				.setCustomId(`${id}-decline`)
-				.setEmoji(this.client.constants.emojis.redcross)
-				.setStyle("DANGER")
+			new MessageButton().setCustomId(`${id}-accept`).setEmoji(this.client.constants.emojis.greentick).setStyle("SUCCESS"),
+			new MessageButton().setCustomId(`${id}-decline`).setEmoji(this.client.constants.emojis.redcross).setStyle("DANGER")
 		);
 		const msg = await channel.send({ embeds: [embed], components: [components] });
 		await this.client.prisma.adrequest.create({
-			data: { id: `${message.author.id}-${message.guildId}`, messageId: msg.id, caseId: id },
+			data: { id: `${message.author.id}-${message.guildId}`, messageId: msg.id, caseId: id }
 		});
 
 		this.client.requests.set(message.author.id, Date.now() + 72e5);

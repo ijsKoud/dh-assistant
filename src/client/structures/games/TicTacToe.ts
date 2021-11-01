@@ -1,6 +1,8 @@
 import { Message, MessageCollector, MessageEmbed } from "discord.js";
 
 export class Tictactoe {
+	public board = ["⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜"];
+
 	private message: Message;
 	private embed!: MessageEmbed;
 	private embedMsg!: Message;
@@ -9,17 +11,6 @@ export class Tictactoe {
 	private redTurn = true;
 	private id: string[] = [];
 	private inGame = false;
-
-	public board: string[] = ["⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜", "⬜"];
-
-	private filter = (m: Message) => {
-		return (
-			!!m.content &&
-			m.author.id === this.id[this.redTurn ? 0 : 1] &&
-			!isNaN(parseInt(m.content.split("")[0])) &&
-			[1, 2, 3, 4, 5, 6, 7, 8, 9].includes(parseInt(m.content.split("")[0]))
-		);
-	};
 
 	public constructor(message: Message, users: string[]) {
 		this.message = message;
@@ -41,19 +32,26 @@ export class Tictactoe {
 
 		this.embedMsg = await this.message.channel.send({
 			content: `TicTacToe: ${this.id.map((id) => `<@${id}>`).join(" **vs** ")}!`,
-			embeds: [this.embed],
+			embeds: [this.embed]
 		});
 		this.awaitResponse();
 	}
+
+	private filter = (m: Message) => {
+		return (
+			Boolean(m.content) &&
+			m.author.id === this.id[this.redTurn ? 0 : 1] &&
+			!isNaN(Number(m.content.split("")[0])) &&
+			[1, 2, 3, 4, 5, 6, 7, 8, 9].includes(Number(m.content.split("")[0]))
+		);
+	};
 
 	private Guessed(number: number): void {
 		if (!this.inGame) return;
 		if (this.board.find((_, i) => i + 1 === number) !== "⬜") return;
 
 		const newboard: string[] = [];
-		this.board.forEach((v, i) =>
-			i + 1 === number ? newboard.push(this.redTurn ? "🟥" : "🟦") : newboard.push(v)
-		);
+		this.board.forEach((v, i) => (i + 1 === number ? newboard.push(this.redTurn ? "🟥" : "🟦") : newboard.push(v)));
 
 		this.board = newboard;
 		this.redTurn = !this.redTurn;
@@ -62,14 +60,14 @@ export class Tictactoe {
 		if (check) return this.gameOver(check === "🟥" ? true : false, check === "🟦" ? true : false);
 
 		this.embed.setDescription(this.description);
-		this.embedMsg.edit({ embeds: [this.embed] });
+		void this.embedMsg.edit({ embeds: [this.embed] });
 	}
 
 	private gameOver(redWon: boolean, blueWon: boolean): void {
 		this.inGame = false;
 
 		this.collector.stop("gameOver");
-		this.embedMsg.reactions.removeAll();
+		void this.embedMsg.reactions.removeAll();
 
 		this.embed = new MessageEmbed();
 
@@ -82,15 +80,13 @@ export class Tictactoe {
 		else
 			this.embed
 				.setDescription(
-					`${
-						redWon ? "**Red**" : blueWon ? "**Blue**" : "No one"
-					} won the game, congrats! 🥳 want to play another game?\nRun \`${
+					`${redWon ? "**Red**" : blueWon ? "**Blue**" : "No one"} won the game, congrats! 🥳 want to play another game?\nRun \`${
 						process.env.PREFIX
 					}tictactoe <user id/name/tag/mention>\` to start a new game.`
 				)
 				.setColor("#4AF3AB");
 
-		this.embedMsg.edit({ embeds: [this.embed] });
+		void this.embedMsg.edit({ embeds: [this.embed] });
 	}
 
 	private get description(): string {
@@ -101,20 +97,18 @@ export class Tictactoe {
 			arr.push(this.board.slice(i * 3, j).join(""));
 		}
 
-		return `\`\`\`${arr.join("\n")}\`\`\` ${
-			this.redTurn ? "**Red**" : "**Blue**"
-		} has to choose now.`;
+		return `\`\`\`${arr.join("\n")}\`\`\` ${this.redTurn ? "**Red**" : "**Blue**"} has to choose now.`;
 	}
 
 	private awaitResponse(): void {
 		this.collector = this.embedMsg.channel.createMessageCollector({
 			filter: this.filter,
-			time: 6e4 * 3,
+			time: 6e4 * 3
 		});
 
 		this.collector.on("collect", (m: Message) => {
-			m.delete();
-			this.Guessed(parseInt(m.content.split("")[0]));
+			void m.delete();
+			this.Guessed(Number(m.content.split("")[0]));
 		});
 
 		this.collector.on("end", (_, reason) => {
@@ -149,12 +143,10 @@ export class Tictactoe {
 		const bottomRight = this.toIndex(2, 2);
 		const bottomLeft = this.toIndex(2, 0);
 
-		if (this.validEquals(topLeft, middle) && this.validEquals(middle, bottomRight))
-			return this.board[middle];
-		if (this.validEquals(topRight, middle) && this.validEquals(middle, bottomLeft))
-			return this.board[middle];
+		if (this.validEquals(topLeft, middle) && this.validEquals(middle, bottomRight)) return this.board[middle];
+		if (this.validEquals(topRight, middle) && this.validEquals(middle, bottomLeft)) return this.board[middle];
 
-		if (this.board.filter((v) => v === "⬜").length == 0) return "none";
+		if (this.board.filter((v) => v === "⬜").length === 0) return "none";
 
 		return null;
 	}

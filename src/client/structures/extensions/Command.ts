@@ -22,16 +22,10 @@ export abstract class Command extends SubCommandPluginCommand<CommandArgs, Comma
 			cooldownDelay: options.cooldownDelay ?? 5e3,
 			cooldownLimit: options.cooldownLimit ?? 2,
 			generateDashLessAliases: true,
-			cooldownFilteredUsers: [
-				...(options.cooldownFilteredUsers ?? []),
-				...(process.env.OWNERS ?? "").split(/ +/g),
-			],
+			cooldownFilteredUsers: [...(options.cooldownFilteredUsers ?? []), ...(process.env.OWNERS ?? "").split(/ +/g)]
 		});
 
-		if (!options.name)
-			this.container.client.loggers
-				.get("bot")
-				?.warn(`No name provided for command with aliases "${this.aliases.join('", "')}"`);
+		if (!options.name) this.container.client.loggers.get("bot")?.warn(`No name provided for command with aliases "${this.aliases.join('", "')}"`);
 
 		this.usage = `${options.name} ${options.usage ?? ""}`.trim();
 

@@ -7,7 +7,7 @@ import { JSDOM } from "jsdom";
 const iDocument = new JSDOM().window.document;
 
 export default class markdownParser {
-	constructor(public client: prClient) {}
+	public constructor(public client: prClient) {}
 
 	public parseContent(message: Message, embed = false, ref = false) {
 		const html = DiscordMD.toHTML(message.content, {
@@ -20,24 +20,19 @@ export default class markdownParser {
 				},
 				channel: ({ id }: { id: string }) => {
 					const channel = message.mentions.channels.get(id) || this.client.channels.cache.get(id);
-					const name =
-						channel?.type === "DM" || channel?.type === "GROUP_DM"
-							? null
-							: (channel as GuildChannel)?.name;
+					const name = channel?.type === "DM" || channel?.type === "GROUP_DM" ? null : (channel as GuildChannel)?.name;
 
 					return name ? `#${name}` : `<#${id}>`;
 				},
 				role: ({ id }: { id: string }) => {
 					const role = message.guild?.roles.cache.get(id);
 					return role ? `@${role.name}` : `<@${id}>`;
-				},
-			},
+				}
+			}
 		}) as string;
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		const parsed = new JSDOM(
-			`<div class="${ref ? "chat__reference-link " : ""} chat-text ${
-				message.id
-			}-content">${this._parse(html)}</div>`
+			`<div class="${ref ? "chat__reference-link " : ""} chat-text ${message.id}-content">${this._parse(html)}</div>`
 		).window.document
 			.getElementsByClassName(`${message.id}-content`)
 			.item(0)!;
@@ -138,9 +133,7 @@ export default class markdownParser {
 			if (embed.fields) {
 				const fields = document.createElement("div");
 				fields.setAttribute("class", "embed-fields");
-				fields.append(
-					...embed.fields.map((f) => this.getField(document, message, f)).filter((div) => div)
-				);
+				fields.append(...embed.fields.map((f) => this.getField(document, message, f)).filter((div) => div));
 
 				textContainer.appendChild(fields);
 			}
@@ -221,11 +214,7 @@ export default class markdownParser {
 		return data;
 	}
 
-	private getField(
-		document: typeof iDocument,
-		message: Message,
-		{ name, value, inline }: { name: string; value: string; inline: boolean }
-	) {
+	private getField(document: typeof iDocument, message: Message, { name, value, inline }: { name: string; value: string; inline: boolean }) {
 		const field = document.createElement("div");
 		field.setAttribute("class", `embed-field${inline ? " embed-field--inline" : ""}`);
 

@@ -10,7 +10,7 @@ export default class LoggingHandler {
 	public messages = new Collection<string, iMessages>();
 	public timeouts = new Collection<string, NodeJS.Timeout>();
 
-	constructor(public client: Client) {}
+	public constructor(public client: Client) {}
 
 	public sendLogs(embed: MessageEmbed, type: string) {
 		const collection = this.messages.get(type) || { messages: [], webhookUrl: "" };
@@ -64,14 +64,13 @@ export default class LoggingHandler {
 
 			const webhook = new WebhookClient({ url: webhookUrl });
 			await Promise.all(
-				embeds.map(
-					async (embed) =>
-						await webhook
-							.send({
-								avatarURL: this.client.user?.displayAvatarURL({ size: 4096 }),
-								embeds: embed,
-							})
-							.catch((e) => this.client.loggers.get("bot")?.fatal("**LoggingHandler Error**:", e))
+				embeds.map((embed) =>
+					webhook
+						.send({
+							avatarURL: this.client.user?.displayAvatarURL({ size: 4096 }),
+							embeds: embed
+						})
+						.catch((e) => this.client.loggers.get("bot")?.fatal("**LoggingHandler Error**:", e))
 				)
 			);
 		} catch (e) {}

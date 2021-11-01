@@ -6,7 +6,7 @@ import { GuildMessage } from "../../../client/structures/Moderation";
 	name: "gclear",
 	aliases: ["giveawayclear"],
 	description: "Clear the giveaway data",
-	preconditions: ["GuildOnly", "SeniorOnly"],
+	preconditions: ["GuildOnly", "SeniorOnly"]
 })
 export default class GclearCommand extends Command {
 	public async messageRun(message: GuildMessage) {
@@ -18,8 +18,6 @@ export default class GclearCommand extends Command {
 			}
 		});
 
-		await message.reply(
-			`>>> ${this.client.constants.emojis.greentick} | I deleted **${i}** giveaways which wher for eligible deletion.`
-		);
+		await message.reply(`>>> ${this.client.constants.emojis.greentick} | I deleted **${i}** giveaways which wher for eligible deletion.`);
 	}
 }

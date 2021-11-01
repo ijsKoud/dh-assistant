@@ -8,13 +8,7 @@ export default class MessageDeleteListener extends Listener {
 		const { client } = this.container;
 		if (message.partial) return;
 		if (message.author.partial) await message.author.fetch();
-		if (
-			message.author.bot ||
-			message.guildId !== client.constants.guild ||
-			message.system ||
-			message.webhookId
-		)
-			return;
+		if (message.author.bot || message.guildId !== client.constants.guild || message.system || message.webhookId) return;
 
 		const embed = client.utils
 			.embed()
@@ -22,10 +16,7 @@ export default class MessageDeleteListener extends Listener {
 			.setTitle(`Message deleted in #${"name" in message.channel ? message.channel.name : ""}`)
 			.setDescription(message.content)
 			.setTimestamp()
-			.setFooter(
-				`${message.author.tag} - ${message.author.id}`,
-				message.author.displayAvatarURL({ dynamic: true, size: 4096 })
-			);
+			.setFooter(`${message.author.tag} - ${message.author.id}`, message.author.displayAvatarURL({ dynamic: true, size: 4096 }));
 
 		client.loggingHandler.sendLogs(embed, "message");
 	}

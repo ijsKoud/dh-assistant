@@ -18,14 +18,14 @@ export class Transcript {
 	public client: Client;
 	public channel: TextChannel;
 
+	public document: any;
+	public dom!: JSDOM;
+
 	private logger: Logger;
 	private markdownParser: markdownParser;
 	private messages = new Collection<string, Message>();
 
-	public document: any;
-	public dom!: JSDOM;
-
-	constructor(options: { client: Client; channel: TextChannel }) {
+	public constructor(options: { client: Client; channel: TextChannel }) {
 		this.client = options.client;
 		this.channel = options.channel;
 		this.markdownParser = new markdownParser(options.client);
@@ -118,13 +118,7 @@ export class Transcript {
 			groupDiv.appendChild(symbolDiv);
 
 			const refMsg = this.messages.get(message.reference?.messageId ?? "");
-			if (!refMsg) {
-				const contentDiv = document.createElement("div");
-				contentDiv.setAttribute("class", "chat__reference-content");
-				contentDiv.append("Message was not found.");
-
-				refDiv.appendChild(contentDiv);
-			} else {
+			if (refMsg) {
 				const avatar = document.createElement("img");
 				avatar.setAttribute("class", "chat__reference-avatar");
 				avatar.setAttribute("src", refMsg.author.displayAvatarURL({ size: 64, dynamic: true }));
@@ -147,12 +141,17 @@ export class Transcript {
 				const html = this.toHTML(document, refMsg, true);
 				const content =
 					refMsg.content.length > 0
-						? html.getElementsByClassName(`${refMsg.id}-content`).item(0) ??
-						  "Click to see attachment"
+						? html.getElementsByClassName(`${refMsg.id}-content`).item(0) ?? "Click to see attachment"
 						: "Click to see attachment";
 				contentDiv.append(content);
 
 				refDiv.append(avatar, nameSpan, contentDiv);
+			} else {
+				const contentDiv = document.createElement("div");
+				contentDiv.setAttribute("class", "chat__reference-content");
+				contentDiv.append("Message was not found.");
+
+				refDiv.appendChild(contentDiv);
 			}
 
 			groupDiv.appendChild(refDiv);
@@ -161,9 +160,7 @@ export class Transcript {
 		// avatar div
 		const avatarDiv = this.getAvatar(
 			document,
-			message.system
-				? "https://cdn.daangamesdg.wtf/discord/wumpus.png"
-				: message.author.displayAvatarURL({ dynamic: true, size: 128 })
+			message.system ? "https://cdn.daangamesdg.wtf/discord/wumpus.png" : message.author.displayAvatarURL({ dynamic: true, size: 128 })
 		);
 		groupDiv.appendChild(avatarDiv);
 
@@ -176,42 +173,25 @@ export class Transcript {
 		user.setAttribute("class", "chat__author-name");
 		user.setAttribute("title", message.system ? "Wumpus" : message.author.tag);
 		user.setAttribute("data-user-id", message.author.id);
-		user.setAttribute(
-			"href",
-			message.system ? "https://discord.com/" : `https://discord.com/users/${message.author.id}`
-		);
+		user.setAttribute("href", message.system ? "https://discord.com/" : `https://discord.com/users/${message.author.id}`);
 
-		const colour = message.system
-			? "#B6D0FC"
-			: message.member
-			? this.client.utils.getColour(message.member.roles)
-			: "#fff";
+		const colour = message.system ? "#B6D0FC" : message.member ? this.client.utils.getColour(message.member.roles) : "#fff";
 		user.setAttribute("style", `color: ${colour}`);
-		user.appendChild(
-			document.createTextNode(
-				message.system ? "Wumpus" : message.member?.nickname || message.author.username
-			)
-		);
+		user.appendChild(document.createTextNode(message.system ? "Wumpus" : message.member?.nickname || message.author.username));
 		messagesDiv.append(user, document.createTextNode("\n"));
 
 		// add bot/system tag
 		if (message.author.bot || message.system) {
 			const tag = document.createElement("span");
 			tag.setAttribute("class", "chat__bot-tag");
-			tag.appendChild(
-				document.createTextNode(message.system ? "SYSTEM" : message.author.bot ? "BOT" : "UNKOWN")
-			);
+			tag.appendChild(document.createTextNode(message.system ? "SYSTEM" : message.author.bot ? "BOT" : "UNKOWN"));
 			messagesDiv.append(tag, document.createTextNode("\n"));
 		}
 
 		// timestamp div
 		const timestamp = document.createElement("span");
 		timestamp.setAttribute("class", "chat__timestamp");
-		timestamp.appendChild(
-			document.createTextNode(
-				moment(message.createdAt).tz("Europe/London").format("DD/MM/YYYY h:mm:ss a")
-			)
-		);
+		timestamp.appendChild(document.createTextNode(moment(message.createdAt).tz("Europe/London").format("DD/MM/YYYY h:mm:ss a")));
 		messagesDiv.appendChild(timestamp);
 		messages.map((m) => messagesDiv.appendChild(this.getMessage(document, m)));
 
@@ -230,10 +210,7 @@ export class Transcript {
 		if (message.editedTimestamp) {
 			const edited = document.createElement("span");
 			edited.setAttribute("class", "chat__edited-timestamp");
-			edited.setAttribute(
-				"title",
-				moment(message.editedAt).tz("Europe/London").format("DD/MM/YYYY h:mm:ss a")
-			);
+			edited.setAttribute("title", moment(message.editedAt).tz("Europe/London").format("DD/MM/YYYY h:mm:ss a"));
 			edited.append("(edited)");
 			div.appendChild(edited);
 		}
@@ -242,10 +219,7 @@ export class Transcript {
 		if (message.attachments?.size) div.append(...this.getAttachments(document, message));
 		if (message.reactions?.cache?.size) div.appendChild(this.getReactions(document, message));
 
-		if (
-			message.reference?.messageId &&
-			!["REPLY", "CHANNEL_PINNED_MESSAGE"].includes(message.type)
-		) {
+		if (message.reference?.messageId && !["REPLY", "CHANNEL_PINNED_MESSAGE"].includes(message.type)) {
 			const reference = document.createElement("span");
 			reference.setAttribute("class", "chat__reference-link");
 			reference.setAttribute("title", "Jump to message");
@@ -285,7 +259,7 @@ export class Transcript {
 			return {
 				emoji: emoji.name,
 				url: emoji.url,
-				count: count ?? 1,
+				count: count ?? 1
 			};
 		});
 
@@ -305,9 +279,7 @@ export class Transcript {
 					e.url
 						? e.url
 						: `${twemoji.base}/72x72/${twemoji.convert.toCodePoint(
-								(e.emoji?.indexOf(String.fromCharCode(0x200d)) ?? 0 < 0
-									? e.emoji?.replace(/\uFE0F/g, "")
-									: e.emoji) ?? ""
+								((e.emoji?.indexOf(String.fromCharCode(0x200d)) ?? 0) < 0 ? e.emoji?.replace(/\uFE0F/g, "") : e.emoji) ?? ""
 						  )}.png`
 				);
 				emoji.setAttribute("height", "17");
@@ -326,8 +298,7 @@ export class Transcript {
 
 	private getEmbeds(document: typeof iDocument, message: Message): any[] {
 		const embeds: any[] = [];
-		for (const embed of message.embeds)
-			embeds.push(...this.markdownParser.parseEmbed(document, message, [embed]));
+		for (const embed of message.embeds) embeds.push(...this.markdownParser.parseEmbed(document, message, [embed]));
 
 		return embeds;
 	}
@@ -362,8 +333,7 @@ export class Transcript {
 			const div = document.createElement("div");
 
 			const imgRegex = /^.*(jpg|png|gif|webp|tiff|psd|raw|bmp|heif|indd)$/g;
-			const videoRegex =
-				/^.*(webm|mpg|mp2|mpeg|mpe|mpv|ogg|mp4|m4p|m4v|avi|wmv|mov|qt|flv|swf|avchd)$/g;
+			const videoRegex = /^.*(webm|mpg|mp2|mpeg|mpe|mpv|ogg|mp4|m4p|m4v|avi|wmv|mov|qt|flv|swf|avchd)$/g;
 			const audioRegex = /^.*(pcm|wav|aiff|mp3|acc|ogg|wma|flac|alac)$/g;
 
 			const attachment = message.attachments.find((a) => url === a.url);
@@ -380,10 +350,7 @@ export class Transcript {
 				if (attachment?.height ?? 0 > 300) img.setAttribute("height", "300");
 
 				img.setAttribute("src", url);
-				img.setAttribute(
-					"title",
-					`${attachment?.name} (${this.client.utils.formatBytes(attachment?.size ?? 0)})`
-				);
+				img.setAttribute("title", `${attachment?.name} (${this.client.utils.formatBytes(attachment?.size ?? 0)})`);
 				a.appendChild(img);
 
 				div.appendChild(a);
@@ -424,9 +391,7 @@ export class Transcript {
 
 				const size = document.createElement("div");
 				size.setAttribute("class", "chat__attachment-filesize");
-				size.appendChild(
-					document.createTextNode(this.client.utils.formatBytes(attachment?.size ?? 0))
-				);
+				size.appendChild(document.createTextNode(this.client.utils.formatBytes(attachment?.size ?? 0)));
 
 				container.append(file, size);
 				div.appendChild(container);

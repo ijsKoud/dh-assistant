@@ -6,7 +6,7 @@ import { Message } from "discord.js";
 	name: "avatar",
 	description: "Shows the avatar of a user",
 	usage: "[user]",
-	requiredClientPermissions: ["EMBED_LINKS"],
+	requiredClientPermissions: ["EMBED_LINKS"]
 })
 export default class AvatarCommand extends Command {
 	public async messageRun(message: Message, args: Command.Args): Promise<void> {
@@ -18,8 +18,8 @@ export default class AvatarCommand extends Command {
 				this.container.client.utils
 					.embed()
 					.setTitle(`Avatar of ${user.tag}`)
-					.setImage(user.displayAvatarURL({ dynamic: true, size: 4096 })),
-			],
+					.setImage(user.displayAvatarURL({ dynamic: true, size: 4096 }))
+			]
 		});
 	}
 }

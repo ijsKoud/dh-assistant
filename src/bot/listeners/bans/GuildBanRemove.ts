@@ -12,7 +12,7 @@ export default class GuildBanRemoveListener extends Listener {
 		const infractions = await ban.guild
 			.fetchAuditLogs({
 				limit: 10,
-				type: "MEMBER_BAN_REMOVE",
+				type: "MEMBER_BAN_REMOVE"
 			})
 			.catch(() => null);
 		if (!infractions) return;
@@ -30,7 +30,7 @@ export default class GuildBanRemoveListener extends Listener {
 			infraction.executor || {
 				displayAvatarURL: () => "https://static.daangamesdg.xyz/discord/wumpus.png",
 				id: "",
-				tag: "User#0000",
+				tag: "User#0000"
 			},
 			"Case Id: none",
 			Date.now()

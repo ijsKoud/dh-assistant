@@ -8,23 +8,18 @@ import { modlog } from ".prisma/client";
 	name: "Unmute",
 	description: "Unmutes a user",
 	usage: "<user> [reason]",
-	preconditions: ["GuildOnly", "ModeratorOnly"],
+	preconditions: ["GuildOnly", "ModeratorOnly"]
 })
 export default class UnmuteCommand extends Command {
 	public async messageRun(message: GuildMessage, args: Command.Args) {
 		const { value: member } = await args.pickResult("member");
 		const { value: reason } = await args.restResult("string");
-		if (!member)
-			return message.reply(`>>> ${this.client.constants.emojis.redcross} | No member provided`);
+		if (!member) return message.reply(`>>> ${this.client.constants.emojis.redcross} | No member provided`);
 
-		const msg = await message.reply(
-			`>>> ${this.client.constants.emojis.loading} | Unmuting **${member.user.tag}**...`
-		);
+		const msg = await message.reply(`>>> ${this.client.constants.emojis.loading} | Unmuting **${member.user.tag}**...`);
 		const { settings, modTimeouts } = this.client.automod;
 		if (!member.roles.cache.has(settings.mute.role))
-			return msg.edit(
-				`>>> ${this.client.constants.emojis.redcross} | This user is not muted in this server.`
-			);
+			return msg.edit(`>>> ${this.client.constants.emojis.redcross} | This user is not muted in this server.`);
 
 		await member.roles.remove(settings.mute.role);
 		const id = `${member.id}-${message.guildId}-mute`;
@@ -37,7 +32,7 @@ export default class UnmuteCommand extends Command {
 
 			log = await this.client.prisma.modlog.update({
 				where: { caseId: timeout?.caseId },
-				data: { timeoutFinished: true },
+				data: { timeoutFinished: true }
 			});
 		}
 
@@ -53,8 +48,6 @@ export default class UnmuteCommand extends Command {
 
 		this.client.loggingHandler.sendLogs(finishLogs, "mod");
 
-		await msg.edit(
-			`>>> ${this.client.constants.emojis.greentick} | Successfully unmuted **${member.user.tag}**.`
-		);
+		await msg.edit(`>>> ${this.client.constants.emojis.greentick} | Successfully unmuted **${member.user.tag}**.`);
 	}
 }
