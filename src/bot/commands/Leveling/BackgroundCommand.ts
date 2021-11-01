@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { GuildMessage } from "../../../client/structures/Moderation";
+import type { GuildMessage } from "../../../client/structures/Moderation";
 import { readdir } from "fs/promises";
 import { join } from "path";
 
@@ -29,7 +29,7 @@ export default class BackgroundCommand extends Command {
 			where: { id: `${message.author.id}-${message.guildId}` },
 			data: { bg: backgroundId }
 		});
-		await message.reply(`>>> ${this.client.constants.emojis.greentick} | Successfully updated the background to \`${backgroundId}\`!`);
+		return message.reply(`>>> ${this.client.constants.emojis.greentick} | Successfully updated the background to \`${backgroundId}\`!`);
 	}
 
 	protected async checkBackground(id: number): Promise<boolean> {

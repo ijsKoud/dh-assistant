@@ -2,7 +2,7 @@ import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { MessageAttachment } from "discord.js";
 import Rank from "../../../client/structures/Rank";
-import { GuildMessage } from "../../../client/structures/Moderation";
+import type { GuildMessage } from "../../../client/structures/Moderation";
 
 @ApplyOptions<Command.Options>({
 	name: "rank",

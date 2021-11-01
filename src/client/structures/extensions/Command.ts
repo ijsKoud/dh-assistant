@@ -1,7 +1,7 @@
 import { Args as CommandArgs, CommandContext, PieceContext, UserError } from "@sapphire/framework";
 import { SubCommandPluginCommand } from "@sapphire/plugin-subcommands";
 import type { PermissionResolvable } from "discord.js";
-import Client from "../../Client";
+import type Client from "../../Client";
 
 export abstract class Command extends SubCommandPluginCommand<CommandArgs, Command> {
 	public readonly hidden: boolean;

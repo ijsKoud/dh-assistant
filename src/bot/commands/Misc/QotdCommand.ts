@@ -1,7 +1,7 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { GuildMessage } from "../../../client/structures/Moderation";
-import { Message } from "discord.js";
+import type { GuildMessage } from "../../../client/structures/Moderation";
+import type { Message } from "discord.js";
 
 @ApplyOptions<Command.Options>({
 	name: "qotd",
@@ -56,7 +56,7 @@ export default class QotdCommand extends Command {
 		if (!collector.content.match(/yes/g)) return msg.edit(`${base}Prompt closed - cancellation request.`);
 
 		await this.postQOTD(message, qotd, fotd, source);
-		await message.reply(`${base}QOTD posted and published!`);
+		return message.reply(`${base}QOTD posted and published!`);
 	}
 
 	private async postQOTD(message: Message, qotd: string, fotd: string, source: string) {

@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { GuildMessage } from "../../../client/structures/Moderation";
+import type { GuildMessage } from "../../../client/structures/Moderation";
 
 @ApplyOptions<Command.Options>({
 	name: "transfer",
@@ -46,7 +46,7 @@ export default class TransferCommand extends Command {
 				)
 				.catch(() => void 0);
 
-		await message.channel.send({
+		return message.channel.send({
 			content: `>>> 👋 | Hey ${member.toString()}, check the pins for more information about this ticket!`,
 			allowedMentions: { users: [member.id] }
 		});

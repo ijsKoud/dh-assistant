@@ -140,8 +140,8 @@ export default class ReadyListener extends Listener {
 
 	private async setStatus() {
 		const { client } = this.container;
-		if (process.env.NODE_ENV === "development")
-			return client.user?.setPresence({
+		if (process.env.NODE_ENV === "development") {
+			client.user?.setPresence({
 				status: "dnd",
 				activities: [
 					{
@@ -150,6 +150,9 @@ export default class ReadyListener extends Listener {
 					}
 				]
 			});
+
+			return;
+		}
 
 		const url = `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCkMrp3dJhWz2FcGTzywQGWg&key=${process.env.YOUTUBE_API_KEY}`;
 		const { data } = await axios

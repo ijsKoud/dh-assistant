@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { GuildMessage } from "../../../client/structures/Moderation";
+import type { GuildMessage } from "../../../client/structures/Moderation";
 import { MessageActionRow, MessageButton, ReplyMessageOptions } from "discord.js";
 import moment from "moment";
 import { nanoid } from "nanoid";

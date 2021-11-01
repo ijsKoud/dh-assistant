@@ -47,6 +47,6 @@ export default class KickCommand extends Command {
 		await member.send({ embeds: [dm] }).catch(() => void 0);
 		await member.kick(reason ?? `Kicked by ${message.author.id}`);
 
-		await msg.edit(`>>> 👞 | Successfully kicked **${member.user.tag}** from the server.`);
+		return msg.edit(`>>> 👞 | Successfully kicked **${member.user.tag}** from the server.`);
 	}
 }

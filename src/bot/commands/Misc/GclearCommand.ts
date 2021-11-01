@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { GuildMessage } from "../../../client/structures/Moderation";
+import type { GuildMessage } from "../../../client/structures/Moderation";
 
 @ApplyOptions<Command.Options>({
 	name: "gclear",
@@ -18,6 +18,6 @@ export default class GclearCommand extends Command {
 			}
 		});
 
-		await message.reply(`>>> ${this.client.constants.emojis.greentick} | I deleted **${i}** giveaways which wher for eligible deletion.`);
+		return message.reply(`>>> ${this.client.constants.emojis.greentick} | I deleted **${i}** giveaways which wher for eligible deletion.`);
 	}
 }

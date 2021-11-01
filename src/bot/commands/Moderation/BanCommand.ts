@@ -1,6 +1,5 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-
 import { GuildMessage, ModerationMessage } from "../../../client/structures/Moderation";
 import ms from "ms";
 import { setTimeout as setLongTimeout } from "long-timeout";
@@ -101,6 +100,6 @@ export default class BanCommand extends Command {
 		await user.send({ embeds: [dm] }).catch(() => void 0);
 		await message.guild.bans.create(user, { reason });
 
-		await msg.edit(`${`>>> 🔨 | Successfully banned **${user.tag}** ${duration ? `for **${ms(duration, { long: true })}**` : ""}`.trim()}.`);
+		return msg.edit(`${`>>> 🔨 | Successfully banned **${user.tag}** ${duration ? `for **${ms(duration, { long: true })}**` : ""}`.trim()}.`);
 	}
 }

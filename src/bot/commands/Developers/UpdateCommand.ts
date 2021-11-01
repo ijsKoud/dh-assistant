@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { Message } from "discord.js";
+import type { Message } from "discord.js";
 import { exec } from "child_process";
 
 @ApplyOptions<Command.Options>({

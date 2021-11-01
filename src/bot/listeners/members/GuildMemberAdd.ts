@@ -1,6 +1,6 @@
 import { ListenerOptions, Listener } from "@sapphire/framework";
 import { ApplyOptions } from "@sapphire/decorators";
-import { GuildMember } from "discord.js";
+import type { GuildMember } from "discord.js";
 import moment from "moment";
 
 @ApplyOptions<ListenerOptions>({ once: false, event: "guildMemberAdd" })

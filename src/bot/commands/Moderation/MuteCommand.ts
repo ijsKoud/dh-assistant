@@ -101,7 +101,7 @@ export default class MuteCommand extends Command {
 		await member.send({ embeds: [dm] }).catch(() => void 0);
 		await member.roles.add(this.client.automod.settings.mute.role);
 
-		await msg.edit(
+		return msg.edit(
 			`${`>>> 🔇 | Successfully muted **${member.user.tag}** ${duration ? `for **${ms(duration, { long: true })}**` : ""}`.trim()}.`
 		);
 	}

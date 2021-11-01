@@ -1,7 +1,7 @@
 import axios from "axios";
 import { createCipheriv, createDecipheriv, randomBytes } from "crypto";
 import { stringify } from "querystring";
-import Client from "../../Client";
+import type Client from "../../Client";
 
 export default class Utils {
 	public constructor(public client: Client) {}

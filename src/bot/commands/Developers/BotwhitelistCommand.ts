@@ -19,7 +19,7 @@ export default class BotWhitelistCommand extends Command {
 		if (!data) return message.reply(`>>> ${this.client.constants.emojis.redcross} | No user/guild found.`);
 
 		await this.client.blacklistManager.whitelist(data.id);
-		await message.reply(
+		return message.reply(
 			`>>> ${this.client.constants.emojis.redcross} | Successfully whitelisted **${
 				data instanceof User ? `${data.tag} (user)` : `${data.name} (guild)`
 			}**!`

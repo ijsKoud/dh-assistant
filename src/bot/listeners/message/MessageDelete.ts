@@ -1,6 +1,6 @@
 import { Listener, ListenerOptions } from "@sapphire/framework";
 import { ApplyOptions } from "@sapphire/decorators";
-import { Message } from "discord.js";
+import type { Message } from "discord.js";
 
 @ApplyOptions<ListenerOptions>({ event: "messageDelete" })
 export default class MessageDeleteListener extends Listener {

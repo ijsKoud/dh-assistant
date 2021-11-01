@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { SapphireClient } from "@sapphire/framework";
 import { BitFieldResolvable, Collection, IntentsString, PartialTypes } from "discord.js";
@@ -11,9 +12,9 @@ import { Automod } from "./structures/Moderation";
 import LoggingHandler from "./structures/handlers/LoggingHandler";
 import { TicketHandler } from "./structures/handlers/TicketHandler";
 import { GiveawaysManager } from "discord-giveaways";
-import { Constants } from "./types";
+import type { Constants } from "./types";
 import { readFileSync } from "fs";
-import { AuthCookie } from "./structures/Api";
+import type { AuthCookie } from "./structures/Api";
 
 export default class Client extends SapphireClient {
 	public owners: string[];
@@ -106,7 +107,6 @@ interface ClientOptions {
 }
 
 declare module "@sapphire/framework" {
-	// eslint-disable-next-line @typescript-eslint/no-shadow
 	class SapphireClient {
 		public owners: string[];
 
@@ -147,7 +147,6 @@ declare module "@sapphire/framework" {
 }
 
 declare global {
-	// eslint-disable-next-line @typescript-eslint/no-namespace
 	namespace Express {
 		export interface Request {
 			auth: AuthCookie | null;

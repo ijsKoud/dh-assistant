@@ -9,7 +9,7 @@ import { Message, User } from "discord.js";
 	preconditions: ["OwnerOnly"]
 })
 export default class BotBlacklistCommand extends Command {
-	public async messagemessageRun(message: Message, args: Command.Args) {
+	public async messageRun(message: Message, args: Command.Args) {
 		const { value: id } = await args.pickResult("string");
 		if (!id) return message.reply(`>>> ${this.client.constants.emojis.redcross} | No user/guild id provided.`);
 		if (this.client.blacklistManager.blacklisted.includes(id))
@@ -19,7 +19,7 @@ export default class BotBlacklistCommand extends Command {
 		if (!data) return message.reply(`>>> ${this.client.constants.emojis.redcross} | No user/guild found.`);
 
 		await this.client.blacklistManager.blacklist(data.id);
-		await message.reply(
+		return message.reply(
 			`>>> ${this.client.constants.emojis.redcross} | Successfully blacklisted **${
 				data instanceof User ? `${data.tag} (user)` : `${data.name} (guild)`
 			}**!`

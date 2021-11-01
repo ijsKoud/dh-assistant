@@ -1,4 +1,4 @@
-import { Guild, GuildChannel, GuildMember, Message } from "discord.js";
+import type { Guild, GuildChannel, GuildMember, Message } from "discord.js";
 
 export interface ModerationSettings {
 	mute: {

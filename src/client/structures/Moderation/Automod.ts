@@ -1,11 +1,11 @@
 import { readFile } from "fs/promises";
-import { CheckResults, ModerationSettings, GuildMessage, ThresholdsSetting } from "./interfaces";
-import Client from "../../Client";
+import type { CheckResults, ModerationSettings, GuildMessage, ThresholdsSetting } from "./interfaces";
+import type Client from "../../Client";
 import { join } from "path";
-import { Invite, Message } from "discord.js";
+import type { Invite, Message } from "discord.js";
 import ms from "ms";
 import { ModerationMessage } from "./ModerationMessage";
-import { BadWordsSettings } from ".";
+import type { BadWordsSettings } from ".";
 import { Timeout, setTimeout as setLongTimeout } from "long-timeout";
 import moment from "moment";
 

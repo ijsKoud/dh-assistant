@@ -24,6 +24,6 @@ export default class MessageCommand extends Command {
 		this.client.loggingHandler.sendLogs(log, "mod");
 		await member.send(`>>> 📣 | You received a message from **${author}**:\n${DmMessage}`.slice(0, 2e3)).catch(() => void 0);
 
-		await msg.edit(`>>> ${this.client.constants.emojis.greentick} | Successfully DMed **${member.user.tag}** as **${author}**.`);
+		return msg.edit(`>>> ${this.client.constants.emojis.greentick} | Successfully DMed **${member.user.tag}** as **${author}**.`);
 	}
 }

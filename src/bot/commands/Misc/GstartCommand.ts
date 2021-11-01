@@ -1,7 +1,7 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { GuildMessage } from "../../../client/structures/Moderation";
-import { Message, TextChannel } from "discord.js";
+import type { GuildMessage } from "../../../client/structures/Moderation";
+import type { Message, TextChannel } from "discord.js";
 import ms from "ms";
 
 @ApplyOptions<Command.Options>({
@@ -88,7 +88,7 @@ export default class GstartCommand extends Command {
 			}
 		});
 
-		await message.reply(`${base}Setup completed, giveaway created!`);
+		return message.reply(`${base}Setup completed, giveaway created!`);
 	}
 
 	private getArg(str: string): string {

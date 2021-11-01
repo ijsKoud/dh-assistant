@@ -20,7 +20,7 @@ import {
 	PermissionString
 } from "discord.js";
 import ms from "ms";
-import Client from "./Client";
+import type Client from "./Client";
 
 export default class Utils {
 	public constructor(public client: Client) {}

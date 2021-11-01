@@ -16,6 +16,6 @@ export default class FactCommand extends Command {
 		const actionRow = new MessageActionRow().addComponents(
 			new MessageButton().setURL("https://daangamesdg.wtf/api/fact?all=true").setLabel("Source").setStyle("LINK")
 		);
-		await message.reply({ content: `\`${Util.escapeMarkdown(data)}\``, components: [actionRow] });
+		return message.reply({ content: `\`${Util.escapeMarkdown(data)}\``, components: [actionRow] });
 	}
 }

@@ -1,6 +1,6 @@
-import { Level } from ".prisma/client";
-import { GuildMember } from "discord.js";
-import Client from "../../../client/Client";
+import type { Level } from ".prisma/client";
+import type { GuildMember } from "discord.js";
+import type Client from "../../../client/Client";
 
 export class LevelManager {
 	public lvlBlacklisted = ["710090914776743966", "701809203484033024"];

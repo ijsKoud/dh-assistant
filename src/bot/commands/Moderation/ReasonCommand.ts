@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { GuildMessage } from "../../../client/structures/Moderation";
+import type { GuildMessage } from "../../../client/structures/Moderation";
 
 @ApplyOptions<Command.Options>({
 	name: "reason",
@@ -21,6 +21,6 @@ export default class ReasonCommand extends Command {
 		if (!modlog) return msg.edit(`>>> ${this.client.constants.emojis.redcross} | No modlog found with the id **${id}**!`);
 
 		await this.client.prisma.modlog.update({ where: { caseId: modlog.caseId }, data: { reason } });
-		await msg.edit(`>>> ${this.client.constants.emojis.greentick} | Successfully updated the reason of modlog **${modlog.caseId}**.`);
+		return msg.edit(`>>> ${this.client.constants.emojis.greentick} | Successfully updated the reason of modlog **${modlog.caseId}**.`);
 	}
 }

@@ -1,5 +1,5 @@
-import prClient from "../../Client";
-import { Message, MessageEmbed, GuildChannel } from "discord.js";
+import type Client from "../../Client";
+import type { Message, MessageEmbed, GuildChannel } from "discord.js";
 import DiscordMD from "./discord-markdown";
 import twemoji from "twemoji";
 import { JSDOM } from "jsdom";
@@ -7,7 +7,7 @@ import { JSDOM } from "jsdom";
 const iDocument = new JSDOM().window.document;
 
 export default class markdownParser {
-	public constructor(public client: prClient) {}
+	public constructor(public client: Client) {}
 
 	public parseContent(message: Message, embed = false, ref = false) {
 		const html = DiscordMD.toHTML(message.content, {

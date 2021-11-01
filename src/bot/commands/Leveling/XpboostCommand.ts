@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { GuildMessage } from "../../../client/structures/Moderation";
+import type { GuildMessage } from "../../../client/structures/Moderation";
 
 @ApplyOptions<Command.Options>({
 	name: "xpboost",
@@ -29,6 +29,8 @@ export default class XpboostCommand extends Command {
 		}
 
 		this.client.levelManager.boost = multiplier || 1;
-		await message.reply(`>>> ${this.client.constants.emojis.greentick} | Successfully set the global multiplier to \`${multiplier || "none"}\`!`);
+		return message.reply(
+			`>>> ${this.client.constants.emojis.greentick} | Successfully set the global multiplier to \`${multiplier || "none"}\`!`
+		);
 	}
 }

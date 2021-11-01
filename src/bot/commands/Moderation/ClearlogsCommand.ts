@@ -58,6 +58,6 @@ export default class ClearlogsCommand extends Command {
 		);
 		this.client.loggingHandler.sendLogs(log, "mod");
 
-		await msg.edit(`>>> ${this.client.constants.emojis.greentick} | Successfully deleted modlog with the id **${modlog.caseId}**.`);
+		return msg.edit(`>>> ${this.client.constants.emojis.greentick} | Successfully deleted modlog with the id **${modlog.caseId}**.`);
 	}
 }

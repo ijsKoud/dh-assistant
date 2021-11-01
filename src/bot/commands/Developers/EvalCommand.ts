@@ -43,6 +43,7 @@ export default class EvalCommand extends Command {
 
 		// otherwise "message is not defined"
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		// @ts-ignore used so we can access it via the eval command
 		const message = msg;
 		let success = true;
 		let result = null;

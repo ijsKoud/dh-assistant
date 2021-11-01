@@ -1,4 +1,4 @@
-import { Ticket } from ".prisma/client";
+import type { Ticket } from ".prisma/client";
 import {
 	Message,
 	Collection,
@@ -11,8 +11,8 @@ import {
 } from "discord.js";
 import { readFile } from "fs/promises";
 import { join } from "path";
-import Client from "../../Client";
-import { GuildMessage } from "../Moderation";
+import type Client from "../../Client";
+import type { GuildMessage } from "../Moderation";
 
 export class TicketHandler {
 	public settings!: TicketSettings;

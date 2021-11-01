@@ -1,6 +1,6 @@
-import { GuildMember } from "discord.js";
-import Client from "../../Client";
-import { Roles } from "../../types";
+import type { GuildMember } from "discord.js";
+import type Client from "../../Client";
+import type { Roles } from "../../types";
 
 export class PermissionHandler {
 	private roles: Roles;

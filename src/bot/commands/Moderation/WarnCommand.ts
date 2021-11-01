@@ -45,6 +45,6 @@ export default class WarnCommand extends Command {
 		this.client.loggingHandler.sendLogs(log, "mod");
 		await member.send({ embeds: [dm] }).catch(() => void 0);
 
-		await msg.edit(`>>> ${this.client.constants.emojis.greentick} | Successfully warned **${member.user.tag}**.`);
+		return msg.edit(`>>> ${this.client.constants.emojis.greentick} | Successfully warned **${member.user.tag}**.`);
 	}
 }

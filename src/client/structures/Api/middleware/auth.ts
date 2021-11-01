@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import Client from "../../../Client";
+import type { NextFunction, Request, Response } from "express";
+import type Client from "../../../Client";
 import Utils from "../utils";
 
 export class AuthMiddleware {

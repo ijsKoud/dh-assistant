@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Collection, Message, TextChannel } from "discord.js";
-import { Logger } from "../extensions";
-import Client from "../../Client";
+import type { Logger } from "../extensions";
+import type Client from "../../Client";
 import { JSDOM } from "jsdom";
 import twemoji from "twemoji";
 

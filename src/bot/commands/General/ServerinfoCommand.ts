@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { Message } from "discord.js";
+import type { Message } from "discord.js";
 
 const levels: Record<"NONE" | "TIER_1" | "TIER_2" | "TIER_3", string> = {
 	NONE: "0",

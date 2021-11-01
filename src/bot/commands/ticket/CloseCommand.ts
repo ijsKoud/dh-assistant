@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { GuildMessage } from "../../../client/structures/Moderation";
+import type { GuildMessage } from "../../../client/structures/Moderation";
 import Transcript from "../../../client/structures/Transcript";
 import { MessageAttachment, TextChannel } from "discord.js";
 import { join } from "path";

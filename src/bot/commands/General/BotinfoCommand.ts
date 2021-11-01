@@ -3,7 +3,7 @@ import { cpus, platform, totalmem, uptime } from "os";
 import { ApplyOptions } from "@sapphire/decorators";
 import { version } from "../../../../package.json";
 import { memoryUsage } from "process";
-import { Message } from "discord.js";
+import type { Message } from "discord.js";
 import ms from "ms";
 
 @ApplyOptions<Command.Options>({

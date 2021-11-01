@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { GuildMessage } from "../../../client/structures/Moderation";
+import type { GuildMessage } from "../../../client/structures/Moderation";
 
 @ApplyOptions<Command.Options>({
 	name: "remove",
@@ -32,7 +32,7 @@ export default class RemoveCommand extends Command {
 				`>>> 👮‍♂️ | One of your message in ${channel.toString()} has been deleted by one of our Moderators:\n${reason ?? "No reason provided"}`
 			)
 			.catch(() => void 0);
-		await message.reply(
+		return message.reply(
 			`>>> ${this.client.constants.emojis.greentick} | Successfully deleted message in ${channel.toString()} with the Id **${msg.id}**.`
 		);
 	}

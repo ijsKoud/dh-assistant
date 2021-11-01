@@ -1,6 +1,6 @@
 import { Listener, ListenerOptions } from "@sapphire/framework";
 import { ApplyOptions } from "@sapphire/decorators";
-import { GuildBan } from "discord.js";
+import type { GuildBan } from "discord.js";
 import { ModerationMessage } from "../../../client/structures/Moderation";
 
 @ApplyOptions<ListenerOptions>({ event: "guildBanAdd" })

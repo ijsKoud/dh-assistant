@@ -1,11 +1,10 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { EmbedField, MessageButton, MessageEmbed, Collection } from "discord.js";
-
-import { modlog } from ".prisma/client";
+import type { modlog } from ".prisma/client";
 import { v4 as uuid } from "uuid";
 import moment from "moment";
-import { GuildMessage } from "../../../client/structures/Moderation";
+import type { GuildMessage } from "../../../client/structures/Moderation";
 
 @ApplyOptions<Command.Options>({
 	name: "modlogs",
@@ -22,7 +21,10 @@ export default class ModlogsCommand extends Command {
 			const logs = await this.client.prisma.modlog.findMany({
 				where: { id: { endsWith: message.guild.id } }
 			});
-			if (!logs.length) return message.reply(">>> 🎉 | No modlogs found for this server.");
+			if (!logs.length) {
+				await message.reply(">>> 🎉 | No modlogs found for this server.");
+				return;
+			}
 
 			const tempCache = new Collection<string, number>();
 			logs.forEach((w) => tempCache.set(w.id, (tempCache.get(w.id) ?? 0) + 1));
@@ -40,13 +42,17 @@ export default class ModlogsCommand extends Command {
 						.substr(0, 4096)
 				);
 
-			return message.reply({ embeds: [embed] });
+			await message.reply({ embeds: [embed] });
+			return;
 		}
 
 		const logs = await this.client.prisma.modlog.findMany({
 			where: { id: `${user.id}-${message.guild.id}` }
 		});
-		if (!logs.length) return message.reply(">>> 🎉 | No modlogs found for this user.");
+		if (!logs.length) {
+			await message.reply(">>> 🎉 | No modlogs found for this user.");
+			return;
+		}
 
 		const embed = this.client.utils
 			.embed()
@@ -54,7 +60,10 @@ export default class ModlogsCommand extends Command {
 			.setURL(`${process.env.DASHBOARD}/modlogs/${user.id}`);
 
 		const embeds = this.generateEmbeds(logs, embed);
-		if (embeds.length === 1) return message.reply({ embeds: [embeds[0]] });
+		if (embeds.length === 1) {
+			await message.reply({ embeds: [embeds[0]] });
+			return;
+		}
 
 		const buttons = [
 			new MessageButton()

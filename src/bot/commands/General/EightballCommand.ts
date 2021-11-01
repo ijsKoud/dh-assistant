@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { Message } from "discord.js";
+import type { Message } from "discord.js";
 
 const ball: string[] = [
 	"🎱 | As I see it, yes,",
@@ -37,6 +37,6 @@ export default class PingCommand extends Command {
 		if (!question || !question.trim().endsWith("?"))
 			return message.reply(`>>> ${this.client.constants.emojis.redcross} | A question with a **?** is required!`);
 
-		await message.reply(`>>> ${ball[Math.floor(Math.random() * ball.length)]} **${message.author.username}**.`);
+		return message.reply(`>>> ${ball[Math.floor(Math.random() * ball.length)]} **${message.author.username}**.`);
 	}
 }

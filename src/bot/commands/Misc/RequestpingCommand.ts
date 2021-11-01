@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { GuildMessage } from "../../../client/structures/Moderation";
+import type { GuildMessage } from "../../../client/structures/Moderation";
 import { MessageActionRow, MessageButton } from "discord.js";
 
 @ApplyOptions<Command.Options>({
@@ -10,7 +10,7 @@ import { MessageActionRow, MessageButton } from "discord.js";
 	preconditions: ["GuildOnly", "CetOnly"]
 })
 export default class RequestpingCommand extends Command {
-	public async messageRun(message: GuildMessage): Promise<void> {
+	public async messageRun(message: GuildMessage) {
 		if (message.channel.id !== this.client.constants.channels.cetChannel) return;
 
 		const channel = await this.client.utils.getChannel(this.client.constants.channels.pingrequest);
@@ -27,6 +27,6 @@ export default class RequestpingCommand extends Command {
 			components: [components]
 		});
 
-		await message.react(this.client.constants.emojis.greentick);
+		return message.react(this.client.constants.emojis.greentick);
 	}
 }

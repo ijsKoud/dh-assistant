@@ -1,5 +1,5 @@
 import { WebhookClient, MessageEmbed, Collection } from "discord.js";
-import Client from "../../../client/Client";
+import type Client from "../../../client/Client";
 
 interface iMessages {
 	messages: MessageEmbed[];

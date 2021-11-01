@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { Message } from "discord.js";
+import type { Message } from "discord.js";
 
 const files: string[] = [
 	"https://cdn.discordapp.com/attachments/727992822036430859/799944907333828628/UwU_Violation.mp4",
@@ -38,6 +38,6 @@ export default class PingCommand extends Command {
 					.join(" ")}.`
 			);
 
-		await message.reply(files[Math.floor(Math.random() * files.length)]);
+		return message.reply(files[Math.floor(Math.random() * files.length)]);
 	}
 }

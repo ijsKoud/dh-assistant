@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { GuildMessage } from "../../../client/structures/Moderation";
+import type { GuildMessage } from "../../../client/structures/Moderation";
 
 @ApplyOptions<Command.Options>({
 	name: "leveledit",
@@ -33,7 +33,7 @@ export default class LeveleditCommand extends Command {
 		}
 
 		await this.client.prisma.level.update({ where: { id: level.id }, data: level });
-		await message.reply(
+		return message.reply(
 			`>>> ${this.client.constants.emojis.greentick} | Successfully updated the **${type}** of **${member.user.tag}** to \`${value}\`!`
 		);
 	}

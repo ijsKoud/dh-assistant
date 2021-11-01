@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { Message } from "discord.js";
+import type { Message } from "discord.js";
 
 import { Tictactoe } from "../../../client/structures/games";
 
@@ -21,6 +21,6 @@ export default class TictactoeCommand extends Command {
 
 		if (member.user.bot || member.user.system) return message.reply(">>> 🤖 | Sorry, you cannot start a game with a discord bot.");
 
-		await new Tictactoe(message, [message.author.id, member.id]).start();
+		return new Tictactoe(message, [message.author.id, member.id]).start();
 	}
 }

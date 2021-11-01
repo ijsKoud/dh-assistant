@@ -1,6 +1,6 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
-import { Message, TextChannel } from "discord.js";
+import type { Message, TextChannel } from "discord.js";
 
 @ApplyOptions<Command.Options>({
 	name: "say",
@@ -33,6 +33,6 @@ export default class SayCommand extends Command {
 			allowedMentions: { users: [] }
 		});
 
-		await message.react(this.client.constants.emojis.greentick).catch(() => void 0);
+		return message.react(this.client.constants.emojis.greentick).catch(() => void 0);
 	}
 }

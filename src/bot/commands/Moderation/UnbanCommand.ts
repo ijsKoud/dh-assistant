@@ -2,7 +2,7 @@ import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import { GuildMessage, ModerationMessage } from "../../../client/structures/Moderation";
 import { clearTimeout as clearLongTimeout } from "long-timeout";
-import { modlog } from "@prisma/client";
+import type { modlog } from "@prisma/client";
 
 @ApplyOptions<Command.Options>({
 	name: "unban",
@@ -47,6 +47,6 @@ export default class UnbanCommand extends Command {
 
 		this.client.loggingHandler.sendLogs(finishLogs, "mod");
 
-		await msg.edit(`>>> ${this.client.constants.emojis.greentick} | Successfully unbanned **${user.tag}**.`);
+		return msg.edit(`>>> ${this.client.constants.emojis.greentick} | Successfully unbanned **${user.tag}**.`);
 	}
 }
