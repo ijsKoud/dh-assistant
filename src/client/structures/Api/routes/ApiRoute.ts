@@ -1,4 +1,6 @@
+import type { modlog } from ".prisma/client";
 import type { Logger } from "@daangamesdg/logger";
+import Collection from "@discordjs/collection";
 import { NextFunction, Request, Response, Router } from "express";
 import type Client from "../../../Client";
 import type { ApiResponse, User } from "../../../types";
@@ -12,23 +14,33 @@ export class ApiRoute {
 		this.utils = new Utils(client);
 		this.router = Router();
 		this.router.get("/user", this.user.bind(this)); // get user
+
+		this.router
+			.get("/modlogs", this.modCheck.bind(this), this.modlogs.bind(this)) // get all modlogs
+			.get("/modlogs/:userId", this.modCheck.bind(this), this.modlog.bind(this)); // get all modlogs of a user
 	}
 
-	// private async modCheck(req: Request, res: Response, next: NextFunction) {
-	// 	if (!req.auth) return res.send(null);
+	private async modCheck(req: Request, res: Response, next: NextFunction) {
+		if (!req.auth) {
+			res.send(null);
+			return;
+		}
 
-	// 	try {
-	// 		const guild = this.client.guilds.cache.get(this.client.constants.guild);
-	// 		if (!guild) throw new Error("Unable to get the correct guild");
+		try {
+			const guild = this.client.guilds.cache.get(this.client.constants.guild);
+			if (!guild) throw new Error("Unable to get the correct guild");
 
-	// 		const member = await this.client.utils.fetchMember(req.auth.userId, guild);
-	// 		if (!member || (!this.client.permissionHandler.hasMod(member) && !this.client.isOwner(member.id))) return res.send(null);
+			const member = await this.client.utils.fetchMember(req.auth.userId, guild);
+			if (!member || (!this.client.permissionHandler.hasMod(member) && !this.client.isOwner(member.id))) {
+				res.send(null);
+				return;
+			}
 
-	// 		next();
-	// 	} catch (e) {
-	// 		res.status(500).json({ message: "internal server error", error: (e as any).message });
-	// 	}
-	// }
+			next();
+		} catch (err) {
+			res.status(500).json({ message: "internal server error", error: err.message });
+		}
+	}
 
 	// private async adminCheck(req: Request, res: Response, next: NextFunction) {
 	// 	if (!req.auth) return res.send(null);
@@ -41,8 +53,8 @@ export class ApiRoute {
 	// 		if (!member || (!this.client.permissionHandler.hasSenior(member) && !this.client.isOwner(member.id))) return res.send(null);
 
 	// 		next();
-	// 	} catch (e) {
-	// 		res.status(500).json({ message: "internal server error", error: (e as any).message });
+	// 	} catch (err) {
+	// 		res.status(500).json({ message: "internal server error", error: err.message });
 	// 	}
 	// }
 
@@ -69,8 +81,61 @@ export class ApiRoute {
 			}
 
 			res.send({ ...user, rank: this.client.permissionHandler.getRank(member) });
-		} catch (e) {
-			res.status(500).json({ message: "internal server error", error: (e as any).message });
+		} catch (err) {
+			res.status(500).json({ message: "internal server error", error: err.message });
+		}
+	}
+
+	private async modlogs(req: Request, res: Response) {
+		try {
+			let logs: modlog[] = this.client.ApiCache.get("modlog");
+			if (!logs) {
+				logs = await this.client.prisma.modlog.findMany({
+					where: { id: { endsWith: this.client.constants.guild } }
+				});
+				this.utils.setCache("modlog", logs);
+			}
+
+			const tempCache = new Collection<string, number>();
+			logs.forEach((w) => tempCache.set(w.id, (tempCache.get(w.id) ?? 0) + 1));
+
+			const _logs = tempCache.sort((a, b) => b - a).map((amount, id) => ({ id, amount }));
+			const parsed = await Promise.all(
+				_logs.map(async ({ id, amount }) => {
+					const user = await this.utils.getUser(id);
+					if (user && "error" in user) throw new Error(user.error);
+					return { user, amount };
+				})
+			);
+
+			res.send(parsed);
+		} catch (err) {
+			res.status(500).json({ message: "internal server error", error: err.message });
+		}
+	}
+
+	private async modlog(req: Request, res: Response) {
+		const { userId } = req.params;
+		if (!userId) {
+			res.status(400).send("Bad request");
+			return;
+		}
+
+		try {
+			let logs: modlog[] = this.client.ApiCache.get(`${userId}-modlog`);
+			if (!logs) {
+				logs = await this.client.prisma.modlog.findMany({
+					where: { id: `${userId}-${this.client.constants.guild}` }
+				});
+				this.utils.setCache(`${userId}-modlog`, logs);
+			}
+
+			const user = await this.utils.getUser(userId);
+			if (user && "error" in user) throw new Error(user.error);
+
+			res.send({ user, logs });
+		} catch (err) {
+			res.status(500).json({ message: "internal server error", error: err.message });
 		}
 	}
 }
