@@ -3,7 +3,7 @@ import type { Logger } from "@daangamesdg/logger";
 import Collection from "@discordjs/collection";
 import { NextFunction, Request, Response, Router } from "express";
 import type Client from "../../../Client";
-import type { ApiResponse, User } from "../../../types";
+import type { ApiResponse, LeaderboardStat, User } from "../../../types";
 import Utils from "../utils";
 
 export class ApiRoute {
@@ -18,6 +18,8 @@ export class ApiRoute {
 		this.router
 			.get("/modlogs", this.modCheck.bind(this), this.modlogs.bind(this)) // get all modlogs
 			.get("/modlogs/:userId", this.modCheck.bind(this), this.modlog.bind(this)); // get all modlogs of a user
+
+		this.router.get("/leaderboard", this.leaderboard.bind(this)); // get leaderboard
 	}
 
 	private async modCheck(req: Request, res: Response, next: NextFunction) {
@@ -81,6 +83,20 @@ export class ApiRoute {
 			}
 
 			res.send({ ...user, rank: this.client.permissionHandler.getRank(member) });
+		} catch (err) {
+			res.status(500).json({ message: "internal server error", error: err.message });
+		}
+	}
+
+	private async leaderboard(req: Request, res: Response) {
+		try {
+			let stats: LeaderboardStat[] = this.client.ApiCache.get("leaderboard");
+			if (!stats) {
+				stats = await this.client.levelManager.getLevels(this.client.constants.guild);
+				this.utils.setCache("leaderboard", stats);
+			}
+
+			res.send(stats);
 		} catch (err) {
 			res.status(500).json({ message: "internal server error", error: err.message });
 		}

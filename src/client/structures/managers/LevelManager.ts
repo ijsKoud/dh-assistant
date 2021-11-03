@@ -1,6 +1,7 @@
 import type { Level } from ".prisma/client";
 import type { GuildMember } from "discord.js";
 import type Client from "../../../client/Client";
+import type { LeaderboardStat } from "../../types";
 
 export class LevelManager {
 	public lvlBlacklisted = ["710090914776743966", "701809203484033024"];
@@ -81,7 +82,7 @@ export class LevelManager {
 		if (role.old) await user.roles.remove(role.old).catch(() => void 0);
 	}
 
-	public async getLevels(id: string): Promise<{ level: Level; i: number }[]> {
+	public async getLevels(id: string): Promise<LeaderboardStat[]> {
 		return Promise.all(
 			(await this.client.prisma.level.findMany({ where: { id: { endsWith: id } } }))
 				.map((level) => ({ level, total: this.getTotal(level.level, level.xp) }))

@@ -1,3 +1,5 @@
+import type { Level } from ".prisma/client";
+
 export interface Constants {
 	channels: Channels;
 	emojis: Emojis;
@@ -50,6 +52,11 @@ export interface User {
 	discriminator: string;
 	avatar: string;
 	rank: -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6;
+}
+
+export interface LeaderboardStat {
+	level: Level & { tag: string | undefined };
+	i: number;
 }
 
 export type ApiResponse = { message: string; error: string } | null;
