@@ -8,9 +8,10 @@ import { GuildMember } from "discord.js";
 
 @ApplyOptions<ListenerOptions>({ once: true, event: "ready" })
 export default class ReadyListener extends Listener {
-	public async run(): Promise<void> {
-		await this.setStatus();
-		await this.loadTimeouts();
+	public run() {
+		void this.container.client.Api.start();
+		void this.setStatus();
+		void this.loadTimeouts();
 		this.loadGiveaways();
 
 		this.container.client.loggers.get("bot")?.info(`${this.container.client.user?.tag} has logged in!`);

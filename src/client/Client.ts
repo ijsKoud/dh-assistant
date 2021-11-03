@@ -14,7 +14,7 @@ import { TicketHandler } from "./structures/handlers/TicketHandler";
 import { GiveawaysManager } from "discord-giveaways";
 import type { Constants } from "./types";
 import { readFileSync } from "fs";
-import type { AuthCookie } from "./structures/Api";
+import Api, { AuthCookie } from "./structures/Api";
 
 export default class Client extends SapphireClient {
 	public owners: string[];
@@ -29,6 +29,7 @@ export default class Client extends SapphireClient {
 	public utils = new Utils(this);
 
 	public automod = new Automod(this);
+	public Api = new Api(this);
 
 	// @ts-ignore currently not compatible with Djs v13.3.0+
 	public giveawaysManager = new GiveawaysManager(this, {
@@ -115,6 +116,7 @@ declare module "@sapphire/framework" {
 		public utils: Utils;
 
 		public automod: Automod;
+		public Api: Api;
 
 		public levelManager: LevelManager;
 		public blacklistManager: BlacklistManager;

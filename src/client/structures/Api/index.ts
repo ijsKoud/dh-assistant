@@ -80,8 +80,8 @@ export default class Api {
 	}
 
 	public async start(): Promise<void> {
-		this.server.listen(this.settings.port, () => this.logger.info(`The API is not listening to port: ${this.settings.port}`));
-		this.notifier.subscribe(this.settings.channels);
+		this.server.listen(this.settings.port, () => this.logger.info(`The API is listening to port: ${this.settings.port}`));
+		if (process.env.NODE_ENV !== "development") this.notifier.subscribe(this.settings.channels);
 
 		this.channels = {
 			draavo: (await this.client.utils.getChannel("701788827215462452")) as NewsChannel,
