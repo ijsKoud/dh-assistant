@@ -55,7 +55,7 @@ export class OauthRoute {
 		}
 
 		try {
-			const data = await Utils.revokeToken(req.auth.token);
+			const data = await this.utils.revokeToken(req.auth.token);
 			if (!data) throw new Error("unknown error");
 			if (data.status === 503) {
 				const retryAfter = data.headers["Retry-After"];
@@ -68,6 +68,7 @@ export class OauthRoute {
 
 			res.clearCookie("DH_ASSISTANT-AUTH").sendStatus(204);
 		} catch (err) {
+			this.logger.fatal(`OauthRoute#logout: ${err.message}`);
 			res.status(500).json({ message: "internal server error", error: err.message });
 		}
 	}

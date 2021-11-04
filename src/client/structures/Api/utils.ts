@@ -158,13 +158,13 @@ export default class Utils {
 		setTimeout(() => this.client.ApiCache.delete(key), 5e3);
 	}
 
-	public static async revokeToken(token: string) {
+	public async revokeToken(token: string) {
 		try {
 			const data = await axios("https://discord.com/api/v9/oauth2/token/revoke", {
 				method: "POST",
 				data: stringify({
 					token,
-					client_id: process.env.DISCORD_ID,
+					client_id: this.client.user!.id,
 					client_secret: process.env.DISCORD_SECRET
 				}),
 				headers: {
