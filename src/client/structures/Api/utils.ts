@@ -39,13 +39,13 @@ export default class Utils {
 				? stringify({
 						refresh_token: code,
 						grant_type: "refresh_token",
-						client_id: process.env.DISCORD_ID,
+						client_id: this.client.user!.id,
 						client_secret: process.env.DISCORD_SECRET
 				  })
 				: stringify({
 						code,
 						grant_type: "authorization_code",
-						client_id: process.env.DISCORD_ID,
+						client_id: this.client.user!.id,
 						client_secret: process.env.DISCORD_SECRET,
 						redirect_uri: process.env.DISCORD_URI
 				  });
