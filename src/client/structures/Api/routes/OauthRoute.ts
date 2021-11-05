@@ -27,14 +27,17 @@ export class OauthRoute {
 			const user = await this.utils.getTokenUser(data.access_token, "");
 			if (!user) throw new Error("unable to get user");
 
+			const expires = Date.now() + data.expires_in * 1e3;
 			const cookie = this.utils.encrypt({
-				expires: Date.now() + data.expires_in * 1e3,
+				expires,
 				refresh: data.refresh_token,
 				token: data.access_token,
 				userId: user.id
 			});
 
-			res.cookie("DH_ASSISTANT-AUTH", cookie).redirect(process.env.DASHBOARD ?? "http://localhost:3000");
+			res.cookie("DH_ASSISTANT-AUTH", cookie, {
+				maxAge: expires + data.expires_in * 1e3
+			}).redirect(process.env.DASHBOARD ?? "http://localhost:3000");
 		} catch (err) {
 			res.status(500).json({ message: "internal server error", error: err.message });
 		}
