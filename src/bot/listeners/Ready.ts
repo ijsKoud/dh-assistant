@@ -27,7 +27,9 @@ export default class ReadyListener extends Listener {
 
 			logger?.info(`Deleting ${filtered.length} from the ${giveaways.length} giveaways. They are all finished and 7 days or older!`);
 			filtered.forEach(async (giveaway) => {
-				await client.giveawaysManager.deleteGiveaway(giveaway.messageId ?? "").catch(() => void 0);
+				await client.giveawaysManager
+					.deleteGiveaway(giveaway.messageId ?? "")
+					.catch((err) => logger?.error(`Unable to delete giveaway with id ${giveaway.messageId}:`, err));
 			});
 		};
 

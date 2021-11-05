@@ -2,6 +2,8 @@ import type { modlog } from ".prisma/client";
 import type { Logger } from "@daangamesdg/logger";
 import Collection from "@discordjs/collection";
 import { NextFunction, Request, Response, Router } from "express";
+import { readdir } from "fs/promises";
+import { join } from "path";
 import type Client from "../../../Client";
 import type { ApiResponse, LeaderboardStat, User } from "../../../types";
 import Utils from "../utils";
@@ -19,7 +21,10 @@ export class ApiRoute {
 			.get("/modlogs", this.modCheck.bind(this), this.modlogs.bind(this)) // get all modlogs
 			.get("/modlogs/:userId", this.modCheck.bind(this), this.modlog.bind(this)); // get all modlogs of a user
 
-		this.router.get("/leaderboard", this.leaderboard.bind(this)); // get leaderboard
+		this.router
+			.get("/leaderboard", this.leaderboard.bind(this)) // get leaderboard
+			.get("/backgrounds/:backgroundId", this.backgrounds.bind(this)) // get rank backgrounds
+			.put("/background", this.background.bind(this)); // update rank background
 	}
 
 	private async modCheck(req: Request, res: Response, next: NextFunction) {
@@ -97,6 +102,81 @@ export class ApiRoute {
 			}
 
 			res.send(stats);
+		} catch (err) {
+			res.status(500).json({ message: "internal server error", error: err.message });
+		}
+	}
+
+	private async backgrounds(req: Request, res: Response) {
+		const base = join(process.cwd(), "assets", "images");
+		const backgroundId = Number(req.params.backgroundId);
+		if (req.params.backgroundId === "length") {
+			const backgrounds = await readdir(base);
+			res.send({ length: backgrounds.length });
+			return;
+		}
+
+		if (isNaN(backgroundId)) {
+			res.status(400).send({
+				error: "Provided Id is not a number",
+				message: "something went wrong while processing your request, please try again later."
+			});
+			return;
+		}
+
+		try {
+			const backgrounds = await readdir(base);
+			if (backgroundId > backgrounds.length || backgroundId <= 0) {
+				res.status(400).send({
+					error: `Provided Id is not a valid number, must be between 0 and ${backgrounds.length}`,
+					message: "something went wrong while processing your request, please try again later."
+				});
+				return;
+			}
+
+			res.sendFile(join(base, `base-${backgroundId}.png`), () => res.end());
+		} catch (err) {
+			res.status(500).json({ message: "internal server error", error: err.message });
+		}
+	}
+
+	private async background(req: Request, res: Response) {
+		if (!req.auth) {
+			res.sendStatus(401);
+			return;
+		}
+
+		const backgroundId = Number(req.body.backgroundId);
+		if (isNaN(backgroundId)) {
+			res.status(400).send({
+				error: "body.backgroundId is not a valid number",
+				message: "something went wrong while processing your request, please try again later."
+			});
+			return;
+		}
+
+		try {
+			const level = await this.client.prisma.level.findFirst({ where: { id: `${req.auth.userId}-${this.client.constants.guild}` } });
+			if (!level || level.level < 5) {
+				res.status(403).send({
+					error: "User didn't reach requirements",
+					message: `You must be level 5+ to change your background! (Currently: ${level?.level ?? 0})`
+				});
+				return;
+			}
+			const base = join(process.cwd(), "assets", "images");
+			const backgrounds = await readdir(base);
+			if (backgroundId > backgrounds.length || backgroundId <= 0) {
+				res.status(400).send({
+					error: `Provided Id is not a valid number, must be between 0 and ${backgrounds.length}`,
+					message: "something went wrong while processing your request, please try again later."
+				});
+				return;
+			}
+
+			level.bg = backgroundId;
+			await this.client.prisma.level.update({ where: { id: level.id }, data: level });
+			res.sendStatus(204);
 		} catch (err) {
 			res.status(500).json({ message: "internal server error", error: err.message });
 		}
