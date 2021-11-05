@@ -198,9 +198,9 @@ export class ApiRoute {
 			const _logs = tempCache.sort((a, b) => b - a).map((amount, id) => ({ id, amount }));
 			const parsed = await Promise.all(
 				_logs.map(async ({ id, amount }) => {
-					const user = await this.utils.getUser(id);
+					const user = await this.utils.getUser(id.split("-")[0]);
 					if (user && "error" in user) throw new Error(user.error);
-					return { user, amount };
+					return { user, amount, id: id.split("-")[0] };
 				})
 			);
 
