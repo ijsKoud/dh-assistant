@@ -68,19 +68,21 @@ export class PermissionHandler {
 	}
 
 	public getRank(member: GuildMember) {
-		if (this.hasTrial(member)) return 1;
-		if (this.hasMod(member)) return 2;
-		if (this.hasCet(member)) return 3;
-		if (this.hasManager(member)) return 4;
-		if (this.hasSenior(member)) return 5;
-		if (member.guild.ownerId === member.id) return 6;
+		if (this._parse([this.roles.cet], member, false)) return 1; // cet
+		if (this._parse([this.roles.trial], member, false)) return 2; // trial
+		if (this._parse([this.roles.moderator], member, false)) return 3; // mod
+		if (this._parse([this.roles.manager], member, false)) return 4; // manager
+		if (this._parse([this.roles.senior], member, false)) return 5; // senior
+		if (member.guild.ownerId === member.id) return 6; // owner
 
 		return 0;
 	}
 
-	protected _parse(roles: string[], member: GuildMember): boolean {
+	protected _parse(roles: string[], member: GuildMember, admin = true): boolean {
 		return (
-			member.roles.cache.some((r) => roles.includes(r.id)) || this.client.isOwner(member.id) || member.permissions.has("ADMINISTRATOR", true)
+			member.roles.cache.some((r) => roles.includes(r.id)) ||
+			(admin && this.client.isOwner(member.id)) ||
+			(admin && member.permissions.has("ADMINISTRATOR", true))
 		);
 	}
 }
