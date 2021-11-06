@@ -80,10 +80,7 @@ export default class Utils {
 					  }
 					: null;
 
-				if (data) {
-					this.client.ApiCache.set(`${userId}-user`, data);
-					setTimeout(() => this.client.ApiCache.delete(`${userId}-user`), 5e3);
-				}
+				if (data) this.setCache(`${userId}-user`, data);
 			}
 
 			return data;
