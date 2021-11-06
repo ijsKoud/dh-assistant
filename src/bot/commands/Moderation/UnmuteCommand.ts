@@ -38,7 +38,7 @@ export default class UnmuteCommand extends Command {
 
 		const finishLogs = ModerationMessage.logs(
 			reason ?? `Unmuted by **${message.author.tag}** (${message.author.toString()})`,
-			"unban",
+			"unmute",
 			member.user,
 			message.author,
 			`Reference Case Id: ${log?.caseId ?? "unknown"}`,
