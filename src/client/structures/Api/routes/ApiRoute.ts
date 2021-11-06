@@ -229,7 +229,15 @@ export class ApiRoute {
 			const user = await this.utils.getUser(userId);
 			if (user && "error" in user) throw new Error(user.error);
 
-			res.send({ user, logs });
+			const logsWithUser = await Promise.all(
+				logs.map<any>(async (log) => {
+					const user = await this.utils.getUser(log.moderator);
+					if (user && "error" in user) throw new Error(user.error);
+					return { ...log, moderator: user };
+				})
+			);
+
+			res.send({ user, logs: logsWithUser });
 		} catch (err) {
 			res.status(500).json({ message: "internal server error", error: err.message });
 		}
