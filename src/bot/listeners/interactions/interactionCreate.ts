@@ -19,8 +19,8 @@ export default class InteractionCreateListener extends Listener {
 
 		const finish = async () => {
 			const components = new MessageActionRow().addComponents(
-				new MessageButton().setStyle("SUCCESS").setEmoji(client.constants.emojis.greentick),
-				new MessageButton().setStyle("DANGER").setEmoji(client.constants.emojis.redcross)
+				new MessageButton().setStyle("SUCCESS").setEmoji(client.constants.emojis.greentick).setDisabled(true).setCustomId("custom_id_1"),
+				new MessageButton().setStyle("DANGER").setEmoji(client.constants.emojis.redcross).setDisabled(true).setCustomId("custom_id_2")
 			);
 
 			await interaction.update({ components: [components] });
