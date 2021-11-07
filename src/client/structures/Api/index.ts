@@ -34,17 +34,14 @@ export default class Api {
 
 	public constructor(public client: Client) {
 		this.server = express();
-		this.server.use("/notifications", this.notifier.listener());
 		this.server.use(
 			cors({
 				credentials: true,
 				origin: ["http://localhost:3000", "https://draavo.daangamesdg.xyz", process.env.DASHBOARD as string]
-			}),
-			json(),
-			cookieParser(),
-			new AuthMiddleware(client).middleware,
-			this.apiLimiter
+			})
 		);
+		this.server.use("/notifications", this.notifier.listener());
+		this.server.use(json(), cookieParser(), new AuthMiddleware(client).middleware, this.apiLimiter);
 
 		this.server.use("/oauth", new OauthRoute(this.client, this.logger).router);
 		this.server.use("/api", new ApiRoute(this.client, this.logger).router);
