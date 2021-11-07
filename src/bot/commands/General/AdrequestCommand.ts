@@ -32,7 +32,7 @@ export default class AvatarCommand extends Command {
 
 		const currentTimeout = this.client.requests.find((_, key) => key === message.author.id);
 		if (currentTimeout)
-			return reply(`>>> ⌚ | You can submit another request ${this.client.utils.formatTime(moment(currentTimeout - Date.now()).unix(), "R")}!`);
+			return reply(`>>> ⌚ | You can submit another request ${this.client.utils.formatTime(moment(currentTimeout).unix(), "R")}!`);
 
 		const channel = await this.client.utils.getChannel(this.client.constants.channels.adrequest);
 		if (!channel || !channel.isText() || channel.type !== "GUILD_TEXT") {
