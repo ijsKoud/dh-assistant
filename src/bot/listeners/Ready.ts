@@ -23,9 +23,10 @@ export default class ReadyListener extends Listener {
 
 		const handle = () => {
 			const { giveaways } = client.giveawaysManager;
-			const filtered = giveaways.filter((giveaway) => giveaway.ended && Date.now() - giveaway.endAt > 6048e5);
+			const filtered = giveaways.filter((giveaway) => giveaway.ended && Date.now() - giveaway.endAt > 2592e6);
 
-			logger?.info(`Deleting ${filtered.length} from the ${giveaways.length} giveaways. They are all finished and 7 days or older!`);
+			logger?.info(`Deleting ${filtered.length} from the ${giveaways.length} giveaways. They are all finished and 30 days or older!`);
+			client.giveawaysManager.giveaways = giveaways.filter((giveaway) => !filtered.some((give) => give.messageId === giveaway.messageId));
 			filtered.forEach(async (giveaway) => {
 				await client.giveawaysManager
 					.deleteGiveaway(giveaway.messageId ?? "")
@@ -34,8 +35,8 @@ export default class ReadyListener extends Listener {
 		};
 
 		handle();
-		logger?.info("Successfully initiated - running every minute");
-		setInterval(handle.bind(this), 6e4);
+		logger?.info("Successfully initiated - running every 10 minutes");
+		setInterval(handle.bind(this), 6e5);
 	}
 
 	private async loadTimeouts() {
