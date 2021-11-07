@@ -63,7 +63,7 @@
 		"build": "tsc --build",
 		"start:dev": "npm run build && npm run start",
 		"dev": "cross-env NODE_ENV=development nodemon --exec ts-node src/index.ts",
-		"start": "node .",
+		"start": "cross-env NODE_ENV=production node .",
 		"lint": "eslint src",
 		"generate-types": "prisma generate",
 		"prisma-install": "prisma db push"
