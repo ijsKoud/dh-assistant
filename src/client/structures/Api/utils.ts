@@ -9,7 +9,7 @@ export default class Utils {
 
 	public decrypt(token: string) {
 		const [data, iv] = token.split(".");
-		const decipher = createDecipheriv("aes-256-cbc", process.env.DISCORD_SECRET as string, Buffer.from(iv, "base64"));
+		const decipher = createDecipheriv("aes-256-cbc", process.env.COOKIE_SECRET as string, Buffer.from(iv, "base64"));
 
 		try {
 			const parsed = JSON.parse(decipher.update(data, "base64", "utf8") + decipher.final("utf8"));
@@ -22,7 +22,7 @@ export default class Utils {
 
 	public encrypt(data: AuthCookie): string {
 		const iv = randomBytes(16);
-		const cipher = createCipheriv("aes-256-cbc", process.env.DISCORD_SECRET as string, iv);
+		const cipher = createCipheriv("aes-256-cbc", process.env.COOKIE_SECRET as string, iv);
 		return `${cipher.update(JSON.stringify(data), "utf8", "base64") + cipher.final("base64")}.${iv.toString("base64")}`;
 	}
 
