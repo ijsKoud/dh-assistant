@@ -17,16 +17,16 @@ This bot is designed to work with Draavo's Hangout, even though this is a custom
 
 ## Install
 
-**This project is still WIP, please stop DMing me "How to install, not working" kinda stuff cuz it's not finished yet**. You will see a small description here that will redirect you to an installation page **once this bot is fully working and operational!**
+The installation guide can be found her: https://draavo.daangamesdg.xyz/installation
 
 ## Author
 
 👤 **DaanGamesDG**
 
-- Website: https://daangamesdg.wtf/
-- Email: <daan@daangamesdg.wtf>
-- Twitter: [@DaanGamesDG](https://twitter.com/DaanGamesDG)
-- Github: [@DaanGamesDG](https://github.com/DaanGamesDG)
+-   Website: https://daangamesdg.wtf/
+-   Email: <daan@daangamesdg.wtf>
+-   Twitter: [@DaanGamesDG](https://twitter.com/DaanGamesDG)
+-   Github: [@DaanGamesDG](https://github.com/DaanGamesDG)
 
 ## Donate
 
