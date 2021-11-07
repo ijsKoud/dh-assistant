@@ -8,12 +8,12 @@ export default class MessageCreateListener extends Listener {
 		const { client } = this.container;
 		if (message.author.bot || message.system || message.webhookId) return;
 
-		this.handleTickets(message);
+		void this.handleTickets(message);
 
 		if (message.guildId !== client.constants.guild) return;
 
-		client.automod.run(message);
-		this.handleLeveling(message);
+		void client.automod.run(message);
+		void this.handleLeveling(message);
 	}
 
 	private async handleTickets(message: Message) {

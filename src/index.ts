@@ -5,7 +5,7 @@ config();
 
 import Client from "./client/Client";
 
-(async () => {
+void (async () => {
 	const dirs = await readdir(process.cwd());
 	if (!dirs.includes("data")) await mkdir(join(process.cwd(), "data"));
 	if (!dirs.includes("transcripts")) await mkdir(join(process.cwd(), "transcripts"));

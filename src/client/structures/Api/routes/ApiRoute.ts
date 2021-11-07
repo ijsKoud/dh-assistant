@@ -264,7 +264,7 @@ export class ApiRoute {
 		}
 	}
 
-	private async transcript(req: Request, res: Response) {
+	private transcript(req: Request, res: Response) {
 		const id = req.params.transcriptId;
 		if (!id || !id.startsWith("ticket-")) {
 			res.status(400).send({ message: "The transcript was not found", error: "Invalid ticket id" });
