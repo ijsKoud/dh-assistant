@@ -85,7 +85,7 @@ export default class InteractionCreateListener extends Listener {
 							client.requests.delete(user.id);
 						}
 					};
-					await interaction.update({ components: [] });
+					await interaction.update({ components: [], embeds: [], content: "Why did you decline this adrequest?" });
 
 					const msg = await interaction.channel?.messages.fetch(interaction.message.id);
 					if (!msg) {
