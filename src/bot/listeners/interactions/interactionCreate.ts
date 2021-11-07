@@ -69,10 +69,10 @@ export default class InteractionCreateListener extends Listener {
 
 		switch (type) {
 			case "accept":
-				await interaction.deferReply();
+				await interaction.deferUpdate();
 				await interaction.deleteReply();
 				await client.prisma.adrequest.delete({ where: { caseId: adrequest.caseId } });
-				await channel.send(`>>> 💰 | Ad - <@${userId}>\n${interaction.message.content}`);
+				await channel.send(`>>> 💰 | Ad - <@${userId}>\n${interaction.message.embeds[0].description}`);
 				break;
 			case "decline":
 				{
