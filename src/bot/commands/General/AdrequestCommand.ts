@@ -48,7 +48,7 @@ export default class AvatarCommand extends Command {
 			.setAuthor(`Adrequest - ${message.author.tag}`, message.member.displayAvatarURL({ dynamic: true, size: 512 }))
 			.setDescription(ad);
 
-		const id = nanoid(12);
+		const id = nanoid(12).replace(/-/g, "");
 		const components = new MessageActionRow().addComponents(
 			new MessageButton().setCustomId(`${id}-accept`).setEmoji(this.client.constants.emojis.greentick).setStyle("SUCCESS"),
 			new MessageButton().setCustomId(`${id}-decline`).setEmoji(this.client.constants.emojis.redcross).setStyle("DANGER")

@@ -17,7 +17,6 @@ export default class InteractionCreateListener extends Listener {
 		const [confirm, type] = interaction.customId.split(/-/g);
 		if (!confirm || confirm !== "pingrequest" || !type) return;
 
-		await interaction.deferUpdate();
 		const finish = async () => {
 			const components = new MessageActionRow().addComponents(
 				new MessageButton().setStyle("SUCCESS").setEmoji(client.constants.emojis.greentick),
@@ -56,7 +55,7 @@ export default class InteractionCreateListener extends Listener {
 			await interaction.deleteReply();
 			await client.prisma.adrequest.delete({ where: { caseId: adrequest.caseId } });
 
-			return;
+			return this.container.client.loggers.get("bot")?.error(`Channel "${channel?.id}" is not a valid text channel!`);
 		}
 
 		const user = await client.utils.fetchUser(userId);
