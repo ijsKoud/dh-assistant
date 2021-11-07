@@ -24,7 +24,11 @@ export class ApiRoute {
 		this.router
 			.get("/leaderboard", this.leaderboard.bind(this)) // get leaderboard
 			.get("/backgrounds/:backgroundId", this.backgrounds.bind(this)) // get rank backgrounds
-			.put("/background", this.background.bind(this)); // update rank background
+			.put("/background", this.background.bind(this)); // update rank background\
+
+		this.router
+			.get("/transcripts", this.adminCheck.bind(this), this.transcripts.bind(this)) // get transcripts
+			.get("/transcript/:transcriptId", this.adminCheck.bind(this), this.transcript.bind(this)); // get transcript
 	}
 
 	private async modCheck(req: Request, res: Response, next: NextFunction) {
@@ -49,21 +53,27 @@ export class ApiRoute {
 		}
 	}
 
-	// private async adminCheck(req: Request, res: Response, next: NextFunction) {
-	// 	if (!req.auth) return res.send(null);
+	private async adminCheck(req: Request, res: Response, next: NextFunction) {
+		if (!req.auth) {
+			res.send(null);
+			return;
+		}
 
-	// 	try {
-	// 		const guild = this.client.guilds.cache.get(this.client.constants.guild);
-	// 		if (!guild) throw new Error("Unable to get the correct guild");
+		try {
+			const guild = this.client.guilds.cache.get(this.client.constants.guild);
+			if (!guild) throw new Error("Unable to get the correct guild");
 
-	// 		const member = await this.client.utils.fetchMember(req.auth.userId, guild);
-	// 		if (!member || (!this.client.permissionHandler.hasSenior(member) && !this.client.isOwner(member.id))) return res.send(null);
+			const member = await this.client.utils.fetchMember(req.auth.userId, guild);
+			if (!member || (!this.client.permissionHandler.hasSenior(member) && !this.client.isOwner(member.id))) {
+				res.send(null);
+				return;
+			}
 
-	// 		next();
-	// 	} catch (err) {
-	// 		res.status(500).json({ message: "internal server error", error: err.message });
-	// 	}
-	// }
+			next();
+		} catch (err) {
+			res.status(500).json({ message: "internal server error", error: err.message });
+		}
+	}
 
 	private async user(req: Request, res: Response<User | ApiResponse>) {
 		if (!req.auth) {
@@ -238,6 +248,31 @@ export class ApiRoute {
 			);
 
 			res.send({ user, logs: logsWithUser });
+		} catch (err) {
+			res.status(500).json({ message: "internal server error", error: err.message });
+		}
+	}
+
+	private async transcripts(req: Request, res: Response) {
+		try {
+			const base = join(process.cwd(), "transcripts");
+			const files: string[] = await readdir(base).catch(() => []);
+
+			res.send({ files: files.map((file) => file.split(".")[0]) });
+		} catch (err) {
+			res.status(500).json({ message: "internal server error", error: err.message });
+		}
+	}
+
+	private async transcript(req: Request, res: Response) {
+		const id = req.params.transcriptId;
+		if (!id || !id.startsWith("ticket-")) {
+			res.status(400).send({ message: "The transcript was not found", error: "Invalid ticket id" });
+			return;
+		}
+		try {
+			const base = join(process.cwd(), "transcripts", `${id}.html`);
+			res.sendFile(base, () => res.end());
 		} catch (err) {
 			res.status(500).json({ message: "internal server error", error: err.message });
 		}
