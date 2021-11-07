@@ -10,9 +10,11 @@ import { GuildMember } from "discord.js";
 export default class ReadyListener extends Listener {
 	public run() {
 		void this.container.client.Api.start();
-		void this.setStatus();
 		void this.loadTimeouts();
 		this.loadGiveaways();
+
+		void this.setStatus();
+		setInterval(this.setStatus.bind(this), 6e5);
 
 		this.container.client.loggers.get("bot")?.info(`${this.container.client.user?.tag} has logged in!`);
 	}
@@ -175,7 +177,5 @@ export default class ReadyListener extends Listener {
 				}
 			]
 		});
-
-		setInterval(this.setStatus.bind(this), 6e5);
 	}
 }
