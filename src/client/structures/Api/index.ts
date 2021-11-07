@@ -38,7 +38,7 @@ export default class Api {
 		this.server.use(
 			cors({
 				credentials: true,
-				origin: ["http://localhost:3000", process.env.DASHBOARD as string]
+				origin: ["http://localhost:3000", "https://draavo.daangamesdg.xyz", process.env.DASHBOARD as string]
 			}),
 			json(),
 			cookieParser(),
