@@ -38,12 +38,7 @@ export default class ServerinfoCommand extends Command {
 			.get<KsoftBan>(`https://api.ksoft.si/bans/check?user=${user.id}`, this.getHeaders(true, "KSOFT_TOKEN"))
 			.catch(() => ({
 				data: {
-					upvotes: 0,
-					downvotes: 0,
-					reputation: 0,
-					rank: 0,
-					xp: 0,
-					staff: false
+					is_banned: false
 				}
 			}));
 
