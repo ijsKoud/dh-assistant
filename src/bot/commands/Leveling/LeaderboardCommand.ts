@@ -10,7 +10,7 @@ import type { GuildMessage } from "../../../client/structures/Moderation";
 	requiredClientPermissions: ["EMBED_LINKS"],
 	preconditions: ["GuildOnly"]
 })
-export default class RankCommand extends Command {
+export default class extends Command {
 	public async messageRun(message: GuildMessage) {
 		const data = (await this.client.levelManager.getLevels(message.guild.id))?.slice(0, 10);
 		if (!data) return message.reply(`>>> ${this.client.constants.emojis.redcross} | Uhm, no one earned xp yet. How?`);
