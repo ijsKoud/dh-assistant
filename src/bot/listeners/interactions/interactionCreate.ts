@@ -17,7 +17,7 @@ export default class InteractionCreateListener extends Listener {
 		const [confirm, type] = interaction.customId.split(/-/g);
 		if (!confirm || confirm !== "pingrequest" || !type) return;
 
-		await interaction.deferReply();
+		await interaction.deferUpdate();
 		const finish = async () => {
 			const components = new MessageActionRow().addComponents(
 				new MessageButton().setStyle("SUCCESS").setEmoji(client.constants.emojis.greentick),
