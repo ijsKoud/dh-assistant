@@ -71,7 +71,8 @@ export default class QotdCommand extends Command {
 
 		const msg = await channel.send({
 			content: "<@&849732197023350804> :arrow_down:",
-			embeds: [embed]
+			embeds: [embed],
+			allowedMentions: { roles: ["849732197023350804"] }
 		});
 		if (msg.crosspostable) await msg.crosspost().catch(() => void 0);
 	}

@@ -15,7 +15,7 @@ export default class InteractionCreateListener extends Listener {
 	private async handlePingRequest(interaction: ButtonInteraction<"present">) {
 		const { client } = this.container;
 		const [confirm, type] = interaction.customId.split(/-/g);
-		if (!confirm || confirm !== "adrequest" || !type) return;
+		if (!confirm || confirm !== "pingrequest" || !type) return;
 
 		await interaction.deferReply();
 		const finish = async () => {

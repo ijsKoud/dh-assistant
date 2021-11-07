@@ -45,12 +45,17 @@ export default class CloseCommand extends Command {
 					.embed()
 					.setTitle(`Transcript: ticket-${ticket.caseId}`)
 					.setDescription(
-						[`Claimed by <@${ticket.claimer}>`, `Closed by ${author.toString()}`, `Owner: <@${ticket.id.split("-")[0]}>`].join("\n")
+						[
+							`Claimed by <@${ticket.claimer}>`,
+							`Closed by ${author.toString()}`,
+							`Owner: <@${ticket.id.split("-")[0]}>`,
+							`[Direct transcript](${process.env.DASHBOARD}/transcripts/ticket-${ticket.caseId})`
+						].join("\n")
 					);
 
 				await transcriptChannel.send({
 					embeds: [embed],
-					attachments: [new MessageAttachment(path, `ticket-${ticket.caseId}.html`)]
+					files: [new MessageAttachment(path, `ticket-${ticket.caseId}.html`)]
 				});
 			}
 		} catch (err) {
