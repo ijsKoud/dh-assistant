@@ -6,11 +6,14 @@ import type { Message } from "discord.js";
 export default class MessageCreateListener extends Listener {
 	public run(message: Message) {
 		const { client } = this.container;
-		if (message.author.bot || message.guildId !== client.constants.guild || message.system || message.webhookId) return;
+		if (message.author.bot || message.system || message.webhookId) return;
 
-		void client.automod.run(message);
-		void this.handleLeveling(message);
-		void this.handleTickets(message);
+		this.handleTickets(message);
+
+		if (message.guildId !== client.constants.guild) return;
+
+		client.automod.run(message);
+		this.handleLeveling(message);
 	}
 
 	private async handleTickets(message: Message) {
@@ -23,7 +26,6 @@ export default class MessageCreateListener extends Listener {
 			message.guild
 		)
 			return client.ticketHandler.handleMention(message);
-
 		if (message.channel.type === "DM" || message.channel.name.startsWith("ticket-")) await client.ticketHandler.handleMessage(message);
 	}
 
