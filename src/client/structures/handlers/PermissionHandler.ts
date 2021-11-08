@@ -30,6 +30,12 @@ export class PermissionHandler {
 		return this._parse(roles, member);
 	}
 
+	public hasQotd(member: GuildMember): boolean {
+		const roles = [this.roles.qotd, this.roles.manager, this.roles.senior];
+
+		return this._parse(roles, member);
+	}
+
 	public hasTrial(member: GuildMember): boolean {
 		const roles = [this.roles.trial, this.roles.moderator, this.roles.manager, this.roles.senior];
 

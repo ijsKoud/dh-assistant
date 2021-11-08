@@ -7,7 +7,7 @@ import type { Message } from "discord.js";
 	name: "qotd",
 	aliases: ["fotd"],
 	description: "Post a QOTD/FOTD embed in the QOTD/FOTD channel",
-	preconditions: ["GuildOnly", "ManagerOnly"]
+	preconditions: ["GuildOnly", "QotdOnly"]
 })
 export default class QotdCommand extends Command {
 	public async messageRun(message: GuildMessage) {

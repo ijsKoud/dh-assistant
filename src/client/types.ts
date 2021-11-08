@@ -28,6 +28,7 @@ export interface Emojis {
 
 export interface Roles {
 	default: string;
+	qotd: string;
 	cet: string;
 	trial: string;
 	moderator: string;

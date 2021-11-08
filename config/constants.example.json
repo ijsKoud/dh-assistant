@@ -19,6 +19,7 @@
 	},
 	"roles": {
 		"default": "",
+		"qotd": "",
 		"cet": "",
 		"trial": "",
 		"moderator": "",

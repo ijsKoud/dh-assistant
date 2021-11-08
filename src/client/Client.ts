@@ -140,6 +140,7 @@ declare module "@sapphire/framework" {
 		PremiumOnly: never;
 
 		// staff preconditions
+		QotdOnly: never;
 		CetOnly: never;
 		TrialModeratorOnly: never;
 		ModeratorOnly: never;
