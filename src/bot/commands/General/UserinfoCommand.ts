@@ -51,7 +51,7 @@ export default class ServerinfoCommand extends Command {
 				[
 					`> 🤔 | **Reputation**: ${rep.upvotes - rep.downvotes < 0 ? "bad" : "good"}`,
 					`> 🔨 | **Globally banned**: ${banned.is_banned ? "🔨" : this.client.constants.emojis.redcross}`,
-					`> ⚖ | **Conclusion**: ${rep.upvotes - rep.downvotes < 0 || banned ? "untrustable" : "trustable"}`
+					`> ⚖ | **Conclusion**: ${rep.upvotes - rep.downvotes < 0 || banned.is_banned ? "untrustable" : "trustable"}`
 				].join("\n")
 			)
 			.addField(
