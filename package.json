@@ -9,7 +9,7 @@
 	"dependencies": {
 		"@daangamesdg/logger": "^1.1.0",
 		"@daangamesdg/youtube-notifications": "^1.0.2",
-		"@prisma/client": "^3.4.1",
+		"@prisma/client": "^3.4.2",
 		"@sapphire/decorators": "^3.1.4",
 		"@sapphire/framework": "^2.1.4",
 		"@sapphire/plugin-subcommands": "^2.0.2",
@@ -56,7 +56,7 @@
 		"cross-env": "^7.0.3",
 		"eslint": "8.2.0",
 		"nodemon": "^2.0.14",
-		"prisma": "^3.4.1",
+		"prisma": "^3.4.2",
 		"typescript": "4.4.4"
 	},
 	"scripts": {
