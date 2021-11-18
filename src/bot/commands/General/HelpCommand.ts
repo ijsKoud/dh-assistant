@@ -59,8 +59,8 @@ export default class PingCommand extends Command {
 
 		const createButton = (url: string, label: string): MessageButton => new MessageButton().setURL(url).setStyle("LINK").setLabel(label);
 		const component = new MessageActionRow().addComponents(
-			createButton("https://daangamesdg.wtf/github/dh-assistant", "GitHub"),
-			createButton(process.env.DASHBOARD ?? "https://daangamesdg.wtf/notfound", "Dashboard")
+			createButton("https://daangamesdg.xyz/github/dh-assistant", "GitHub"),
+			createButton(process.env.DASHBOARD ?? "https://daangamesdg.xyz/notfound", "Dashboard")
 		);
 		await message.reply({ embeds: [embed], components: [component] });
 	}

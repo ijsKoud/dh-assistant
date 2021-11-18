@@ -10,11 +10,11 @@ import axios from "axios";
 })
 export default class FactCommand extends Command {
 	public async messageRun(message: Message) {
-		const { data } = await axios.get<string>("https://daangamesdg.wtf/api/fact").catch(() => ({ data: null }));
+		const { data } = await axios.get<string>("https://daangamesdg.xyz/api/fact").catch(() => ({ data: null }));
 		if (!data) return message.reply(`>>> ${this.client.constants.emojis.redcross} | Unable to find a fact, please try again later.`);
 
 		const actionRow = new MessageActionRow().addComponents(
-			new MessageButton().setURL("https://daangamesdg.wtf/api/fact?all=true").setLabel("Source").setStyle("LINK")
+			new MessageButton().setURL("https://daangamesdg.xyz/api/fact?all=true").setLabel("Source").setStyle("LINK")
 		);
 		return message.reply({ content: `\`${Util.escapeMarkdown(data)}\``, components: [actionRow] });
 	}

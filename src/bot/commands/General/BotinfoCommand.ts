@@ -21,8 +21,8 @@ export default class BotinfoCommand extends Command {
 					.setTitle(`Bot Info: ${this.container.client.user?.tag}`)
 					.setDescription(
 						[
-							"Bot created by [**DaanGamesDG#7621**](https://daangamesdg.wtf)",
-							"This bot is open-source, you can find the code [here](https://daangamesdg.wtf/github/dh-assistant)"
+							"Bot created by [**DaanGamesDG#7621**](https://daangamesdg.xyz)",
+							"This bot is open-source, you can find the code [here](https://daangamesdg.xyz/github/dh-assistant)"
 						].join("\n")
 					)
 					.setFields([
