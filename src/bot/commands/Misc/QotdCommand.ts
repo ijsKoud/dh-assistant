@@ -53,7 +53,7 @@ export default class QotdCommand extends Command {
 		});
 		collector = (await this.client.utils.awaitMessages(msg, { filter }))?.first();
 		if (!collector || !collector?.content) return msg.edit(`${base}Prompt closed - no response`);
-		if (!collector.content.match(/yes/g)) return msg.edit(`${base}Prompt closed - cancellation request.`);
+		if (!collector.content.toLowerCase().match(/yes/g)) return msg.edit(`${base}Prompt closed - cancellation request.`);
 
 		await this.postQOTD(message, qotd, fotd, source);
 		return message.reply(`${base}QOTD posted and published!`);
