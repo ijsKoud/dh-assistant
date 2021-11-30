@@ -67,8 +67,8 @@ export class PermissionHandler {
 			...Object.keys(this.roles.levels).map((k) => (this.roles.levels as Record<string, string>)[k])
 		];
 
-		if (options?.contentCreator) roles.push(...this.roles.contentCreator);
-		if (options?.staff) return this.hasStaff(member) || this._parse(roles, member);
+		if (options?.contentCreator) roles.push(this.roles.contentCreator);
+		if (options?.staff) roles.push(this.roles.cet, this.roles.trial, this.roles.moderator, this.roles.manager, this.roles.senior);
 
 		return this._parse(roles, member);
 	}
