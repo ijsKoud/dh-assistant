@@ -72,6 +72,8 @@ export class Logger extends defaultLogger {
 		super.write(input, data);
 
 		if (this.webhook && process.env.NODE_ENV !== "development") {
+			if (typeof input[0] === "string" && input[0].endsWith(" giveaways. They are all finished and 30 days or older!")) return this;
+
 			const str = this.formatter.webhook(input, { ...data, name: this.name });
 			this.webhook.send(str.substr(0, 2000)).catch(() => void 0);
 		}
