@@ -31,7 +31,10 @@ export default class InteractionCreateListener extends Listener {
 
 		switch (type) {
 			case "accept":
-				await eventsChannel.send("🔼 New event announcement/information! <@&702176526795276349>");
+				await eventsChannel.send({
+					content: "🔼 New event announcement/information! <@&702176526795276349>",
+					allowedMentions: { roles: ["702176526795276349"] }
+				});
 				break;
 			default:
 				break;
