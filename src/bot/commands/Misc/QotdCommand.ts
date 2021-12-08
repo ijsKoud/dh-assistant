@@ -15,29 +15,29 @@ export default class QotdCommand extends Command {
 
 		const base = ">>> ❓ | **QOTD Command**:\n";
 		let msg: Message = await message.channel.send(`${base}Please give me the QOTD including the user (<qotd> ~ <user>)`);
-		let collector = (await this.client.utils.awaitMessages(msg, { filter }))?.first();
+		let collector = (await this.client.utils.awaitMessages(msg, { filter, time: 6e5 }))?.first();
 
 		// QOTD
 		if (!collector) return msg.edit(`${base}Prompt closed - no response`);
 		const qotd = collector.content;
 		if (!qotd || !qotd.includes("~")) return msg.edit(`${base}Prompt closed - invalid QOTD provided.`);
-		if (collector.content.match(/cancel/g)) return msg.edit(`${base}Prompt closed - cancellation request.`);
+		if (collector.content.toLowerCase().startsWith("cancel")) return msg.edit(`${base}Prompt closed - cancellation request.`);
 
 		// FOTD
 		msg = await message.channel.send(`${base}Please give me the FOTD including the user (<qotd> ~ <user>)`);
-		collector = (await this.client.utils.awaitMessages(msg, { filter }))?.first();
+		collector = (await this.client.utils.awaitMessages(msg, { filter, time: 6e5 }))?.first();
 		if (!collector) return msg.edit(`${base}Prompt closed - no response`);
 		const fotd = collector.content;
 		if (!fotd || !fotd.includes("~")) return msg.edit(`${base}Prompt closed - invalid FOTD provided.`);
-		if (collector.content.match(/cancel/g)) return msg.edit(`${base}Prompt closed - cancellation request.`);
+		if (collector.content.toLowerCase().startsWith("cancel")) return msg.edit(`${base}Prompt closed - cancellation request.`);
 
 		// Source
 		msg = await message.channel.send(`${base}Please give me the Source of the FOTD (excluding the 'source:')`);
-		collector = (await this.client.utils.awaitMessages(msg, { filter }))?.first();
+		collector = (await this.client.utils.awaitMessages(msg, { filter, time: 6e5 }))?.first();
 		if (!collector) return msg.edit(`${base}Prompt closed - no response`);
 		const source = collector.content;
 		if (!source) return msg.edit(`${base}Prompt closed - no source provided.`);
-		if (collector.content.match(/cancel/g)) return msg.edit(`${base}Prompt closed - cancellation request.`);
+		if (collector.content.toLowerCase().startsWith("cancel")) return msg.edit(`${base}Prompt closed - cancellation request.`);
 
 		// confirmation
 		msg = await message.channel.send({
