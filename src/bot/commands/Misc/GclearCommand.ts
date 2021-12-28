@@ -1,6 +1,7 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import type { GuildMessage } from "../../../client/structures/Moderation";
+import type { Giveaway } from "discord-giveaways";
 
 @ApplyOptions<Command.Options>({
 	name: "gclear",
@@ -11,7 +12,7 @@ import type { GuildMessage } from "../../../client/structures/Moderation";
 export default class GclearCommand extends Command {
 	public async messageRun(message: GuildMessage) {
 		let i = 0;
-		this.client.giveawaysManager.giveaways.forEach(async (giveaway) => {
+		this.client.giveawaysManager.giveaways.forEach(async (giveaway: Giveaway) => {
 			if (giveaway.ended && giveaway.messageId) {
 				await this.client.giveawaysManager.deleteGiveaway(giveaway.messageId).catch(() => void 0);
 				i++;

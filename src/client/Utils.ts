@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+	AnyChannel,
 	AwaitMessageComponentOptions,
 	AwaitMessagesOptions,
 	ButtonInteraction,
@@ -91,13 +92,15 @@ export default class Utils {
 		return str.charAt(0).toUpperCase() + str.slice(1);
 	}
 
-	public async getChannel(id: string): Promise<Channel | null> {
+	public async getChannel(id: string): Promise<AnyChannel | null> {
 		const resolve = () => {
 			const { cache } = this.client.channels;
 			return (
 				cache.get(id) ||
 				cache.find((channel) =>
-					"name" in channel ? (channel as Channel & { name: string }).name === id || channel.toString() === id : channel.toString() === id
+					"name" in channel
+						? (channel as AnyChannel & { name: string }).name === id || channel.toString() === id
+						: channel.toString() === id
 				)
 			);
 		};

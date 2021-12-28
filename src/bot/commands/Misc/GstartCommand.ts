@@ -1,7 +1,7 @@
 import { Command } from "../../../client/structures/extensions";
 import { ApplyOptions } from "@sapphire/decorators";
 import type { GuildMessage } from "../../../client/structures/Moderation";
-import type { Message, TextChannel } from "discord.js";
+import type { GuildMember, Message, TextChannel } from "discord.js";
 import ms from "ms";
 
 @ApplyOptions<Command.Options>({
@@ -80,7 +80,7 @@ export default class GstartCommand extends Command {
 			duration,
 			winnerCount: winners,
 			hostedBy: message.author,
-			exemptMembers: (member) => !member.roles.cache.has(requiredRole.id),
+			exemptMembers: (member: GuildMember) => !member.roles.cache.has(requiredRole.id),
 			allowedMentions: {},
 			messages: {
 				winMessage:

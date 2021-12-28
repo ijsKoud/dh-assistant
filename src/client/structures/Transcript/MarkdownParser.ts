@@ -20,7 +20,7 @@ export default class markdownParser {
 				},
 				channel: ({ id }: { id: string }) => {
 					const channel = message.mentions.channels.get(id) || this.client.channels.cache.get(id);
-					const name = channel?.type === "DM" || channel?.type === "GROUP_DM" ? null : (channel as GuildChannel)?.name;
+					const name = channel?.type === "DM" ? null : (channel as GuildChannel)?.name;
 
 					return name ? `#${name}` : `<#${id}>`;
 				},
