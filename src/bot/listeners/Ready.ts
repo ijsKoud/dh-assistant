@@ -4,7 +4,6 @@ import axios from "axios";
 import { setTimeout as setLongTimeout } from "long-timeout";
 import { ModerationMessage } from "../../client/structures/Moderation";
 import moment from "moment";
-import { GuildMember } from "discord.js";
 
 @ApplyOptions<ListenerOptions>({ once: true, event: "ready" })
 export default class ReadyListener extends Listener {
@@ -124,7 +123,6 @@ export default class ReadyListener extends Listener {
 								client.automod.settings.mute.duration
 							);
 
-							if (member instanceof GuildMember) await member.roles.remove(automod.settings.mute.role).catch(() => void 0);
 							await client.prisma.modlog.update({
 								where: { caseId: log.caseId },
 								data: { timeoutFinished: true }

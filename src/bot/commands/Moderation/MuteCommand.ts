@@ -10,15 +10,16 @@ import moment from "moment";
 	aliases: ["mute"],
 	description: "Mutes someone",
 	usage: "<user> <reason> [--duration=<duration>]",
-	requiredClientPermissions: ["MANAGE_ROLES"],
+	requiredClientPermissions: ["MODERATE_MEMBERS"],
 	preconditions: ["GuildOnly", "ModeratorOnly"],
 	options: ["duration"]
 })
 export default class MuteCommand extends Command {
 	public async messageRun(message: GuildMessage, args: Command.Args) {
 		const { value: member } = await args.pickResult("member");
+		const { value: durationOption } = await args.pickResult("string");
 		const { value: reason } = await args.restResult("string");
-		const durationOption = args.getOption("duration");
+
 		if (!member) return message.reply(`>>> ${this.client.constants.emojis.redcross} | Couldn't find that member in this server.`);
 
 		const msg = await message.reply(`>>> ${this.client.constants.emojis.loading} | Muting **${member.user.tag}**...`);
@@ -38,7 +39,13 @@ export default class MuteCommand extends Command {
 		if (mute) return msg.edit(`>>> ${this.client.constants.emojis.redcross} | This user is already muted in the server.`);
 
 		const date = Date.now();
-		const duration = this.client.utils.parseTime(durationOption ?? "p") || undefined;
+		const duration = this.client.utils.parseTime(durationOption ?? "");
+		if (!duration) {
+			await message.reply(
+				`>>> ${this.client.constants.emojis.redcross} | I cannot permanently mute someone. You can only mute someone up to 28 days!`
+			);
+			return;
+		}
 
 		const muteLog = await this.client.prisma.modlog.create({
 			data: {
@@ -85,7 +92,6 @@ export default class MuteCommand extends Command {
 					duration
 				);
 
-				if (member) member.roles.remove(this.client.automod.settings.mute.role).catch(() => void 0);
 				await this.client.prisma.modlog.update({
 					where: { caseId: muteLog.caseId },
 					data: { timeoutFinished: true }
@@ -99,7 +105,7 @@ export default class MuteCommand extends Command {
 		}
 
 		await member.send({ embeds: [dm] }).catch(() => void 0);
-		await member.roles.add(this.client.automod.settings.mute.role);
+		await member.timeout(duration, reason);
 
 		return msg.edit(
 			`${`>>> 🔇 | Successfully muted **${member.user.tag}** ${duration ? `for **${ms(duration, { long: true })}**` : ""}`.trim()}.`
