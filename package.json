@@ -23,7 +23,7 @@
 		"discord.js": "^13.4.0",
 		"dotenv": "^10.0.0",
 		"express": "^4.17.2",
-		"express-rate-limit": "^5.5.1",
+		"express-rate-limit": "^6.0.1",
 		"highlight.js": "^11.3.1",
 		"jsdom": "^19.0.0",
 		"long-timeout": "^0.1.1",
