@@ -16,7 +16,10 @@ export default class MessageDeleteListener extends Listener {
 			.setTitle(`Message deleted in #${"name" in message.channel ? message.channel.name : ""}`)
 			.setDescription(message.content)
 			.setTimestamp()
-			.setFooter(`${message.author.tag} - ${message.author.id}`, message.author.displayAvatarURL({ dynamic: true, size: 4096 }));
+			.setFooter({
+				text: `${message.author.tag} - ${message.author.id}`,
+				iconURL: message.author.displayAvatarURL({ dynamic: true, size: 4096 })
+			});
 
 		client.loggingHandler.sendLogs(embed, "message");
 	}

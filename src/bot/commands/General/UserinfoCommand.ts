@@ -19,7 +19,9 @@ export default class ServerinfoCommand extends Command {
 		let { value: user } = await args.pickResult("user");
 		if (!user) user = message.author;
 
-		const embed = this.client.utils.embed().setAuthor(`${user.tag} - user info`, user.displayAvatarURL({ dynamic: true, size: 4096 }));
+		const embed = this.client.utils
+			.embed()
+			.setAuthor({ name: `${user.tag} - user info`, iconURL: user.displayAvatarURL({ dynamic: true, size: 4096 }) });
 
 		const { data: rep } = await axios
 			.get<Reputation>(`https://discordrep.com/api/v3/rep/${user.id}`, this.getHeaders(true, "DREP_TOKEN"))
@@ -69,7 +71,7 @@ export default class ServerinfoCommand extends Command {
 				"• Roblox Information",
 				[`>>> 🎮 | **Rover**: ${roblox.rover || "-"}`, `🕹 | **Bloxlink**: ${roblox.bloxlink || "-"}`].join("\n")
 			)
-			.setFooter("The global stats are fetched from an api - discordrep & KSoft Ban");
+			.setFooter({ text: "The global stats are fetched from an api - discordrep & KSoft Ban" });
 
 		if (message.guild) {
 			const member = await this.client.utils.fetchMember(user.id, message.guild);

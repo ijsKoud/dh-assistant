@@ -45,7 +45,10 @@ export default class AvatarCommand extends Command {
 		await message.delete().catch(() => void 0);
 		const embed = this.client.utils
 			.embed()
-			.setAuthor(`Adrequest - ${message.author.tag}`, message.member.displayAvatarURL({ dynamic: true, size: 512 }))
+			.setAuthor({
+				name: `Adrequest - ${message.author.tag}`,
+				iconURL: message.member.displayAvatarURL({ dynamic: true, size: 512 })
+			})
 			.setDescription(ad);
 
 		const id = nanoid(12).replace(/-/g, "");

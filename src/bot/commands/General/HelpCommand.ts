@@ -12,10 +12,10 @@ import ms from "ms";
 })
 export default class PingCommand extends Command {
 	public async messageRun(message: Message, args: Command.Args, context: Command.Context): Promise<void> {
-		const embed: MessageEmbed = this.container.client.utils
-			.embed()
-			.setTitle(`Help Command - ${message.author.tag}`)
-			.setFooter("DH Assistant created by DaanGamesDG#7621", "https://static.daangamesdg.xyz/discord/pfp.gif");
+		const embed: MessageEmbed = this.container.client.utils.embed().setTitle(`Help Command - ${message.author.tag}`).setFooter({
+			text: "DH Assistant created by DaanGamesDG#7621",
+			iconURL: "https://static.daangamesdg.xyz/discord/pfp.gif"
+		});
 
 		const cmd = await args.pickResult("string");
 		const command = this.container.stores.get("commands").get(cmd.value ?? "") as Command | undefined;

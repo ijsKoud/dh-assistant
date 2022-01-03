@@ -33,7 +33,7 @@ export class GuildMemberAddListener extends Listener {
 			.setColor("#58DCAE")
 			.setTitle(`Welcome to Draavo's Hangout, ${member.user.tag}`)
 			.setDescription(`There are now **${member.guild.memberCount}** members in this server. Don't forget to say hi!`)
-			.setFooter("Daan has left a message for you: say Hi!", "https://static.daangamesdg.xyz/discord/pfp.gif");
+			.setFooter({ text: "Daan has left a message for you: say Hi!", iconURL: "https://static.daangamesdg.xyz/discord/pfp.gif" });
 		client.loggingHandler.sendLogs(embed2, "join");
 	}
 }

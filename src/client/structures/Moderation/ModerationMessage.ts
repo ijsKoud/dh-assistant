@@ -22,8 +22,11 @@ export const ModerationMessage = {
 
 		const embed = new MessageEmbed()
 			.setColor(this.getColour(action))
-			.setAuthor(`${moderator.tag} (${moderator.id})`, moderator.displayAvatarURL({ dynamic: true, size: 4096 }))
-			.setFooter(caseId)
+			.setAuthor({
+				name: `${moderator.tag} (${moderator.id})`,
+				iconURL: moderator.displayAvatarURL({ dynamic: true, size: 4096 })
+			})
+			.setFooter({ text: caseId })
 			.setTimestamp(date)
 			.setDescription(description);
 
@@ -40,8 +43,11 @@ export const ModerationMessage = {
 
 		const embed = new MessageEmbed()
 			.setColor(process.env.COLOUR as `#${string}`)
-			.setAuthor("User#0000", "https://static.daangamesdg.xyz/discord/wumpus.png")
-			.setFooter(caseId)
+			.setAuthor({
+				name: "User#0000",
+				iconURL: "https://static.daangamesdg.xyz/discord/wumpus.png"
+			})
+			.setFooter({ text: caseId })
 			.setTimestamp(date)
 			.setDescription(description);
 

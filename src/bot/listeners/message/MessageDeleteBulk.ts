@@ -28,7 +28,7 @@ export default class MessageDeleteBulkListener extends Listener {
 				embed
 					.setTimestamp()
 					.setColor("#DC5E55")
-					.setFooter(`${messages.size} of ${size} messages shown`)
+					.setFooter({ text: `${messages.size} of ${size} messages shown` })
 					.setTitle(`Messages deleted in #${"name" in message.channel ? message.channel.name : ""}`)
 					.setDescription(c.replace(/{\\N}/g, "\n"));
 			else if (i === 0)
@@ -40,7 +40,7 @@ export default class MessageDeleteBulkListener extends Listener {
 				embed
 					.setTimestamp()
 					.setColor("#DC5E55")
-					.setFooter(`${messages.size} of ${size} messages shown`)
+					.setFooter({ text: `${messages.size} of ${size} messages shown` })
 					.setDescription(c.replace(/{\\N}/g, "\n"));
 			else embed.setColor("#DC5E55").setDescription(c.replace(/{\\N}/g, "\n"));
 

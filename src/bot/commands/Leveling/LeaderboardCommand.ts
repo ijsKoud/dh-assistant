@@ -17,7 +17,7 @@ export default class extends Command {
 
 		const embed = this.client.utils
 			.embed()
-			.setFooter("Only the first 10 users are shown")
+			.setFooter({ text: "Only the first 10 users are shown" })
 			.setTitle("Level Leaderboard")
 			.setDescription(
 				data

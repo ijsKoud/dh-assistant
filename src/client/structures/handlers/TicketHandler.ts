@@ -93,7 +93,7 @@ export class TicketHandler {
 				.embed()
 				.setTitle(`New Ticket - ${ticket.caseId}`)
 				.setDescription(firstMessage.content)
-				.setFooter(message.author.tag, message.author.displayAvatarURL({ dynamic: true, size: 512 }));
+				.setFooter({ text: message.author.tag, iconURL: message.author.displayAvatarURL({ dynamic: true, size: 512 }) });
 			const component = new MessageActionRow().addComponents(
 				new MessageButton()
 					.setCustomId(`${message.author.id}-${message.guild.id}-${ticket.caseId}`)
@@ -167,7 +167,7 @@ export class TicketHandler {
 				.embed()
 				.setTitle(`Ticket - ${ticket.caseId}`)
 				.setDescription(interaction.message.embeds[0].description ?? "Unknown reason")
-				.setFooter(`claimed by ${interaction.user.tag}`, interaction.user.displayAvatarURL({ dynamic: true, size: 512 }));
+				.setFooter({ text: `claimed by ${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL({ dynamic: true, size: 512 }) });
 			await channel.send({ embeds: [embed] }).then((m) => m.pin().catch(() => void 0));
 
 			ticket.channel = channel.id;
