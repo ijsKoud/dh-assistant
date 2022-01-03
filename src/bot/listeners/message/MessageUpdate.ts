@@ -30,7 +30,10 @@ export default class MessageUpdateListener extends Listener {
 			.setColor("#4a7cc5")
 			.setTitle(`Message edited in #${"name" in newMessage.channel ? newMessage.channel.name : ""}`)
 			.setDescription(`[Jump to message](${newMessage.url})`)
-			.setFooter(`${newMessage.author.tag} - ${newMessage.author.id}`, newMessage.author.displayAvatarURL({ dynamic: true, size: 4096 }))
+			.setFooter({
+				text: `${newMessage.author.tag} - ${newMessage.author.id}`,
+				iconURL: newMessage.author.displayAvatarURL({ dynamic: true, size: 4096 })
+			})
 			.setTimestamp()
 			.addFields([
 				{

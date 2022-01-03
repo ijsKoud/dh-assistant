@@ -66,7 +66,7 @@ export default class QotdCommand extends Command {
 		const embed = this.client.utils
 			.embed()
 			.setTitle("Question of the Day & Fact of the Day!")
-			.setFooter(`Source: ${source} ~ Embed sent by ${message.author.username}`)
+			.setFooter({ text: `Source: ${source} ~ Embed sent by ${message.author.username}` })
 			.setDescription(["**QOTD**", qotd, "**FOTD**", fotd, "_Don't forget to leave your responses in_\n<#702174849283522661>"].join("\n\n"));
 
 		const msg = await channel.send({

@@ -34,10 +34,12 @@ export class GuildMemberRemoveListener extends Listener {
 		const embed2 = client.utils
 			.embed()
 			.setColor("#DC5E55")
-			.setAuthor("Goodbye!")
+			.setAuthor({
+				name: "Goodbye!"
+			})
 			.setTitle(`${member.user.tag} left the server!`)
 			.setDescription("Bye bye 😢")
-			.setFooter(`There are now ${member.guild.memberCount} members in this server.`);
+			.setFooter({ text: `There are now ${member.guild.memberCount} members in this server.` });
 
 		client.loggingHandler.sendLogs(embed2, "join");
 	}
