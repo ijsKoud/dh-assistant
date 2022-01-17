@@ -3,7 +3,6 @@ dist/
 prisma/migrations/
 
 .env
-yarn.lock
 yarn-error.log
 
 transcripts/
