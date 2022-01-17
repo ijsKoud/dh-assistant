@@ -39,6 +39,9 @@ export class Automod {
 
 		filtered.forEach(async (result) => {
 			const setting = (this.settings.thresholds as Record<string, ThresholdsSetting | BadWordsSettings>)[result.type];
+			const warns = await this.client.prisma.modlog.count({ where: { id: { startsWith: result.user } } });
+			if (warns && warns % 2 === 0) setting.type === "mute";
+
 			switch (setting?.type) {
 				case "verbal":
 					await message.reply({ content: result.message, allowedMentions: { repliedUser: true } }).catch(() => void 0);
@@ -58,7 +61,6 @@ export class Automod {
 							}
 						});
 
-						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 						const user = this.client.user!;
 						const log = ModerationMessage.logs(result.reason, "warn", message.author, user, `CaseId: ${warn.caseId}`, result.date);
 
@@ -86,7 +88,6 @@ export class Automod {
 							}
 						});
 
-						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 						const user = this.client.user!;
 						const log = ModerationMessage.logs(
 							result.reason,
@@ -99,6 +100,7 @@ export class Automod {
 						);
 
 						this.client.loggingHandler.sendLogs(log, "mod");
+						await message.member?.disableCommunicationUntil(this.settings.mute.duration).catch(() => void 0);
 
 						const timeout = setLongTimeout(async () => {
 							const unmuteReason = `Automatic unmute from mute made by ${this.client.user?.toString()} <t:${moment(
@@ -115,7 +117,6 @@ export class Automod {
 								this.settings.mute.duration
 							);
 
-							await message.member?.roles.remove(this.settings.mute.role).catch(() => void 0);
 							await this.client.prisma.modlog.update({
 								where: { caseId: mute.caseId },
 								data: { timeoutFinished: true }
