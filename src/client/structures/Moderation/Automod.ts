@@ -2,7 +2,7 @@ import { readFile } from "fs/promises";
 import type { CheckResults, ModerationSettings, GuildMessage, ThresholdsSetting } from "./interfaces";
 import type Client from "../../Client";
 import { join } from "path";
-import type { Invite, Message } from "discord.js";
+import type { GuildMember, Invite, Message } from "discord.js";
 import ms from "ms";
 import { ModerationMessage } from "./ModerationMessage";
 import type { BadWordsSettings } from ".";
@@ -71,9 +71,9 @@ export class Automod {
 		this.settings = JSON.parse(data);
 	}
 
-	public async mute(message: Message, result: CheckResults, response = true) {
+	public async mute(message: Message, result: CheckResults, member?: GuildMember) {
 		await message.delete().catch(() => void 0);
-		if (response) await message.channel.send({ content: result.message, allowedMentions: { users: [result.user] } }).catch(() => void 0);
+		if (!member) await message.channel.send({ content: result.message, allowedMentions: { users: [result.user] } }).catch(() => void 0);
 
 		const id = `${result.user}-${result.guild}`;
 		const mute = await this.client.prisma.modlog.create({
@@ -89,10 +89,11 @@ export class Automod {
 		});
 
 		const user = this.client.user!;
+		const offender = member ?? message.member!;
 		const log = ModerationMessage.logs(
 			result.reason,
 			"mute",
-			message.author,
+			offender.user,
 			user,
 			`CaseId: ${mute.caseId}`,
 			result.date,
@@ -100,7 +101,7 @@ export class Automod {
 		);
 
 		this.client.loggingHandler.sendLogs(log, "mod");
-		await message.member?.disableCommunicationUntil(this.settings.mute.duration).catch(() => void 0);
+		await offender.disableCommunicationUntil(this.settings.mute.duration).catch(() => void 0);
 
 		const timeout = setLongTimeout(async () => {
 			const unmuteReason = `Automatic unmute from mute made by ${this.client.user?.toString()} <t:${moment(result.date).unix()}:R>`;
@@ -108,7 +109,7 @@ export class Automod {
 			const finishLogs = ModerationMessage.logs(
 				unmuteReason,
 				"unmute",
-				message.author,
+				offender.user,
 				user,
 				`CaseId: ${mute.caseId}`,
 				result.date,
@@ -127,8 +128,8 @@ export class Automod {
 			caseId: mute.caseId
 		});
 
-		const embed = ModerationMessage.dm(result.reason, "mute", message.author, `CaseId: ${mute.caseId}`, result.date, this.settings.mute.duration);
-		await message.author.send({ embeds: [embed] }).catch(() => void 0);
+		const embed = ModerationMessage.dm(result.reason, "mute", offender.user, `CaseId: ${mute.caseId}`, result.date, this.settings.mute.duration);
+		await offender.send({ embeds: [embed] }).catch(() => void 0);
 	}
 
 	private async warn(message: Message, result: CheckResults) {
