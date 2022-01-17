@@ -18,7 +18,7 @@ export default class UnmuteCommand extends Command {
 
 		const msg = await message.reply(`>>> ${this.client.constants.emojis.loading} | Unmuting **${member.user.tag}**...`);
 		const { modTimeouts } = this.client.automod;
-		if (!member.communicationDisabledUntil)
+		if (!member.isCommunicationDisabled())
 			return msg.edit(`>>> ${this.client.constants.emojis.redcross} | This user is not muted in this server.`);
 
 		await member.timeout(null);
