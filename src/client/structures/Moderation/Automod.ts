@@ -72,8 +72,10 @@ export class Automod {
 	}
 
 	public async mute(message: Message, result: CheckResults, member?: GuildMember) {
-		await message.delete().catch(() => void 0);
-		if (!member) await message.channel.send({ content: result.message, allowedMentions: { users: [result.user] } }).catch(() => void 0);
+		if (!member) {
+			await message.delete().catch(() => void 0);
+			await message.channel.send({ content: result.message, allowedMentions: { users: [result.user] } }).catch(() => void 0);
+		}
 
 		const id = `${result.user}-${result.guild}`;
 		const mute = await this.client.prisma.modlog.create({
@@ -101,7 +103,9 @@ export class Automod {
 		);
 
 		this.client.loggingHandler.sendLogs(log, "mod");
-		await offender.disableCommunicationUntil(this.settings.mute.duration).catch(() => void 0);
+		await offender
+			.disableCommunicationUntil(this.settings.mute.duration)
+			.catch((err) => this.client.loggers.get("bot")?.error(`Mute error`, err));
 
 		const timeout = setLongTimeout(async () => {
 			const unmuteReason = `Automatic unmute from mute made by ${this.client.user?.toString()} <t:${moment(result.date).unix()}:R>`;
