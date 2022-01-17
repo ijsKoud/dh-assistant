@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-namespace */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SapphireClient } from "@sapphire/framework";
 import { BitFieldResolvable, Collection, IntentsString, PartialTypes } from "discord.js";
 import { join } from "path";
