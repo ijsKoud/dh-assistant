@@ -78,13 +78,14 @@ export class Automod {
 		}
 
 		const id = `${result.user}-${result.guild}`;
+		const endDate = new Date(result.date + this.settings.mute.duration);
 		const mute = await this.client.prisma.modlog.create({
 			data: {
 				reason: result.reason,
 				id,
 				moderator: this.client.user?.id ?? "",
 				startDate: new Date(result.date),
-				endDate: new Date(result.date + this.settings.mute.duration),
+				endDate,
 				type: "mute",
 				timeoutFinished: false
 			}
@@ -103,9 +104,7 @@ export class Automod {
 		);
 
 		this.client.loggingHandler.sendLogs(log, "mod");
-		await offender
-			.disableCommunicationUntil(this.settings.mute.duration)
-			.catch((err) => this.client.loggers.get("bot")?.error(`Mute error`, err));
+		await offender.disableCommunicationUntil(endDate).catch((err) => this.client.loggers.get("bot")?.error(`Mute error`, err));
 
 		const timeout = setLongTimeout(async () => {
 			const unmuteReason = `Automatic unmute from mute made by ${this.client.user?.toString()} <t:${moment(result.date).unix()}:R>`;
