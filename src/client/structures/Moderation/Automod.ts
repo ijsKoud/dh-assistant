@@ -39,8 +39,6 @@ export class Automod {
 
 		filtered.forEach(async (result) => {
 			const setting = (this.settings.thresholds as Record<string, ThresholdsSetting | BadWordsSettings>)[result.type];
-			const warns = await this.client.prisma.modlog.count({ where: { id: { startsWith: result.user } } });
-			if (warns && warns % 2 === 0) setting.type === "mute";
 
 			switch (setting?.type) {
 				case "verbal":
@@ -48,97 +46,21 @@ export class Automod {
 					break;
 				case "warn":
 					{
-						await message.delete().catch(() => void 0);
-						await message.channel.send({ content: result.message, allowedMentions: { users: [result.user] } }).catch(() => void 0);
-
-						const warn = await this.client.prisma.modlog.create({
-							data: {
-								reason: result.reason,
-								id: `${result.user}-${result.guild}`,
-								moderator: this.client.user?.id ?? "",
-								startDate: new Date(result.date),
-								type: "warn"
-							}
-						});
-
-						const user = this.client.user!;
-						const log = ModerationMessage.logs(result.reason, "warn", message.author, user, `CaseId: ${warn.caseId}`, result.date);
-
-						this.client.loggingHandler.sendLogs(log, "mod");
-
-						const embed = ModerationMessage.dm(result.reason, "warn", message.author, `CaseId: ${warn.caseId}`, result.date);
-						await message.author.send({ embeds: [embed] }).catch(() => void 0);
+						await this.warn(message, result);
+						const warns = await this.client.prisma.modlog.count({ where: { id: { startsWith: result.user }, type: "warn" } });
+						if (warns && warns % 2 === 0)
+							await this.mute(message, {
+								date: Date.now(),
+								guild: result.guild,
+								message: result.message,
+								user: result.user,
+								reason: "Automatic mute for every 2 warnings",
+								type: "mute"
+							});
 					}
 					break;
 				case "mute":
-					{
-						await message.delete().catch(() => void 0);
-						await message.channel.send({ content: result.message, allowedMentions: { users: [result.user] } }).catch(() => void 0);
-
-						const id = `${result.user}-${result.guild}`;
-						const mute = await this.client.prisma.modlog.create({
-							data: {
-								reason: result.reason,
-								id,
-								moderator: this.client.user?.id ?? "",
-								startDate: new Date(result.date),
-								endDate: new Date(result.date + this.settings.mute.duration),
-								type: "mute",
-								timeoutFinished: false
-							}
-						});
-
-						const user = this.client.user!;
-						const log = ModerationMessage.logs(
-							result.reason,
-							"mute",
-							message.author,
-							user,
-							`CaseId: ${mute.caseId}`,
-							result.date,
-							this.settings.mute.duration
-						);
-
-						this.client.loggingHandler.sendLogs(log, "mod");
-						await message.member?.disableCommunicationUntil(this.settings.mute.duration).catch(() => void 0);
-
-						const timeout = setLongTimeout(async () => {
-							const unmuteReason = `Automatic unmute from mute made by ${this.client.user?.toString()} <t:${moment(
-								result.date
-							).unix()}:R>`;
-
-							const finishLogs = ModerationMessage.logs(
-								unmuteReason,
-								"unmute",
-								message.author,
-								user,
-								`CaseId: ${mute.caseId}`,
-								result.date,
-								this.settings.mute.duration
-							);
-
-							await this.client.prisma.modlog.update({
-								where: { caseId: mute.caseId },
-								data: { timeoutFinished: true }
-							});
-							this.client.loggingHandler.sendLogs(finishLogs, "mod");
-						}, this.settings.mute.duration);
-
-						this.modTimeouts.set(`${id}-mute`, {
-							timeout,
-							caseId: mute.caseId
-						});
-
-						const embed = ModerationMessage.dm(
-							result.reason,
-							"mute",
-							message.author,
-							`CaseId: ${mute.caseId}`,
-							result.date,
-							this.settings.mute.duration
-						);
-						await message.author.send({ embeds: [embed] }).catch(() => void 0);
-					}
+					await this.mute(message, result);
 					break;
 			}
 		});
@@ -149,7 +71,90 @@ export class Automod {
 		this.settings = JSON.parse(data);
 	}
 
-	protected bypass(message: Message, setting: ThresholdsSetting | BadWordsSettings): boolean {
+	public async mute(message: Message, result: CheckResults, response = true) {
+		await message.delete().catch(() => void 0);
+		if (response) await message.channel.send({ content: result.message, allowedMentions: { users: [result.user] } }).catch(() => void 0);
+
+		const id = `${result.user}-${result.guild}`;
+		const mute = await this.client.prisma.modlog.create({
+			data: {
+				reason: result.reason,
+				id,
+				moderator: this.client.user?.id ?? "",
+				startDate: new Date(result.date),
+				endDate: new Date(result.date + this.settings.mute.duration),
+				type: "mute",
+				timeoutFinished: false
+			}
+		});
+
+		const user = this.client.user!;
+		const log = ModerationMessage.logs(
+			result.reason,
+			"mute",
+			message.author,
+			user,
+			`CaseId: ${mute.caseId}`,
+			result.date,
+			this.settings.mute.duration
+		);
+
+		this.client.loggingHandler.sendLogs(log, "mod");
+		await message.member?.disableCommunicationUntil(this.settings.mute.duration).catch(() => void 0);
+
+		const timeout = setLongTimeout(async () => {
+			const unmuteReason = `Automatic unmute from mute made by ${this.client.user?.toString()} <t:${moment(result.date).unix()}:R>`;
+
+			const finishLogs = ModerationMessage.logs(
+				unmuteReason,
+				"unmute",
+				message.author,
+				user,
+				`CaseId: ${mute.caseId}`,
+				result.date,
+				this.settings.mute.duration
+			);
+
+			await this.client.prisma.modlog.update({
+				where: { caseId: mute.caseId },
+				data: { timeoutFinished: true }
+			});
+			this.client.loggingHandler.sendLogs(finishLogs, "mod");
+		}, this.settings.mute.duration);
+
+		this.modTimeouts.set(`${id}-mute`, {
+			timeout,
+			caseId: mute.caseId
+		});
+
+		const embed = ModerationMessage.dm(result.reason, "mute", message.author, `CaseId: ${mute.caseId}`, result.date, this.settings.mute.duration);
+		await message.author.send({ embeds: [embed] }).catch(() => void 0);
+	}
+
+	private async warn(message: Message, result: CheckResults) {
+		await message.delete().catch(() => void 0);
+		await message.channel.send({ content: result.message, allowedMentions: { users: [result.user] } }).catch(() => void 0);
+
+		const warn = await this.client.prisma.modlog.create({
+			data: {
+				reason: result.reason,
+				id: `${result.user}-${result.guild}`,
+				moderator: this.client.user?.id ?? "",
+				startDate: new Date(result.date),
+				type: "warn"
+			}
+		});
+
+		const user = this.client.user!;
+		const log = ModerationMessage.logs(result.reason, "warn", message.author, user, `CaseId: ${warn.caseId}`, result.date);
+
+		this.client.loggingHandler.sendLogs(log, "mod");
+
+		const embed = ModerationMessage.dm(result.reason, "warn", message.author, `CaseId: ${warn.caseId}`, result.date);
+		await message.author.send({ embeds: [embed] }).catch(() => void 0);
+	}
+
+	private bypass(message: Message, setting: ThresholdsSetting | BadWordsSettings): boolean {
 		if (!message.member || message.member.permissions.has("MANAGE_GUILD") || message.guildId !== this.client.constants.guild) return true;
 
 		const roles = setting.whitelisted.filter((str) => str.toLowerCase().includes("role-")).map((str) => str.slice(5));
@@ -165,13 +170,13 @@ export class Automod {
 		return false;
 	}
 
-	protected replace(str: string, vars: Record<string, string>): string {
+	private replace(str: string, vars: Record<string, string>): string {
 		for (const key of Object.keys(vars)) str = str.replace(new RegExp(`{${key}}`, "g"), vars[key]);
 
 		return str;
 	}
 
-	protected caps(message: GuildMessage): CheckResults | null {
+	private caps(message: GuildMessage): CheckResults | null {
 		const { caps } = this.settings.thresholds;
 		if (this.bypass(message, caps)) return null;
 
@@ -207,7 +212,7 @@ export class Automod {
 		return null;
 	}
 
-	protected spam(message: GuildMessage): CheckResults | null {
+	private spam(message: GuildMessage): CheckResults | null {
 		const { spam } = this.settings.thresholds;
 		if (this.bypass(message, spam)) return null;
 
@@ -262,7 +267,7 @@ export class Automod {
 		return null;
 	}
 
-	protected mention(message: GuildMessage): CheckResults | null {
+	private mention(message: GuildMessage): CheckResults | null {
 		const { mention } = this.settings.thresholds;
 		if (this.bypass(message, mention)) return null;
 
@@ -319,7 +324,7 @@ export class Automod {
 		return null;
 	}
 
-	protected async inviteLinks(message: GuildMessage): Promise<CheckResults | null> {
+	private async inviteLinks(message: GuildMessage): Promise<CheckResults | null> {
 		const { invite: InviteSettings } = this.settings.thresholds;
 		if (this.bypass(message, InviteSettings)) return null;
 
@@ -348,7 +353,7 @@ export class Automod {
 		};
 	}
 
-	protected badWords(message: GuildMessage): CheckResults | null {
+	private badWords(message: GuildMessage): CheckResults | null {
 		const { badWords } = this.settings.thresholds;
 		if (this.bypass(message, badWords)) return null;
 

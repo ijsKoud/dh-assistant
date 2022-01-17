@@ -38,8 +38,21 @@ export default class WarnCommand extends Command {
 			}
 		});
 
+		const warns = await this.client.prisma.modlog.count({ where: { id: { startsWith: member.id }, type: "warn" } });
+		if (warns && warns % 2 === 0)
+			await this.client.automod.mute(
+				message,
+				{
+					type: "mute",
+					user: member.id,
+					reason: "Automatic mute for every 2 warnings",
+					date: Date.now(),
+					guild: message.guildId,
+					message: message.id
+				},
+				false
+			);
 		const dm = ModerationMessage.dm(reason ?? "No reason provided", "warn", member.user, `Case Id: ${warnLog.id}`, date);
-
 		const log = ModerationMessage.logs(reason ?? "No reason provided", "warn", member.user, message.author, `Case Id: ${warnLog.caseId}`, date);
 
 		this.client.loggingHandler.sendLogs(log, "mod");
