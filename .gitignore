@@ -1,11 +1,25 @@
-node_modules/
-dist/
-prisma/migrations/
+# dependencies
+/node_modules
 
+# production
+/dist
+
+# env files
 .env
-yarn.lock
-yarn-error.log
+.env.local
+.env.test
+.env.development
+.env.production
 
+# yarn files
+yarn-debug.log*
+yarn-error.log*
+
+.yarn/cache
+.yarn/install-state.gz
+.yarn/build-state.yml
+
+# Config files
 transcripts/
 data/*.json
 
@@ -13,3 +27,6 @@ config/automod.json
 config/api.json
 config/constants.json
 config/ticket.json
+
+# prisma
+prisma/migrations/
