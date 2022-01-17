@@ -6,6 +6,8 @@
 	"author": "DaanGamesDG <daan@daangamesdg.xyz>",
 	"license": "MIT",
 	"dependencies": {
+		"@commitlint/cli": "^16.0.2",
+		"@commitlint/config-angular": "^16.0.0",
 		"@daangamesdg/logger": "^1.1.0",
 		"@daangamesdg/youtube-notifications": "^1.0.2",
 		"@prisma/client": "^3.8.1",
@@ -24,7 +26,9 @@
 		"express": "^4.17.2",
 		"express-rate-limit": "^6.1.0",
 		"highlight.js": "^11.4.0",
+		"husky": "^7.0.4",
 		"jsdom": "^19.0.0",
+		"lint-staged": "^12.1.7",
 		"long-timeout": "^0.1.1",
 		"moment": "^2.29.1",
 		"moment-timezone": "^0.5.34",
@@ -65,6 +69,7 @@
 		"start": "cross-env NODE_ENV=production node .",
 		"lint": "eslint src",
 		"generate-types": "prisma generate",
-		"prisma-install": "prisma db push"
+		"prisma-install": "prisma db push",
+		"prepare": "husky install"
 	}
 }

@@ -1,9 +1,22 @@
 <div align="center">
-	<img src="assets/readme/logo-text.png" title="DH-Assistant" alt="DH-Assistant" />
-</div>
-<h1 align="left"><strong>DH Assistant (v4)</strong></h1>
+    <img src="assets/readme/logo-text.png" />
+    <h1>dh-assistant</h1>
+  
+  <p>The open-source multi-purpose Discord bot for Draavo's Hangout</p>
+  
+  <p align="center">
+    <img alt="Version" src="https://img.shields.io/badge/version-4.0.0-blue.svg" />
+    <a href="/LICENSE" target="_blank">
+      <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
+    </a>
+  </p>
 
-The open-source multi-purpose Discord bot for Draavo's Hangout
+  <a href="https://discord.gg/draavo" target="_blank">
+    <img src="https://discord.com/api/guilds/701781652577321002/embed.png?style=banner2" />
+  </a>
+</div>
+
+---
 
 ## Information
 
@@ -19,6 +32,10 @@ This bot is designed to work with Draavo's Hangout, even though this is a custom
 
 The installation guide can be found her: https://draavo.daangamesdg.xyz/installation
 
+## Install
+
+This project is WIP, please come back later for a guide on how to host this bot yourself.
+
 ## Author
 
 👤 **DaanGamesDG**
@@ -30,7 +47,7 @@ The installation guide can be found her: https://draavo.daangamesdg.xyz/installa
 
 ## Donate
 
-This will always be open source project, even if I don't receive donations. But there are still people out there that want to donate, so if you do here is the link [PayPal](https://daangamesdg.xyz/paypal) or to [Ko-Fi](https://daangamesdg.xyz/kofi). Thanks in advance! I really appriciate it <3
+This will always be open source project, even if I don't receive donations. But there are still people out there that want to donate, so if you do here is the link [PayPal](https://paypal.me/daangamesdg) or to [Ko-Fi](https://daangamesdg.xyz/kofi). Thanks in advance! I really appriciate it <3
 
 ## Lisence
 
