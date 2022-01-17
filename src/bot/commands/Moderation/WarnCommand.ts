@@ -52,7 +52,7 @@ export default class WarnCommand extends Command {
 				},
 				member
 			);
-		const dm = ModerationMessage.dm(reason ?? "No reason provided", "warn", member.user, `Case Id: ${warnLog.id}`, date);
+		const dm = ModerationMessage.dm(reason ?? "No reason provided", "warn", member.user, `Case Id: ${warnLog.caseId}`, date);
 		const log = ModerationMessage.logs(reason ?? "No reason provided", "warn", member.user, message.author, `Case Id: ${warnLog.caseId}`, date);
 
 		this.client.loggingHandler.sendLogs(log, "mod");
