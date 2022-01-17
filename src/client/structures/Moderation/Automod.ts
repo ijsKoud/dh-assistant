@@ -62,6 +62,9 @@ export class Automod {
 				case "mute":
 					await this.mute(message, result);
 					break;
+				case "kick":
+					await this.kick(message, result);
+					break;
 			}
 		});
 	}
@@ -133,6 +136,31 @@ export class Automod {
 
 		const embed = ModerationMessage.dm(result.reason, "mute", offender.user, `CaseId: ${mute.caseId}`, result.date, this.settings.mute.duration);
 		await offender.send({ embeds: [embed] }).catch(() => void 0);
+	}
+
+	private async kick(message: Message, result: CheckResults) {
+		await message.delete().catch(() => void 0);
+		await message.channel.send({ content: result.message, allowedMentions: { users: [result.user] } }).catch(() => void 0);
+
+		const kick = await this.client.prisma.modlog.create({
+			data: {
+				reason: result.reason,
+				id: `${result.user}-${result.guild}`,
+				moderator: this.client.user?.id ?? "",
+				startDate: new Date(result.date),
+				type: "kick"
+			}
+		});
+
+		const user = this.client.user!;
+		const log = ModerationMessage.logs(result.reason, "kick", message.author, user, `CaseId: ${kick.caseId}`, result.date);
+
+		this.client.loggingHandler.sendLogs(log, "mod");
+
+		const embed = ModerationMessage.dm(result.reason, "kick", message.author, `CaseId: ${kick.caseId}`, result.date);
+		await message.author.send({ embeds: [embed] }).catch(() => void 0);
+
+		await message.member?.kick(result.reason).catch((err) => this.client.loggers.get("bot")?.error(`Mute error`, err));
 	}
 
 	private async warn(message: Message, result: CheckResults) {
