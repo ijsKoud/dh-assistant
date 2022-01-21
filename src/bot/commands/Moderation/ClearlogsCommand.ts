@@ -12,10 +12,10 @@ import { GuildMessage, ModerationMessage } from "../../../client/structures/Mode
 })
 export default class ClearlogsCommand extends Command {
 	public async messageRun(message: GuildMessage, args: Command.Args) {
-		const { value: id } = await args.pickResult("string");
+		const { value: id } = await args.pickResult("integer");
 		const userFlag = args.getFlags("user");
 		if (userFlag) {
-			const user = await this.client.utils.fetchUser(id ?? "");
+			const user = await this.client.utils.fetchUser((id ?? "").toString());
 			if (!user) return message.reply(`>>> ${this.client.constants.emojis.redcross} | I could not find that user on Discord at all.`);
 
 			const msg = await message.reply(`>>> ${this.client.constants.emojis.loading} | Deleting the modlogs of **${user.tag}**...`);
@@ -37,8 +37,13 @@ export default class ClearlogsCommand extends Command {
 			return msg.edit(`>>> ${this.client.constants.emojis.greentick} | Successfully deleted all the modlogs of **${user.tag}**.`);
 		}
 
+		if (!id || isNaN(id)) {
+			await message.reply(`>>> ${this.client.constants.emojis.error} | Invalid case id provided.`);
+			return;
+		}
+
 		const msg = await message.reply(`>>> ${this.client.constants.emojis.loading} | Deleting the modlog **${id}**...`);
-		const modlog = await this.client.prisma.modlog.findFirst({ where: { caseId: Number(id) } });
+		const modlog = await this.client.prisma.modlog.findFirst({ where: { caseId: id } });
 		if (!modlog) return;
 
 		await this.client.prisma.modlog.delete({ where: { caseId: modlog.caseId } });
