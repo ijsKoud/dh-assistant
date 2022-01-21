@@ -13,7 +13,8 @@ export class GuildMemberRemoveListener extends Listener {
 		const joinDate = client.utils.formatTime(moment(member.joinedTimestamp).unix(), "R");
 		const embed = client.utils
 			.embed()
-			.setTitle(`Member joined: ${member.user.tag}`)
+			.setTitle(`Member left: ${member.user.tag}`)
+			.setColor("#DC5E55")
 			.setDescription(
 				[
 					`>>> 👤 | **User**: **${member.user.tag}** (${member.toString()})`,

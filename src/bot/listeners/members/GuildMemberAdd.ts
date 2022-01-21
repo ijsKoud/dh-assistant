@@ -13,6 +13,7 @@ export class GuildMemberAddListener extends Listener {
 		const embed = client.utils
 			.embed()
 			.setTitle(`Member joined: ${member.user.tag}`)
+			.setColor("#58DCAE")
 			.setDescription(
 				[
 					`>>> 👤 | **User**: ${member.user.tag} (${member.toString()})`,
