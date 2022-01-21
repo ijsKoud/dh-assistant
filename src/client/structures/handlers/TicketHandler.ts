@@ -182,7 +182,6 @@ export class TicketHandler {
 	}
 
 	public async handleMessage(message: Message): Promise<void> {
-		if (message.content.startsWith(process.env.PREFIX ?? "=")) return;
 		switch (message.channel.type) {
 			case "DM":
 				{
@@ -206,9 +205,15 @@ export class TicketHandler {
 				break;
 			case "GUILD_TEXT":
 				{
+					const TICKET_MESSAGE_PREFIX = `${process.env.PREFIX ?? "="}message`;
+					if (message.content.startsWith(TICKET_MESSAGE_PREFIX)) return;
+					message.content = message.content.replace(TICKET_MESSAGE_PREFIX, "");
+
 					try {
 						const ticket = await this.getTicket("TEXT", message);
 						if (!ticket || ticket.closed) return;
+
+						if (ticket.claimer !== message.author.id) return;
 
 						const user = await this.client.utils.fetchUser(ticket.id.split("-")[0]);
 						if (!user) return;
