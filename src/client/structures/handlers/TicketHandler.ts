@@ -205,8 +205,8 @@ export class TicketHandler {
 				break;
 			case "GUILD_TEXT":
 				{
-					const TICKET_MESSAGE_PREFIX = `${process.env.PREFIX ?? "="}message`;
-					if (message.content.startsWith(TICKET_MESSAGE_PREFIX)) return;
+					const TICKET_MESSAGE_PREFIX = `${process.env.PREFIX ?? "="}respond`;
+					if (!message.content.startsWith(TICKET_MESSAGE_PREFIX)) return;
 					message.content = message.content.replace(TICKET_MESSAGE_PREFIX, "");
 
 					try {
