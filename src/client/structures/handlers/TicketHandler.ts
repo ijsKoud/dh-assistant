@@ -261,6 +261,8 @@ export class TicketHandler {
 		}
 
 		let id = Number((message.channel as TextChannel).name.split("-")[1]);
+		if (isNaN(id)) return null;
+
 		let ticket: Ticket | null = this.tickets.get(id) ?? null;
 		if (!ticket) {
 			ticket = await this.client.prisma.ticket.findFirst({
