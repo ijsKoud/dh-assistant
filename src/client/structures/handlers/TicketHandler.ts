@@ -241,7 +241,7 @@ export class TicketHandler {
 				message.content || "no message content"
 			}\`\`\`${
 				warning
-					? `\nMessages from the ticket claimer sent to this channel will automatically be sent to the ticket creator. Use \`${this.client.options.defaultPrefix}\` at the beginning of your message to stop this.`
+					? `\nMessages from the ticket claimer sent to this channel will aren't automatically sent to the ticket creator. Use \`${this.client.options.defaultPrefix}respond <content>\` to reply.`
 					: ""
 			}`
 		};
