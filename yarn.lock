@@ -914,7 +914,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:^5.10.0":
+"@typescript-eslint/eslint-plugin@npm:^5.10.0, @typescript-eslint/eslint-plugin@npm:^5.10.1":
   version: 5.10.1
   resolution: "@typescript-eslint/eslint-plugin@npm:5.10.1"
   dependencies:
@@ -937,7 +937,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:^5.10.0":
+"@typescript-eslint/parser@npm:^5.10.0, @typescript-eslint/parser@npm:^5.10.1":
   version: 5.10.1
   resolution: "@typescript-eslint/parser@npm:5.10.1"
   dependencies:
@@ -2056,6 +2056,8 @@ __metadata:
     "@types/random-words": 1.1.2
     "@types/twemoji": ^12.1.2
     "@types/uuid": 8.3.4
+    "@typescript-eslint/eslint-plugin": ^5.10.1
+    "@typescript-eslint/parser": ^5.10.1
     axios: ^0.25.0
     body-parser: ^1.19.1
     canvas: ^2.9.0
@@ -2065,7 +2067,9 @@ __metadata:
     discord-giveaways: ^5.1.0
     discord.js: ^13.6.0
     dotenv: ^14.3.2
-    eslint: 8.8.0
+    eslint: ^8.8.0
+    eslint-config-prettier: ^8.3.0
+    eslint-plugin-prettier: ^4.0.0
     express: ^4.17.2
     express-rate-limit: ^6.2.0
     highlight.js: ^11.4.0
@@ -2382,7 +2386,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.8.0":
+"eslint@npm:^8.8.0":
   version: 8.8.0
   resolution: "eslint@npm:8.8.0"
   dependencies:
