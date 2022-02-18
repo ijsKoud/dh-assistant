@@ -74,12 +74,12 @@ export class PermissionHandler {
 	}
 
 	public getRank(member: GuildMember) {
-		if (this._parse([this.roles.cet], member, false)) return 1; // cet
-		if (this._parse([this.roles.trial], member, false)) return 2; // trial
-		if (this._parse([this.roles.moderator], member, false)) return 3; // mod
-		if (this._parse([this.roles.manager], member, false)) return 4; // manager
-		if (this._parse([this.roles.senior], member, false)) return 5; // senior
 		if (member.guild.ownerId === member.id) return 6; // owner
+		if (this._parse([this.roles.senior], member, false)) return 5; // senior
+		if (this._parse([this.roles.manager], member, false)) return 4; // manager
+		if (this._parse([this.roles.moderator], member, false)) return 3; // mod
+		if (this._parse([this.roles.trial], member, false)) return 2; // trial
+		if (this._parse([this.roles.cet], member, false)) return 1; // cet
 
 		return 0;
 	}
