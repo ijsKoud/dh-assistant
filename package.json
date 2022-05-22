@@ -6,8 +6,8 @@
 	"author": "DaanGamesDG <daan@daangamesdg.xyz>",
 	"license": "MIT",
 	"dependencies": {
-		"@commitlint/cli": "^16.2.1",
-		"@commitlint/config-angular": "^16.2.1",
+		"@commitlint/cli": "^17.0.0",
+		"@commitlint/config-angular": "^17.0.0",
 		"@daangamesdg/logger": "^1.1.0",
 		"@daangamesdg/youtube-notifications": "^1.0.2",
 		"@prisma/client": "^3.9.2",
