@@ -24,7 +24,7 @@ export class GuildMemberAddListener extends Listener {
 				].join("\n")
 			);
 		client.loggingHandler.sendLogs(embed, "member");
-		if (!member.pending) await member.roles.add(client.constants.roles.default).catch(() => void 0);
+		await member.roles.add(client.constants.roles.default).catch(() => void 0);
 
 		const general = await client.utils.getChannel(client.constants.channels.general);
 		if (general && general.isText()) await general.send(`**${member.user.tag}** just joined! Make sure to welcome them!`).catch(() => void 0);
