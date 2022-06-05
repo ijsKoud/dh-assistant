@@ -918,13 +918,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/twemoji@npm:^12.1.2":
-  version: 12.1.2
-  resolution: "@types/twemoji@npm:12.1.2"
-  checksum: 35ef6fd9f58e1e2284aa202daf6b8f21d725941411ef7551b1283cc56b663cbcdd5252f359a39906e83657536b142b5350258378498698aba4dc80963e6eab8a
-  languageName: node
-  linkType: hard
-
 "@types/uuid@npm:8.3.4":
   version: 8.3.4
   resolution: "@types/uuid@npm:8.3.4"
@@ -2183,7 +2176,6 @@ __metadata:
     "@types/ms": 0.7.31
     "@types/node": 16.11.38
     "@types/random-words": 1.1.2
-    "@types/twemoji": ^12.1.2
     "@types/uuid": 8.3.4
     "@typescript-eslint/eslint-plugin": ^5.27.0
     "@typescript-eslint/parser": ^5.27.0

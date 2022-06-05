@@ -54,7 +54,6 @@
 		"@types/ms": "0.7.31",
 		"@types/node": "16.11.38",
 		"@types/random-words": "1.1.2",
-		"@types/twemoji": "^12.1.2",
 		"@types/uuid": "8.3.4",
 		"@typescript-eslint/eslint-plugin": "^5.27.0",
 		"@typescript-eslint/parser": "^5.27.0",
