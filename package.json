@@ -28,7 +28,7 @@
 		"highlight.js": "^11.4.0",
 		"husky": "^8.0.1",
 		"jsdom": "^19.0.0",
-		"lint-staged": "^12.3.4",
+		"lint-staged": "^13.0.0",
 		"long-timeout": "^0.1.1",
 		"moment": "^2.29.1",
 		"moment-timezone": "^0.5.34",
