@@ -209,6 +209,7 @@ export default class markdownParser {
 	}
 
 	private _parse(data: string): string {
+		// @ts-ignore typings went missing
 		data = twemoji.parse(data);
 		data = data.replace(/\/blockquote/g, "div").replace(/blockquote/g, 'div class="quote"');
 		return data;
