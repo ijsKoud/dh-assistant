@@ -5,14 +5,14 @@ import { ButtonInteraction, Interaction, MessageActionRow, MessageButton } from 
 @ApplyOptions<ListenerOptions>({ event: "interactionCreate" })
 export default class InteractionCreateListener extends Listener {
 	public run(interaction: Interaction) {
-		if (interaction.inGuild() && interaction.isButton()) {
+		if (interaction.inCachedGuild() && interaction.isButton()) {
 			void this.container.client.ticketHandler.handleInteraction(interaction);
 			void this.handleAdrequest(interaction);
 			void this.handlePingRequest(interaction);
 		}
 	}
 
-	private async handlePingRequest(interaction: ButtonInteraction<"present">) {
+	private async handlePingRequest(interaction: ButtonInteraction<"cached">) {
 		const { client } = this.container;
 		const [confirm, type] = interaction.customId.split(/-/g);
 		if (!confirm || confirm !== "pingrequest" || !type) return;
@@ -43,7 +43,7 @@ export default class InteractionCreateListener extends Listener {
 		await finish();
 	}
 
-	private async handleAdrequest(interaction: ButtonInteraction<"present">) {
+	private async handleAdrequest(interaction: ButtonInteraction<"cached">) {
 		const { client } = this.container;
 		const [caseId, type] = interaction.customId.split(/-/g);
 		if (!caseId || !type) return;

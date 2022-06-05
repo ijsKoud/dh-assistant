@@ -278,7 +278,8 @@ export class Transcript {
 					"src",
 					e.url
 						? e.url
-						: `${twemoji.base}/72x72/${twemoji.convert.toCodePoint(
+						: // @ts-ignore typings went missing
+						  `${twemoji.base}/72x72/${twemoji.convert.toCodePoint(
 								((e.emoji?.indexOf(String.fromCharCode(0x200d)) ?? 0) < 0 ? e.emoji?.replace(/\uFE0F/g, "") : e.emoji) ?? ""
 						  )}.png`
 				);
