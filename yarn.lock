@@ -918,10 +918,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/twemoji@npm:^12.1.2":
-  version: 12.1.2
-  resolution: "@types/twemoji@npm:12.1.2"
-  checksum: 35ef6fd9f58e1e2284aa202daf6b8f21d725941411ef7551b1283cc56b663cbcdd5252f359a39906e83657536b142b5350258378498698aba4dc80963e6eab8a
+"@types/twemoji@npm:^13.1.1":
+  version: 13.1.1
+  resolution: "@types/twemoji@npm:13.1.1"
+  dependencies:
+    twemoji: "*"
+  checksum: 1d517d1924049382e5a077a69a5386c8abe9ea3d1333ea55205937bb463b5d3d1eda346917d5cae2e19797d95b6145bc2c77664580190fdc8143246b0f3c2886
   languageName: node
   linkType: hard
 
@@ -2183,7 +2185,7 @@ __metadata:
     "@types/ms": 0.7.31
     "@types/node": 16.11.38
     "@types/random-words": 1.1.2
-    "@types/twemoji": ^12.1.2
+    "@types/twemoji": ^13.1.1
     "@types/uuid": 8.3.4
     "@typescript-eslint/eslint-plugin": ^5.27.0
     "@typescript-eslint/parser": ^5.27.0
@@ -5921,10 +5923,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"twemoji-parser@npm:^14.0.0":
+"twemoji-parser@npm:14.0.0, twemoji-parser@npm:^14.0.0":
   version: 14.0.0
   resolution: "twemoji-parser@npm:14.0.0"
   checksum: 8eede69cf71f94735de7b6fddf5dfbfe3cb2e01baefc3201360984ccc97cfc659f206c8f73bd1405a2282779af3b79a8c9bed3864c672e15e2dc6f8ce4810452
+  languageName: node
+  linkType: hard
+
+"twemoji@npm:*":
+  version: 14.0.2
+  resolution: "twemoji@npm:14.0.2"
+  dependencies:
+    fs-extra: ^8.0.1
+    jsonfile: ^5.0.0
+    twemoji-parser: 14.0.0
+    universalify: ^0.1.2
+  checksum: 686a356a7af3cf15f7894568bfcdfafcea0cd45473b3f8c59d6ca95e549695f1222845d1a8c39ffa3bc4057e9d59e41ab83e4ce3cbcd68823ff50d57e3ff58da
   languageName: node
   linkType: hard
 
