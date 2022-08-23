@@ -1994,12 +1994,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"deepmerge-ts@npm:^4.0.3":
-  version: 4.0.3
-  resolution: "deepmerge-ts@npm:4.0.3"
-  dependencies:
-    is-plain-object: ^5.0.0
-  checksum: 4973705394bcbf13f896942491366b16b9776a1484c60f827e56fd2fa2327dc1f9634d00a5ac321a17c8099427890dcfb406fa216ba406644107281ed79a1e86
+"deepmerge-ts@npm:^4.2.1":
+  version: 4.2.1
+  resolution: "deepmerge-ts@npm:4.2.1"
+  checksum: 5fb2f4a6b0f2a637992ba226cb89c28b081575489f1adfcd6789d95bdfb5b8236c8c5aafc02e645fd04f16101bf7c3f3e7c58e523579c635649eb36cb113a3bb
   languageName: node
   linkType: hard
 
@@ -2089,7 +2087,7 @@ __metadata:
     cookie-parser: ^1.4.6
     cors: ^2.8.5
     cross-env: ^7.0.3
-    discord-giveaways: ^5.2.2
+    discord-giveaways: ^6.0.1
     discord.js: ^13.10.3
     dotenv: ^16.0.1
     eslint: ^8.22.0
@@ -2147,15 +2145,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"discord-giveaways@npm:^5.2.2":
-  version: 5.2.2
-  resolution: "discord-giveaways@npm:5.2.2"
+"discord-giveaways@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "discord-giveaways@npm:6.0.1"
   dependencies:
-    deepmerge-ts: ^4.0.3
+    deepmerge-ts: ^4.2.1
     serialize-javascript: ^6.0.0
   peerDependencies:
-    discord.js: ">=13.5.0"
-  checksum: 10afb3e2714803a667626aefdc4051776be2b4020253f73278a479564834ae94995990b23e4a452ef66897ad2b99931ccca118f8dbf09bdf0f6e72d9b3ef31cb
+    discord.js: ">=14.0.0"
+  checksum: 02f1561e45793379b0618511d5fdb0ad15e3570033a33ea4e0ad8739240481ea999c06d5e8042d730bf752cb3ff6b53b19f0f4f7e2b4adbd401461707d9d88fe
   languageName: node
   linkType: hard
 
@@ -3427,13 +3425,6 @@ __metadata:
   version: 1.1.0
   resolution: "is-plain-obj@npm:1.1.0"
   checksum: 0ee04807797aad50859652a7467481816cbb57e5cc97d813a7dcd8915da8195dc68c436010bf39d195226cde6a2d352f4b815f16f26b7bf486a5754290629931
-  languageName: node
-  linkType: hard
-
-"is-plain-object@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "is-plain-object@npm:5.0.0"
-  checksum: e32d27061eef62c0847d303125440a38660517e586f2f3db7c9d179ae5b6674ab0f469d519b2e25c147a1a3bc87156d0d5f4d8821e0ce4a9ee7fe1fcf11ce45c
   languageName: node
   linkType: hard
 
