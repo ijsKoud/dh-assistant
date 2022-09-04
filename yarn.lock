@@ -476,9 +476,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prisma/client@npm:^4.3.0":
-  version: 4.3.0
-  resolution: "@prisma/client@npm:4.3.0"
+"@prisma/client@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "@prisma/client@npm:4.3.1"
   dependencies:
     "@prisma/engines-version": 4.3.0-32.c875e43600dfe042452e0b868f7a48b817b9640b
   peerDependencies:
@@ -486,7 +486,7 @@ __metadata:
   peerDependenciesMeta:
     prisma:
       optional: true
-  checksum: bf468a8673788a28523228aa5fc34e9f4607b47d75f8adadd6bae812ba299c3c0848d60a9a8751f79389bb32f5248087829bca1d4aca75b7cb8fdca4b35bf92b
+  checksum: 2e3e6319bb0974f9ab67ab4620b775f82c54e00c4690db59bbd4736967c1afae7b4487ac54a78d221b7f898287b387422c7e8de026dfd66e97c1ca1e79eb06f7
   languageName: node
   linkType: hard
 
@@ -497,10 +497,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prisma/engines@npm:4.3.0":
-  version: 4.3.0
-  resolution: "@prisma/engines@npm:4.3.0"
-  checksum: 2ec623073aa6d1532d5cbe475d8e2238b5084dad15159b97f789cac5ae0d0fe017a683a61863bd2b5d02f64fee400c3c43e08f78035bb09d6882d739c881d5b1
+"@prisma/engines@npm:4.3.1":
+  version: 4.3.1
+  resolution: "@prisma/engines@npm:4.3.1"
+  checksum: a407ecb8e15373890d82fc01682ddb1c473c7a5e81e07b603bdf3064bad936ee7cfa9d3ac68d5c4b845f476df53b92b705e7ec6a24a7364354ac78eb9084cbcc
   languageName: node
   linkType: hard
 
@@ -1655,6 +1655,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"canvas@npm:^2.10.0":
+  version: 2.10.0
+  resolution: "canvas@npm:2.10.0"
+  dependencies:
+    "@mapbox/node-pre-gyp": ^1.0.0
+    nan: ^2.15.0
+    node-gyp: latest
+    simple-get: ^3.0.3
+  checksum: bed0f61d51a6f5d721742776e2dd1203ad6ca2475e1177cfb7a6f9ed1d313372ab8b4aa5a6780c85d35e533e2400cb5f291be1a1d35a84fc71d6372cd4cdbc61
+  languageName: node
+  linkType: hard
+
 "canvas@npm:^2.7.0":
   version: 2.9.0
   resolution: "canvas@npm:2.9.0"
@@ -1664,18 +1676,6 @@ __metadata:
     node-gyp: latest
     simple-get: ^3.0.3
   checksum: 376ccd47340a46c04d5cabafd6feb1b7ae82c92dc3ae6db68c9cbac17ec1c43d2bf6aab60019690e9d49bf40b41bee3e4e0a8901f39b53e993789698e77e2699
-  languageName: node
-  linkType: hard
-
-"canvas@npm:^2.9.3":
-  version: 2.9.3
-  resolution: "canvas@npm:2.9.3"
-  dependencies:
-    "@mapbox/node-pre-gyp": ^1.0.0
-    nan: ^2.15.0
-    node-gyp: latest
-    simple-get: ^3.0.3
-  checksum: 368112ba4b16f54ce6dfac1ccbc45ddd1eb0b76dc09509c2601c2a26459bb4449d259a7aa8664fd94153aad13b48557535f3b9eb7fad9a97929b9eb962e50f09
   languageName: node
   linkType: hard
 
@@ -2204,7 +2204,7 @@ __metadata:
     "@commitlint/config-angular": ^17.1.0
     "@daangamesdg/logger": ^1.1.0
     "@daangamesdg/youtube-notifications": ^1.0.2
-    "@prisma/client": ^4.3.0
+    "@prisma/client": ^4.3.1
     "@sapphire/decorators": ^4.3.8
     "@sapphire/eslint-config": ^4.3.8
     "@sapphire/framework": ^2.5.1
@@ -2227,7 +2227,7 @@ __metadata:
     "@typescript-eslint/parser": ^5.36.1
     axios: ^0.27.2
     body-parser: ^1.20.0
-    canvas: ^2.9.3
+    canvas: ^2.10.0
     cookie-parser: ^1.4.6
     cors: ^2.8.5
     cross-env: ^7.0.3
@@ -2250,7 +2250,7 @@ __metadata:
     nanoid: ^4.0.0
     node-canvas-with-twemoji-and-discord-emoji: ^1.2.1
     nodemon: ^2.0.19
-    prisma: ^4.3.0
+    prisma: ^4.3.1
     random-words: ^1.2.0
     simple-markdown: ^0.7.3
     twemoji: ^14.0.2
@@ -4786,15 +4786,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prisma@npm:^4.3.0":
-  version: 4.3.0
-  resolution: "prisma@npm:4.3.0"
+"prisma@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "prisma@npm:4.3.1"
   dependencies:
-    "@prisma/engines": 4.3.0
+    "@prisma/engines": 4.3.1
   bin:
     prisma: build/index.js
     prisma2: build/index.js
-  checksum: 36295fc3d13ca6260e4da81c7c2fd1d800efb01119f89c6308becf86d132a048dbd8ff0047efc7b4899a3035d9763cd9da3d364d87e5d0f48c81a46544c23ef3
+  checksum: f97133c11ecbb09a40c0ec006af50e8789f3b76376e29d5eb041b1592d2c289af22bcb9b5c49789ffb8bbe0b24f470c1ec668a94194c5859e18b601398cf80c8
   languageName: node
   linkType: hard
 
