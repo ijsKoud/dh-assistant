@@ -38,7 +38,7 @@
 		"random-words": "^1.2.0",
 		"simple-markdown": "^0.7.3",
 		"twemoji": "^14.0.2",
-		"uuid": "^8.3.2"
+		"uuid": "^9.0.0"
 	},
 	"devDependencies": {
 		"@sapphire/eslint-config": "^4.3.8",
