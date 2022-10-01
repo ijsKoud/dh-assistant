@@ -11,7 +11,7 @@
 		"@daangamesdg/logger": "^1.1.0",
 		"@daangamesdg/youtube-notifications": "^1.0.2",
 		"@prisma/client": "^4.4.0",
-		"@sapphire/decorators": "^4.3.8",
+		"@sapphire/decorators": "^5.0.0",
 		"@sapphire/framework": "^2.5.1",
 		"@sapphire/plugin-subcommands": "^2.2.2",
 		"@sapphire/type": "^2.2.4",
